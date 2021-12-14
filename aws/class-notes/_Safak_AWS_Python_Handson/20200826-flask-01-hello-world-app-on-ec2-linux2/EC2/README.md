@@ -1,4 +1,5 @@
 OZET: 2020-08-26
+Yeni repoya uygun sekilde wget adresi guncellendi!!
 
 - Part-2: Alttaki komutlari EC2 instance uzerinde calistir.
 - ssh -i leon.pem ec2-user@18.206.126.248
@@ -10,7 +11,8 @@ OZET: 2020-08-26
 - pip3 list
 - Part-3: Lokalde helloworld-app.py belgesini olustur.
 - Part-4: Github repona lokalde olusturdugun hello-world-app.py belgesini ekle (git add/comment/push) ve Github repona gonderdigin hello-world-app.py belgesinin raw adresini kopyala
-- wget https://raw.githubusercontent.com/safaksrd/aws-devops-new/main/python/hands-on/20200826-flask-01-hello-world-app-on-ec2-linux2/EC2_wget_jinja/flask-01-hello-world-app-on-ec2-linux2/hello-world-app.py
+- wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200826-flask-01-hello-world-app-on-ec2-linux2/EC2/flask-01-hello-world-app-on-ec2-linux2/hello-world-app.py
+
 - ls komutu ile EC2 instance a app.py nin gelip gelmedigini kontrol et
 - sudo python3 hello-world-app.py
 - EC2 adresine webpage uzerinden baglan ve Hello World! yazisini gor.
