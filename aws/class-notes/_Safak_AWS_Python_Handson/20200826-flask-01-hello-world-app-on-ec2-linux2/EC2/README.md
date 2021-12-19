@@ -1,5 +1,5 @@
 OZET: 2020-08-26
-Yeni repoya uygun sekilde wget adresi guncellendi!!
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 - Part-2: Alttaki komutlari EC2 instance uzerinde calistir.
 - ssh -i leon.pem ec2-user@18.206.126.248

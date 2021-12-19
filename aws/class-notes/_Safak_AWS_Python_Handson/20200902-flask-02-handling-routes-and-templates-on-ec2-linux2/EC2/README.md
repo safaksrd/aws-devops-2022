@@ -1,4 +1,5 @@
 OZET: 2020-09-02
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 - Part-2: Alttaki komutlari EC2 instance uzerinde calistir.
 - ssh -i leon.pem ec2-user@52.23.205.60
@@ -9,14 +10,14 @@ OZET: 2020-09-02
 - pip3 list
 
 - Part-3: Github repona lokalde olusturdugun app.py belgesini ekle (git add/comment/push) ve Github repona gonderdigin app.py belgesinin raw adresini kopyala
-- wget https://raw.githubusercontent.com/safaksrd/aws-devops-new/main/python/hands-on/20200902-flask-02-handling-routes-and-templates-on-ec2-linux2/EC2/app.py
+- wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200902-flask-02-handling-routes-and-templates-on-ec2-linux2/EC2/app.py
 - ls komutu ile EC2 instance a app.py nin gelip gelmedigini kontrol et
 - mkdir templates
 - cd templates
 - templates klasoru altina tek tek evens.html, list100.html ve greet.html raw uzantilarini wget ile aliyoruz.
-- https://raw.githubusercontent.com/safaksrd/aws-devops-new/main/python/hands-on/20200902-flask-02-handling-routes-and-templates-on-ec2-linux2/EC2/templates/evens.html
-- https://raw.githubusercontent.com/safaksrd/aws-devops-new/main/python/hands-on/20200902-flask-02-handling-routes-and-templates-on-ec2-linux2/EC2/templates/greet.html
-- https://raw.githubusercontent.com/safaksrd/aws-devops-new/main/python/hands-on/20200902-flask-02-handling-routes-and-templates-on-ec2-linux2/EC2/templates/list100.html
+- wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200902-flask-02-handling-routes-and-templates-on-ec2-linux2/EC2/templates/evens.html
+- https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200902-flask-02-handling-routes-and-templates-on-ec2-linux2/EC2/templates/greet.html
+- https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200902-flask-02-handling-routes-and-templates-on-ec2-linux2/EC2/templates/list100.html
 - Bir ust klasore cik.
 - sudo python3 app.py
 - EC2 adresine webpage uzerinden baglan ve gor.
