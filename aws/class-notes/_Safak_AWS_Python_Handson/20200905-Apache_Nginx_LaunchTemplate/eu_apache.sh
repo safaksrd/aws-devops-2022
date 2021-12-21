@@ -1,4 +1,6 @@
 Ozet: 2020-09-05
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
+
 
 launch template icin kullanilan userdata:
 
