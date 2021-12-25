@@ -1,4 +1,5 @@
 Ozet: 2020-09-06
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 # EC2 instance a AWS konsol volumes bolumunden volume eklersek, 
 # bu volumun EC2 daki Linux tarafindan gorulmesi icin terminalden bazi Linux 
