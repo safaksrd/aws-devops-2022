@@ -1,4 +1,5 @@
 Ozet: 2020-09-09
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 - GET ve POST request yontemlerinin farki. POST hassas bilgiler (form doldurma, mesaj gonderme vb) icin. POST hafızada tutulmaz.
 - decorate kisminda default GET metodu kullanilir, dilersek metod degistirilebilir.
