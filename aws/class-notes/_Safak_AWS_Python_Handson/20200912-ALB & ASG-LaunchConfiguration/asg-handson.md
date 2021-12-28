@@ -1,4 +1,5 @@
 Ozet: 2020-09-12
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 - Nginx firmasinin Load Balancer (LB) konusunda ustun cozumleri var. Amazon Nginx cozumlerinden esinleniyor.
 - Algoritmalar: Round Robin: sirayla random dagitiyor, Least Outstanding Requests: isi bitene dagitiyor, sirayla dagitmak esit dagitmak degildir.
