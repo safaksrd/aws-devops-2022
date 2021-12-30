@@ -1,4 +1,6 @@
  cfn yazinca ana cati geliyor!!
+ cfn-lite yazinca daha sade hali geliyor. Bu hali genelde bize yetiyor.
+ 
  https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html sitesinde ayrintili aciklamalar var.
 
 # Template sections
