@@ -1,4 +1,5 @@
 Ozet: 2020-09-19
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 Bir bucketi ve icindekileri public hale getirip statik web sayfasi yayini icin yapilmasi gerekenler:
 - Bucketi olustururken Block all public access kismindaki check i kaldir ve acknowledge et.
