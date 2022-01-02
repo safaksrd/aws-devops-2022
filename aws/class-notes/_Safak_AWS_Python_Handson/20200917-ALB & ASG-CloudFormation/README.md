@@ -1,4 +1,5 @@
  Ozet: 2020-09-17
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
  Resource olusturma sirasi cok onemli degil. Stack olusurken template deki adimlar paralel calisiyor.
 - Security Group
