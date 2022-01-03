@@ -1,4 +1,5 @@
 Ozet: 2020-09-20
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 - Kullanilamayan verilerin storage class inin degisimi icin Lifecycle Management olmali. Lifecycle Management icin Bucket olusturulurken Versioning acilmali.
 
