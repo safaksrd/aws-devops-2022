@@ -1,4 +1,5 @@
 Ozet: 2020-09-22
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 NoSQL: Not Only SQL
 IOPS: akiskanin hizi
