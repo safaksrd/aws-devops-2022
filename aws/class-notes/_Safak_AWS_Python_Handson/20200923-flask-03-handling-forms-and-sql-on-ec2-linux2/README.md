@@ -1,4 +1,6 @@
 Ozet: 2020-09-23
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
+
 Lokal PC de asagidakiler kurulacak.
 
 pip3 install flask_sqlalchemy
