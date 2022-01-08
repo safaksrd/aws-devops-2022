@@ -1,4 +1,6 @@
 Ozet: 2020-09-24
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
+
 - EC2 Instance uzerinde MariaDB Database Server ve bu server da tablolar olusturduk. Kullanici ayarlari yaptik.
 - Sonra EC2 instance uzerinde MariaDB Client kurduk. EC2 Instance da kurulu olan Client dan baska bir EC2 Instance da kurulu olan Server a baglandik.
 - MariaDB MySQL den fork edilmis bir database.
