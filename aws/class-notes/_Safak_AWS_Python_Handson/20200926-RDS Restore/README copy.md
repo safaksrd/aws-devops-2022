@@ -1,4 +1,5 @@
 Ozet: 2020-09-26
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 - !! EC2 Instance a ssh -i ile baglaniriz, MySQL secilerek kurulan DB Instance'a ise mysql -h ile baglaniriz.
 - MySQL secerek bir RDS Instance kuruyoruz. Security Group inbound MySQL/Aurora ayarla.
