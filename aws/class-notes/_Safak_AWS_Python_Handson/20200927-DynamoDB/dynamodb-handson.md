@@ -1,7 +1,7 @@
 Ozet: 2020-09-27
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 DynamoDB de tablolar olusturduk. Sonra Lokal PC den AWS CLI araciligi ile bu tablolara veri gonderdik. Tablolarda islemler yaptik.
-
 
 
 ## Part 1 - Creating DynamoDB Tables
