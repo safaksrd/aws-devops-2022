@@ -1,4 +1,5 @@
 Ozet: 2020-09-29
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 - VPC: Ozel alan, ozelliklerini biz belirliyoruz. Ornegin bir firmanin binasini VPC olarak düsünelim.
 - Subnet: VPC icindeki logical bölümlerdir. VPC icinde kümelendirme yapmak icin (finans, marketing vs.) subnet kullaniyoruz. Subnet, VPC nin kuruldugu Region altindaki farkli AZ lerde kurulabilir. Bu farkli AZ leri ayni firmaya ait farkli kampusler gibi dusunebiliriz.
