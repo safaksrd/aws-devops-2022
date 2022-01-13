@@ -1,3 +1,5 @@
+Yeni repoya uygun sekilde wget adresleri guncellendi!!
+
 # Project-001 : Roman Numerals Converter Application (Python Flask) deployed on AWS EC2 with Cloudformation
 
 ## Description
