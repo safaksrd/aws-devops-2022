@@ -1,4 +1,5 @@
 Ozet: 2020-10-01
+Yeni repoya uygun sekilde guncellendi!!
 
 - Elastic IP : Aslinda statik IP. 
 - Bastion Host / Jump Box
