@@ -1,4 +1,5 @@
 Ozet: 2020-10-03
+Yeni repoya uygun sekilde guncellendi!!
 
 NOT: Handson un Peering ile ilgili mimarisi VPC Peering Windows-EC2.png isimli resimdeki gibidir. VPC-03.pdf in ilk sayfasindaki mimaride Bastion Host da sanki kullaniliyor gibi görünüyor, halbuki Bastion Host a gerek yok
 
