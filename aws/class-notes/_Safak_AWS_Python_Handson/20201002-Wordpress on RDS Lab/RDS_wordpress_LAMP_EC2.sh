@@ -1,3 +1,4 @@
+Yeni repoya uygun sekilde guncellendi!!
 
 2 Ekim 2020 - Cuma---> Wordpress ve RDS (LAMP Stack) Lab
 
