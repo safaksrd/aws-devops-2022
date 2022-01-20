@@ -1,0 +1,121 @@
+Fundamentals
+------------
+IT Fundementals	Linux Essentials
+IT Fundementals	Networking Basics
+IT Fundementals	Python
+IT Fundementals	Python Plus
+IT Fundementals	GIT
+IT Fundementals	SQL
+IT Fundementals	Linux Plus (Optional)
+
+AWS 
+-------------------
+AWS	Cloud Computing Basics
+AWS	Getting Started with AWS
+YAML & JSON Essentials
+AWS	IAM
+AWS	EC2
+AWS	EC2-ELB
+AWS	EC2-ASG
+AWS	EC2-SG
+AWS	EC2-EBS
+AWS	S3
+AWS	Database (RDS, DynamoDB)
+AWS	VPC
+AWS	Route 53
+AWS	Cloudfront
+AWS	CloudFormation
+AWS	AWS SDK (Boto 3)
+AWS	Cloudwatch
+AWS	Elastic Beanstalk
+AWS	Lambda & API Gateway
+AWS	Elastic Container Service
+AWS	Elastic Container Registry
+AWS	Elastic Kubernetes Service
+
+Docker 
+---------------
+Introduction
+Installing Docker
+Docker Containers
+Docker Images
+Docker Compose
+Dockerize your Python Application
+Docker Lab
+
+Docker Swarm
+----------------
+Introduction
+How Does Docker Swarm Works
+Swarm Management
+Service Management
+Clarus Hands-On Lab
+
+Jenkins
+------------------
+What is Jenkins?
+Installing Jenkins
+Build Your First Job
+Jenkins GitHub Integration
+Creating your first Pipeline
+Build Pipeline with a Python app
+Build Pipeline with Python (Optional)
+
+Kubernetes
+---------------
+What is Kubernetes
+Kubernetes ComponentsLesson
+What is minikube
+Installation
+Kubernetes Core Concepts
+Kubectl common commands
+Understanding Pods
+Configure network on cluster nodes
+Pod Networking Concepts
+Setting up a cluster
+
+Ansible
+--------------
+Introduction
+Installation
+Playbooks
+Modules
+Tasks
+Handlers
+
+Terraform
+--------------
+Introduction to Terraform
+Installation and Quick Start
+Infrastructure
+Resource Dependencies and Provision
+Input and Output Variables
+
+Maven
+-------------
+Introduction
+High Level Overview
+Installation
+Best Practices & Demo
+
+Prometheus
+--------------
+Introduction
+Monitoring
+Alerting
+Best Practices & Demo
+
+Grafana
+----------
+Introduction
+Units 
+User 
+Explore 
+Dashboard 
+Best Practices & Demo
+
+Nexus Artifactory
+-------------------
+Introduction
+Usage
+Best Practices & Demo
