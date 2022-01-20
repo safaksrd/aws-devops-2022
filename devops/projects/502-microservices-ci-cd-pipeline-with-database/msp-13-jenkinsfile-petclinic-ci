@@ -1,0 +1,17 @@
+pipeline {
+    agent {
+        docker {
+            image 'maven:3.6-openjdk-11'
+            args '-v $HOME/.m2:/root/.m2 -v ${pwd}:/app -w /app'
+        }
+    }
+
+    stages {
+        stage('Unit Testing Petclinic App') {
+            steps {
+                echo 'Running Unit Tests on Petclinic Application'
+                sh 'mvn clean test'
+            }
+        }
+    }
+}
