@@ -74,7 +74,6 @@ Ten         Warning with "Not Valid! Please enter a number between 1 and 3999, i
 
    - The application stack should take the name of your Key Pair as a parameter from the user;
 
-   
    - The application should run on Amazon Linux 2 EC2 Instance
 
    - EC2 Instance type can be configured as `t2.micro`.
