@@ -10,7 +10,7 @@
 Master username: admin
 Password: Clarusway_1
 
-# 3.Create EC2 that is installed LAMP with user data seen below for Wordpress app.
+# 3.Create EC2 that is installed LAMP with user data seen below for Wordpress app. (Database Instance)
 
 #!/bin/bash
 
@@ -34,9 +34,10 @@ systemctl restart httpd
 # 4. Paste the DNS of EC2 instance to the browser 
 Error establishing a database connection
 
-# 5. Check the httpd status
-sudo systemctl status  httpd
-
+# 5. Connect to EC2 Instance and Check the httpd status
+sudo systemctl status httpd
+  #(you'll see that apache server active running)
+  
 # 6. Check the PHP version
 php --version 
    #(you'll see HP 7.2.30)
@@ -53,12 +54,23 @@ sudo systemctl start mariadb
 
 # 10. Enable mariadb service, so that mariadb service will be activated on restarts
 sudo systemctl enable mariadb
+# mysql de enable etmeye gerek yoktur
 
 # 11. Setup secure installation of MariaDB
 sudo mysql_secure_installation
+# mariadb de root password bos gelir, mysql de root password derinlerde bir yerde saklidir.
+# root passwordu degistirmek icin yukaridaki komut girilir
+# enter current password bos geldigi icin enter a bas gec, 
+# set root password -> y
+# new password -> Clarusway_1
+# remove anonymous users -> y
+# disallow root login remotely? -> y
+# remove test database and access to it? -> y
+# reload privilege tables now? -> y
 
 # 12. Connect mysql terminal without password anymore
 mysql -u root -p
+# -u user demek, root user ile mariadb ye belirledigimiz sifre ile gireriz
 
 # 13.Show that test db is gone.
 SHOW databases;
@@ -76,15 +88,19 @@ SHOW DATABASES;
 
 # 17. Create a user named "admin"; 
 CREATE USER admin IDENTIFIED BY 'Clarusway_1';
+# sifresi Clarusway_1 olan admin isimli bir kullanici olusturduk
 
 # 18. Grant permissions to the user "admin" for database "clarusway"
 GRANT ALL ON clarusway.* TO admin IDENTIFIED BY 'Clarusway_1' WITH GRANT OPTION;  
+# admin lullanicisina clarusway databaesinde olusturulan herseyde tam yetki verdik
 
 # 19. Update privileges
 FLUSH PRIVILEGES;
+# degisiklikleirn devreye girmesi icin bu komut girilir
 
 # 20. List the users defined.
 SELECT Host, User, Password FROM user;
+# Host sutunundaki % isareti remote baglanabilir anlamina gelir
 
 # 21. Close the mysql terminal
 EXIT;
@@ -92,6 +108,7 @@ EXIT;
 
 # 22. Login databse again for upload an tables 
 mysql -u admin -p
+# clarusway database uzerinde tam yetkili admin kullanicisi ile mysql e baglanalim.
 
 # 23. Show databases and Select the database "clarusway"
 SHOW DATABASES;
@@ -162,7 +179,7 @@ cd /var/www/html/
 sudo cp wp-config-sample.php wp-config.php
 
 # 32. Change the config file for database assosiation
-sudo vi wp-config.php
+sudo vi wp-config.php # bu dosya wordpress in kalbidir, asagidaki degisikliklerle wordpress i clarusway database e bagliyoruz. Wordpress web sayfamizda yapilan degisiklikler ornegin YORUM eklersek vs artik clarusway database yazilacak. SELECT * FROM 'tablonun_adi' ile yapilan degisiklikleri gorebiliriz.
 click i (insert)
 
      #define( 'DB_NAME', 'clarusway' );
@@ -188,10 +205,11 @@ SHOW DATABASES;
 USE clarusway;
 select * from wp_comments;  # you can see the written two comments in here
 exit
-
+# buraya kadar LAMP Stack in fisini EC2 icinde kurdugumuz database e bagliydi, simdi bu database in fisini RDS e baglayalim, buna migration yada DUMP deniyor
 
 # 34. Connect to the RDS instance to create "clarusway" database with HOST
-mysql -u admin -h [your-own-RDS-endpoint] -p
+mysql -u admin -h "your-own-RDS-endpoint" -p
+# h nin anlami uzaktan baglanirken host olarak baglaniyoruz anlaminda
 
 # 35. Show databases and select "mysql"
 SHOW DATABASES;
@@ -204,20 +222,24 @@ CREATE DATABASE clarusway;
 SHOW DATABASES;
 EXIT;
 
-# 38.Create Messanger Instance and connce with SSH: 
+# 38.Create Messenger Instance and connect with SSH: 
   
----> Sec group: ssh-mysql aurora:0/00000 (or Wordpress_Instance_sec_group )
+---> Sec group: SSH and mysql aurora:0/00000 (or Wordpress_Instance_sec_group )
   
 userdata:
     
 #!/bin/bash
+
 yum update -y
 yum install -y https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
 yum install -y mysql-community-client
 
 
-# 39. Create dumb of "clarusway" database via connecting from "Messenger EC2" to the "Database Instance"
-mysqldump -u admin -h [your-own-database-instance-DNS] -p clarusway > clarusway_migration.sql
+# 39. Connect to Messenger Instance. Create dumb of "clarusway" database via connecting from "Messenger EC2" to the "Database Instance"
+mysqldump -u admin -h 'your-own-database-instance-DNS' -p clarusway > clarusway_migration.sql
+# 39. ve 40. bu iki komut onemli. Bu komutlar yeni olusturdugumuz Messenger Instance da calistirilir!!
+# 39.da Ilk kurulan LAMP Stack Instance yani Database Instance daki database i yeni kurulan Messenger Instance a cekiyoruz (mysqldump). Dolayisiyla 'your-own-database-instance-DNS' bizim ilk kurdugumuz instance in DNS i !!!
+# 40.da Messenger Instance dan yani client dan RDS e gönderiyoruz
 
 # 40. Transfer the dumb file to the RDS instance 
 mysql -u admin -h [your-own-RDS-endpoint] -p clarusway < clarusway_migration.sql
@@ -252,14 +274,17 @@ select * from wp_comments;
 
 cd /var/www/html/
 
-# 49. Change the config file for database assosiation
+# 49. Change the config file for database association
 sudo vi wp-config.php
 click i (insert)
 
     #define( 'DB_HOST', '[RDS-end-point]' );
+# ilk halinde localhost yaziyordu, onun yerine RDS endpoint i girdik. 
+# Boylece artik yeni girilen bilgileri LAMP Stack Instance yani Database Instance yerine Messenger Instance araciligi ile RDS e kaydedecek.
 
 esc+:wq
 sudo systemctl restart httpd
+# wordpress artik adresleme olarak RDS i görüyor
 
 #51 Go to client EC2 and conneect to the rds instance;
 mysql -u admin -h [your-own-RDS-endpoint] -p
