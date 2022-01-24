@@ -1,3 +1,18 @@
+Ozet: 06.10.2020
+
+- Klasik senaryoda statik web sayfamizi S3 bucket uzerinden yayinliyorduk. Her requestte webpage in lokal olarak bulundugu S3 Bucketa kadar gidip dönüyoruz. 
+- Cloud Front mimarisinde her seferinde S3 Bucketa kadar gitmeye gerek yok. Cloud Front bir CDN (Content Delivery Network) dir. Edge Locations ve Edge Caches lardan olusan Points of Presence (PoP) larda bizim web sayfamizin cache verisini tutuyor, request oldugunda bu cache den web sayfamizi gosteriyor. Böylece Latency azaliyor. Web sayfasinin icerigini edge location lardan daha hizli dagitmis (distribution) olacagiz. 
+- AWS Certicate Manager araciligi ile bir SSL sertifika aliyoruz. Cloud Front ayarlarinda bu sertifika kullanilacak.
+- Ozetle;
+    1. Lokalden gordugumuz web sayfasini
+    2. Once S3 bucket adresinden, 
+    3. Sonra SSL sertifika baglanmis sekilde Cloud Front adresinden,
+    4. Son olarak kendi dns name imizden goruyoruz.
+- Invalidation islemi: S3 Bucket ta icerik guncellesek bile web sayfamiza request olduugnda TTL süresü boyunca Edge locations cache deki icerik gelir. Bunu engellemek icin Cloud Front menusunde invalidation sekmesinden soruna aninda mudahale edip tüm cache bilgilerini degistirebiliriz.
+- Geo-Restrictions islemi: Istedigimiz ülkeleri kara veya beyaz listeye ekleriz.
+
+
+
 ## Part 1 - Creating a Certificate 
 
 - Go to Certificate Manager service and select "Provision Certificates" ----> "Get Started"
@@ -59,12 +74,11 @@
 
 - Select a delivery method for your content: Choose "Web" option and click on "Get Started"
 - Create Distribution : 
-  - Origin Settings: 
+  - Origin Settings: Cloud Front ile S3 ü burada bulusturuyoruz.
       - Origin Domain Name: Paste the "endpoint" (without https://) of the S3 bucket
   - Default Cache Behavior Settings
       - Viewer Protocol Policy: Select "Redirect HTTP to HTTPS"
-   
-  - Distribution Settings
+  - Distribution Settings: Cloud Front ile Domain Name i burada bulusturuyoruz ve SSL i tanimliyoruz.
       - Alternate Domain Names (CNAMEs): [your donamin name]
       - SSL Certificate: Select "Custom SSL Certificate (example.com)" >>> select your newly created certificate
      
@@ -75,9 +89,10 @@
 - It may take some time distribution to be deployed. (Check status of distribution to be "Deployed")
 
 - When it is deployed, copy the "Domain name" of the distribution. 
-
+- Bu islemin sonunda S3 un verdigi xx.s3-xxx.amazonaws.com dns name yerine cloud Front un edge locationlara koyacagi distribution icin olusturdugu d ile baslayan cloudfront.net ile biten bir adres elde ediyoruz. Yani artik S3 bucket imizi Cloud Front dagitiyor. Ama halen bu adres bizim web sayfamizin adi degil. Sirada web sayfamizin adini Route 53 uzerinden Cloud Front a tanitmaya geldi.
 
 ## Part 4 - Creating Route 53 record sets (Alias)
+- Cloud Front ile Route 53 i burada bulusturuyoruz. Cloud Front web sayfa
 
 - click your Domain name's public hosted zone
 
@@ -102,9 +117,11 @@ tab seen bottom
 
 - go to the target domain name "[your DNS name].net" on browser
 
-- check it si working with "https protocol"
+- check it is working with "https protocol"
 
 - show the content of web page.
+- Bu islemin sonunda cloud Front un olusturdugu d ile baslayan cloudfront.net yerine kendi dns name imiz ile web sayfamiza baglaniyoruz.
+
 
 ## Part 5 - Configuring CloudFront Distribution
 

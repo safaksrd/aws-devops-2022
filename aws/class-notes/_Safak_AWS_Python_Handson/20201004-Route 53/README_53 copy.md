@@ -15,7 +15,6 @@ Ozet: 04.10.2020
 - Weighted senaryoda agirlandirma yapilir. %60 tiklamada bu IP, %40 tiklamada bu IP den cevap versin seklinde ayarlariz.
 - Local Hosted Zone senaryo firma icinde bir web sayfasi, public de baska bir websayfasi gormek icin kullanilir. Handson kapsaminda private hosted zone olusturduk. Private hosted zone olustururken domain name nacked yani basinda www olmadan yazilir ve kendi olusturdugumuz VPC secilir. A rekord olusturulurken simple routing yapilir. Senaryoya gore lokalde bir Linux web server bir de windows kullanici var. Windows kullanicisi sirket icinde Linux weeb server i gorecek ama publicden baglanan birisi sirketin kamuya acik olan web sayfasini gorecek.
 
-
 # Hands-on : Route 53 
 
 Purpose of the this hands-on training is to creating a DNS record sets and implement Route 53 routing policies. 
