@@ -1,3 +1,21 @@
+Ozet: 04.10.2020
+
+- Bu hands-on da AWS den aldigin DNS name üzerinde islemler yapilacak.
+- 4 farkli region da birer adet Instance olustur.
+- 2 adet S3 bucket olustur. Bucketlar uzerinde Statik webpage aktif et.
+- Route 53 menusunde hosted zone da NS, SOA kaydi otomatik gelir. 
+- Route 53 menusunde hosted zone da A record ile : dns name girildiginde hangi IP ye gidecegini belirleriz, birden fazla IP de girilebilir, AWS kendi icinde IP adresleri arasinda balancing yapiyor, A record dendiginde aklimiza IP gelmesi gerekiyor.
+- Route 53 menusunde hosted zone da CNAME record ile: yanlis bir dns name girildiginde bizim belirledigimiz dns name a yoneliyor. A rekord da yapilan bir degisiklik CNAME recordunu da etkiler. 
+- Yani A record da dns name in bagli oldugu IP adresini yenilersek, yanlis bir dns name girdigimizde CNAME record yenilenmis IP nin bagli oldugu dns name e baglanir.
+- nslookup 'yanlisdnsname.com' ile A rekordun CNAME rekordunu da etkiledigini teyit edebilirsin.
+- AWS S3 gibi kendi resource larini ALIAS record ile gosteriyor. Onceden bu CNAME ile oluyormus.
+- S3 uzerinde statik webpage yayinlamak, EC2 Instance da server calistirarak webpage yayinlamaktan daha ucuz oldugu icin nihai hedefimiz Alias rekord ile web sayfamizi s3 bucket uzerinde gostermek
+- Failover senaryosunda once Health Check olusturulur. Hosted zone da Failover routing secilir. Webpage in yayinlandigi EC2 Instance IP si primary, S3 Bucket secondary olarak girilir. EC2 instance da problem olursa S3 bucket a yonlendirilir.
+- Geolocation senaryoda A record kullaniriz, Ülke veya kita bazinda IP adresi yonlendirmesi yapilabilir. Mutlaka bir tane A record default olarak ayarlanmalidir. 
+- Weighted senaryoda agirlandirma yapilir. %60 tiklamada bu IP, %40 tiklamada bu IP den cevap versin seklinde ayarlariz.
+- Local Hosted Zone senaryo firma icinde bir web sayfasi, public de baska bir websayfasi gormek icin kullanilir. Handson kapsaminda private hosted zone olusturduk. Private hosted zone olustururken domain name nacked yani basinda www olmadan yazilir ve kendi olusturdugumuz VPC secilir. A rekord olusturulurken simple routing yapilir. Senaryoya gore lokalde bir Linux web server bir de windows kullanici var. Windows kullanicisi sirket icinde Linux weeb server i gorecek ama publicden baglanan birisi sirketin kamuya acik olan web sayfasini gorecek.
+
+
 # Hands-on : Route 53 
 
 Purpose of the this hands-on training is to creating a DNS record sets and implement Route 53 routing policies. 
@@ -59,7 +77,7 @@ systemctl enable httpd
 
 ```
 
-2. Create EC2 that is installed httpd user data in default VPC "N.virginia_2"
+2. Create EC2 that is installed httpd user data in default VPC named "N.virginia_2"
 ```bash
 Region: "N.Virginia"
 VPC: Default VPC
@@ -205,6 +223,7 @@ TTL:"1m"
 - Select newly created record's flag and hit the "create record" tab seen bottom
 
 # STEP 2 : Create another "A record" with N. Virginia_1 with "info" subdomain
+- NOT: Route 53 menusunde hosted zone da A record ile : dns name girildiginde hangi IP ye gidecegini belirleriz, birden fazla IP de girilebilir, AWS kendi icinde IP adresleri arasinda balancing yapiyor, A record dendiginde aklimiza IP gelmesi gerekiyor.
 
 - Go to Route 53 service
 
@@ -272,6 +291,10 @@ TTL:"1m"
 tab seen bottom
 
 - After show "showcname.[your DNS name].net" on the browser. It will reflects the "www.[your DNS name].net". After that "Delete"  this record 
+
+- NOT: Route 53 menusunde hosted zone da CNAME record ile: yanlis bir dns name girildiginde bizim belirledigimiz dns name a yoneliyor. A rekord da yapilan bir degisiklik CNAME recordunu da etkiler. 
+Yani A record da dns name in bagli oldugu IP adresini yenilersek, yanlis bir dns name girdigimizde CNAME record yenilenmis IP nin bagli oldugu dns name e baglanir.
+
 
 # STEP 5 : Alias Record:
 
@@ -390,7 +413,7 @@ Record ID               : Failover Scenario-primary
 
 - select created failover record flag and push the create records button
 
-# Step 3: Create A record for S3 website endpoint - Secondary record
+# Step 3: Create A record for S3 website endpoint - Secondary record
 
 - Click create record
 
