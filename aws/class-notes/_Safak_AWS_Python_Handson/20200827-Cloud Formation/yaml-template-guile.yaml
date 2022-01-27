@@ -4,7 +4,7 @@
 # CloudFormation icin template
 # cfn yazinca ana cati geliyor!!
 # cfn-lite dersek daha kisa halde getirir.
-# Command Shift P ile acilan menude Converto to JSON dersek mevcut YAML file json a döner, tersi de gecerlidir.
+# Command Shift P ile acilan menude Convert to JSON dersek mevcut YAML file JSON file a döner, tersi de gecerlidir.
 
 AWSTemplateFormatVersion: 2010-09-09
 
