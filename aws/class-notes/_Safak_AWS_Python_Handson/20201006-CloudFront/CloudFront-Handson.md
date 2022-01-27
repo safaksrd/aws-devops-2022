@@ -74,10 +74,13 @@ Ozet: 06.10.2020
 
 - Select a delivery method for your content: Choose "Web" option and click on "Get Started"
 - Create Distribution : 
+  
   - Origin Settings: Cloud Front ile S3 ü burada bulusturuyoruz.
       - Origin Domain Name: Paste the "endpoint" (without https://) of the S3 bucket
+  
   - Default Cache Behavior Settings
       - Viewer Protocol Policy: Select "Redirect HTTP to HTTPS"
+ 
   - Distribution Settings: Cloud Front ile Domain Name i burada bulusturuyoruz ve SSL i tanimliyoruz.
       - Alternate Domain Names (CNAMEs): [your donamin name]
       - SSL Certificate: Select "Custom SSL Certificate (example.com)" >>> select your newly created certificate
