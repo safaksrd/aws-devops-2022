@@ -1,0 +1,24 @@
+# Ozet: 2020-08-27
+
+# Infrastructure as a Code (IaaC)
+# CloudFormation icin template
+# cfn yazinca ana cati geliyor!!
+# cfn-lite dersek daha kisa halde getirir.
+# Command Shift P ile acilan menude Converto to JSON dersek mevcut YAML file json a döner, tersi de gecerlidir.
+
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: This template creates an EC2 instance which enables SSH connection. # comment boyle
+
+Resources:
+  LeonCFInstance: #LogicalID, GuileCFInstance idi degistirdim.
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0ed9277fb7eb570c9
+      InstanceType: t2.micro
+      KeyName: leon
+      SecurityGroups:
+        - ssh-http
+      Tags:
+        - Key: Name
+          Value: leon-cf-instance
