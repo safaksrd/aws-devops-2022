@@ -1,0 +1,94 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+
+Description: |
+  CloudFormation Template for Roman Numerals Converter Application. 
+  This template creates Python Flask Web Application on Amazon Linux 2 (XXXXXXXXXXXXXXXXX) EC2 Instance with custom security group allowing http connections on port 80.
+  Roman Numerals Converter Application is downloaded from Github repository, then installed on Flask.
+
+
+Parameters:
+  
+  MyKeyName:
+    Description: Enter the name of your Key Pair for SSH connections
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: Must one of the existing EC2 KeyPair 
+
+
+#Mappings:
+#  RegionImageMap:
+#    us-east-1:
+#      AMI: ami-0c94855ba95c71c99
+#    us-east-2:
+#      AMI: ami-0603cbe34fd08cb81
+#    us-west-1:
+#      AMI: ami-0e65ed16c9bf1abc7
+#    us-west-2:
+#      AMI: ami-0841edc20334f9287
+#    eu-west-1:
+#      AMI: ami-08a2aed6e0a6f9c7d  
+
+
+Resources:
+
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP and SSH connection for Flask Web Server #required
+      SecurityGroupIngress: # stateful oldugu icin egress (outbound rules) tanimlamaya gerek yok
+        - IpProtocol: tcp # required
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp # required
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+# Mapping bolumundeki commenti aktiflestirip alttaki komutu calistirarak ImageId icin Mapping yapabiliriz. Bu hands-on da bir Linux ami degeri girdik
+#      ImageId: !FindInMap 
+#        - RegionImageMap
+#        - !Ref AWS::Region
+#        - AMI 
+      ImageId: ami-08e4e35cccc6189f4
+      InstanceType: t2.micro
+      KeyName: !Ref MyKeyName
+      SecurityGroupIds:
+        - !Ref MySecurityGroup 
+      Tags:
+        - Key: Name
+          Value: !Sub Flask Web Server for Roman Numerals Converter of ${AWS::StackName} Stack # Substitute, ifadenin yerine koyma anlaminda, StackName i cekip burada yaziyor
+      UserData: !Base64 |
+          #! /bin/bash
+          yum update -y
+          yum install python3 -y
+          pip3 install flask
+          cd /home/ec2-user
+          wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200930-001-roman-numerals-converter/app.py
+          mkdir templates
+          cd templates
+          wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200930-001-roman-numerals-converter/templates/index.html
+          wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200930-001-roman-numerals-converter/templates/result.html
+          cd ..
+          python3 app.py
+
+# /home/ec2-user dizinine gecmezsek wget ile cekilen dosyalar roota gelir, bu production ortaminda istediigmiz birsey degil
+
+# mkdir template
+# cd templates
+# wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200930-001-roman-numerals-converter/templates/index.html
+
+# Üc satr ile yapmak yerine alttaki de ayni isi görür
+# wget -P templates https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200930-001-roman-numerals-converter/templates/index.html
+
+
+Outputs: 
+  WebsiteURL:
+    Value: !Sub 
+      - http://${PublicAddress}
+      - PublicAddress: !GetAtt MyEC2Instance.PublicDnsName # PublicDnsName attribute u cekiyoruz
+    Description: Roman Numerals Converter Application URL
+# Guile hoca 20200917-ALB & ASG-CloudFormation dersinde bu kismi join fonksiyonu ile yapmistik.

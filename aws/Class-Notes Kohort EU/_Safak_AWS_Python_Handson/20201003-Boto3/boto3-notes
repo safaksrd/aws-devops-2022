@@ -1,0 +1,13 @@
+Ozet: 2020-10-03
+
+Boto3, bir Python library. Bu library uzerinden AWS ye ulasiyoruz.
+Python ile AWS resource lari arasinda baglanti kurmamizi saglar.
+AWS CLI üzerinden yapabildiklerimizi AWS CLI olmadan da Boto3 araciligi ile python kodlari ile yapabiliriz.
+AWS normalde crediantilas icin masaustunde gizli .aws klasorunun icine bakar.
+Bu dosyalari olusturursak artik AWS CLI olmasa bile ornegin S3 bucket larimizi python koduyla listeleriz.
+
+Python kodlarini terminalde calistirirken basina python3 yaziyoruz.
+
+python3 s3-list-boto3.py
+python3 s3-put-boto3.py
+python3 ec2-launch-boto3.py
