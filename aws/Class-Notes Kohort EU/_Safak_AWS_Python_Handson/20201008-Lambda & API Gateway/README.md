@@ -1,9 +1,11 @@
 Ozet: 2020-10-08
 
+- lambda function kisa süreli calisiyor en fazla 15 dk. EC2 olusturmuyoruz. Arka planda AWS bizim icin fonksiyonumuzu gerekli resource larda calistiriyor bize sonucu dönüyor.
 - Are you Cola? -> Bodrum English : API
 - Iki adet S3 Bucket olustur, biri source digeri destination, source Bucket a bir nesne koyunca lambda function tetiklenecek ve konulan nesneyi destination bucket a gonderecek.
 - Source a atilani trigger dan anlayacak, destination bucket a atacagini ise python koddan anlayacak.
-- AWS ortaminda python kodu calistirarak AWS resource larina erisiyorsak racona uyacaksin boto3 yi kuracaksin.
+- AWS ortaminda python kodu calistirarak AWS resource larina erisiyorsak racona uyacaksin boto3 yi kuracaksin. boto3 kurmaya gerek olmayan durumlar da oluyor. Ornegin rastgele sehir ismi secip ekrana yazdiran bir fonksiyon icin boto3 gerek yok cünkü bu fonksiyonda AWS resource larina erismeye gerek yok
+- Lambda function API Gateway i tetikliyor. Once /city seklinde Resource olusturuyoruz. Yani browserda yazacagimiz ifadeyi (hangi alt microservice e gidecegimizi) belirliyoruz. Sonra o ifadeyi yazinca hangi yöntemle (GET, PUT vs) ne gerceklesecek (Lambda function) onu belirleyecegiz. 
 
 
 # Hands-on Lambda-01 : Lambda Function and API Gateway.
