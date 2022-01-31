@@ -1,5 +1,10 @@
 Ozet: 2020-09-06
-Yeni repoya uygun sekilde wget adresleri guncellendi!!
+Instance Store: EC2 Instance a direk baglidir.
+EBS: Elastic Block Storage: Hypervisor ile ag uzerinden baglidir, uzakta olabilir.
+EFS: Elastic File Storage
+
+
+
 
 # EC2 instance a AWS konsol volumes bolumunden volume eklersek, 
 # bu volumun EC2 daki Linux tarafindan gorulmesi icin terminalden bazi Linux 
@@ -10,13 +15,16 @@ Yeni repoya uygun sekilde wget adresleri guncellendi!!
 # check volumes which volumes attached to instance. 
 # only root volume should be listed
 lsblk # # volume attach etmeden once instance daki volumelari gorelim.
+df -h # h:human readable yapiyor
 
 # create a new volume in the same AZ with the instance from aws console (2 GB for this demo).
 # attach the new volume from aws console, then list block storages again.
 # root volume and secondary volume should be listed
+
 # Intstance a volume attach etmek istiyorsak instance ile volume ayni AZ de olusturulmali
 # Konsolda olusturulan volume konsoldaki Actions bolumunden attach edilir
 lsblk # # volume attach ettikten sonra instance daki volumelari gorelim.
+df -h 
 
 # check if the attached volume is already formatted or not and has data on it.
 sudo file -s /dev/xvdf # volume formatina bakiyoruz
@@ -38,6 +46,9 @@ cd # home klasore geri donuyoruz
 # mount the new volume to the mounting point path
 sudo mount /dev/xvdf /mnt/2nd-vol/ # formatladigimiz volumu, 
                                 # yeni olusturdugumuz 2nd-vol klasorune mount ettik
+# Yanlis bir mount islemi yaparsak asagidaki komutla unmount yapabiliriz
+# sudo unmount /dev/xvdf /mnt/2nd-vol/
+
 
 # check if the attached volume is mounted to the mounting point path
 lsblk # yeni volume mount edilmis hali ile gozukuyor

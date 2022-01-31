@@ -59,6 +59,10 @@ sudo mkdir /mnt/3rd-vol-part2
 sudo mount /dev/xvdg1 /mnt/3rd-vol-part1/
 sudo mount /dev/xvdg2 /mnt/3rd-vol-part2/
 
+# Yanlis bir mount islemi yaparsak asagidaki komutla unmount yapabiliriz
+# sudo unmount /dev/xvdg1 /mnt/3rd-vol-part1/
+# sudo unmount /dev/xvdg2 /mnt/3rd-vol-part2/
+
 # list volumes to show current status, all volumes and partittions should be listed
 lsblk
 
@@ -79,15 +83,15 @@ lsblk
 df -h
 
 # extend the partition 2 and occupy all newly avaiable space
-# xvdg nin 2 partition unu genisletme adilari. 
-# Once yeni eklenen 1 GB yi 2.Partiton icin isgal ediyoruz
+# xvdg nin 2 partition unu genisletme adimlari. 
+# Once yeni eklenen 1 GB yi xvdg nin 2 numarali Partitionu icin isgal ediyoruz. Hangi partitionu genisletmek istiyorsak onun numarasini yaziyoruz.
 sudo growpart /dev/xvdg 2
 
 # ​show the real capacity used currently at mounting path, updated capacity should be shown.
 lsblk
 
 # resize and extend the file system
-# Sonra yeni eklenen 1 GB'yi 2.Partiton a ekliyoruz.
+# 2 numarali partitona yeni eklenen 1 GB'i resize ile genisletiyoruz
 sudo resize2fs /dev/xvdg2
 
 # show the newly created file to show persistence

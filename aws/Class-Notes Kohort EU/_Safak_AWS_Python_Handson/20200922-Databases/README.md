@@ -1,11 +1,10 @@
 Ozet: 2020-09-22
-Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 NoSQL: Not Only SQL
 IOPS: akiskanin hizi
 Throughput: Akiskanin debisi
 
-Amac havuzu doldurmak olsun. Elimizde bir su hortumu ve bir nehir var diyelim. Su hortumunun hizi daha yuksek olsa bile havuzu nehir ile daha cabuk doldururuz.
+Amac havuzu doldurmak olsun. Elimizde bir su hortumu ve bir nehir var diyelim. Su hortumunun hizi (IOPS) daha yuksek olsa bile havuzu nehir ile (throughput)daha cabuk doldururuz.
 Ziel ist es, den Pool zu füllen. Nehmen wir an, wir haben einen Wasserschlauch und einen Fluss. Auch wenn die Geschwindigkeit des Wasserschlauches höher ist, füllen wir den Pool schneller mit dem Fluss.
 
 Price Catogory for Database can be : On Demand and Reserved

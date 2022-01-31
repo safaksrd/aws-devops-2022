@@ -2,15 +2,15 @@ Ozet: 2020-09-06
 
 # EC2 instance i reboot edince instance ayni IP ile aciliyor
 # yeniden baslatinca yaptigimiz ayarlar yok oldu. 
-# Mount islemleri bosa gitti
-# Ancak 8+4+3 GB volume duruyor ve tekrar formatlamaya gerek yok. 
+# Mount islemleri bosa gitti.
+# Ancak 8+4+3 GB volume duruyor ve tekrar formatlamaya gerek yok.
 
 # linux de otomatik mount icin bir konfigurasyon dosyasi var. 
 # ismi fstab. Bunun modifiye edilmesi lazim.
 # cd /etc/fstab
 # Ancak onemli dosyalarin bu tip islemlerden once backup ini almaliyiz.
 # sudo cp fstab fstab.bak
-# nano yada vim ile icine gir. sudo nano fstab ve modifiye et.
+# nano yada vim ile icine girip, fstab i modifiye ediyoruz.
 
 # PART 3 - AUTOMOUNT EBS VOLUMES AND PARTITIONS ON REBOOT
 

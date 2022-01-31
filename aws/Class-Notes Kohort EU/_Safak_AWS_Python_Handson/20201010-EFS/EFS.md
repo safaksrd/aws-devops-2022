@@ -1,3 +1,6 @@
+Ozet: 2020-10-10
+
+
 # Hands-on EFS-01 : How to Create EFS & Attach the EFS to the multiple EC2 Linux 2 Instances
 
 ## Outline
