@@ -8,7 +8,7 @@ Description: > # > ya da | ile altsatira gecip aciklama yapilabilir
   is downloaded from Github repository, then deployed on Apache Web Server.
 
 Resources:
-  WebServerSecurityGroup:
+  LeonsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable HTTP for Apache Web Server and SSH for Terminal
@@ -35,7 +35,7 @@ Resources:
       # Ornegin Launch Template de InstanceType m2.large ama CloudFormation da t2.micro dedik. 
       # Bu durumda InstanceType t2.micro olur.
       SecurityGroupIds:
-        - !Ref WebServerSecurityGroup # !Ref instrict function ile yukaridaki Sec Group u refere ediyoruz
+        - !Ref LeonsSecurityGroup # !Ref instrict function ile yukaridaki Sec Group u refere ediyoruz
       Tags:                
         -                        
           Key: Name
@@ -48,10 +48,10 @@ Resources:
             yum update -y
             yum install httpd -y
             cd /var/www/html/
-            wget https://raw.githubusercontent.com/safaksrd/aws-devops-new/main/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/index.html
-            wget https://raw.githubusercontent.com/safaksrd/aws-devops-new/main/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/cat0.jpg
-            wget https://raw.githubusercontent.com/safaksrd/aws-devops-new/main/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/cat1.jpg
-            wget https://raw.githubusercontent.com/safaksrd/aws-devops-new/main/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/cat2.jpg
+            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes%20Kohort%20EU/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/index.html
+            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes%20Kohort%20EU/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/cat0.jpg
+            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes%20Kohort%20EU/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/cat1.jpg
+            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes%20Kohort%20EU/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/cat2.jpg
             systemctl start httpd
             systemctl enable httpd
 Outputs:
