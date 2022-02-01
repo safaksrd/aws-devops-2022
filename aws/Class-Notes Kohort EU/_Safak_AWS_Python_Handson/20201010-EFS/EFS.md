@@ -1,5 +1,7 @@
 Ozet: 2020-10-10
 
+- EC2'larda SSH baglanti icin bir Security Group olusturuyoruz. EFS icin ise baglantinin güvenligi icin EC2'nun Security Group u uzerinden gelen (Inbound Rules: Custom->EC2 Sec Group) baska bir Security Group olusturuyoruz. 
+- EFS ile farkli EC2 instance lar ayni dosya uzerinde islem yapabiliyor.
 
 # Hands-on EFS-01 : How to Create EFS & Attach the EFS to the multiple EC2 Linux 2 Instances
 

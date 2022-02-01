@@ -1,7 +1,7 @@
 Ozet: 2020-09-06
 Instance Store: EC2 Instance a direk baglidir.
 EBS: Elastic Block Storage: Hypervisor ile ag uzerinden baglidir, uzakta olabilir.
-EFS: Elastic File Storage
+EFS: Elastic File System
 
 
 
