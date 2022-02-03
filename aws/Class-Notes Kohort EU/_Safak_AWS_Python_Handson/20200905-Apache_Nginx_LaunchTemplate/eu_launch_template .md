@@ -1,19 +1,19 @@
 Ozet: 2020-09-05
 
-Once Prototip bir launch template olusturuyoruz.
+- Once Prototip bir launch template olusturuyoruz.
 EC2/Launch templates/Create launch template
--Launch template name: Prototip_v1 (ALCIKALIBI)
--AMI, Instance type, Keypair, Security Group sec
--Resource Tags: Key: Name, Value:Original_v1
+Launch template name: Prototip_v1 (ALCIKALIBI)
+AMI, Instance type, Keypair, Security Group sec
+Resource Tags: Key: Name, Value:Original_v1
 
-Sonra bu prototipi modify ederek v2 de user data ile bos bir nginx, v3 de user data ile dolu bir nginx launchtemplate olusturuyoruz.
+- Sonra bu prototipi modify ederek version2 de user data ile BOS bir nginx, version3 de user data ile DOLU bir nginx launchtemplate olusturuyoruz.
 
-v2 adimlari
+- version2 adimlari
 EC2/Launch templates/Modify template (Create new version)
--Template version description: v2
--AMI, Instance type, Keypair, Security Group ayni kalacak
--Resource Tags: Key: Name, Value:v2
--Advanced details de User data bolumune BOS nginx icin sunu gir
+Template version description: v2
+AMI, Instance type, Keypair, Security Group ayni kalacak
+Resource Tags: Key: Name, Value:v2
+Advanced details de User data bolumune BOS nginx icin sunu gir
 
 #!/bin/bash
 
@@ -23,12 +23,12 @@ systemctl enable nginx
 systemctl start nginx
 
 
-v3 adimlari
+- version3 adimlari
 EC2/Launch templates/Modify template (Create new version)
--Template version description: v3
--AMI, Instance type, Keypair, Security Group ayni kalacak
--Resource Tags: Key: Name, Value:v3
--Advanced details de User data bolumune DOLU nginx icin sunu gir
+Template version description: v3
+AMI, Instance type, Keypair, Security Group ayni kalacak
+Resource Tags: Key: Name, Value:v3
+Advanced details de User data bolumune DOLU nginx icin sunu gir
 
 #!/bin/bash
 
@@ -42,8 +42,9 @@ wget https://raw.githubusercontent.com/awsdevopsteam/ngniex/master/index.html
 wget https://raw.githubusercontent.com/awsdevopsteam/ngniex/master/ryu.jpg
 service nginx start
 
-Ilgili versiyondan instance launch etmek icin;
+- Ilgili versiyondan instance launch etmek icin;
 Versions bolumundeki Actions butonundan (buna dikkat et, cunku template in yaninda da Actions butonu var) Launch instance from template tikla. Verileri kontrol et launch et.
+
 
 # Hands-on EC2-03 : Creating an Instance with Launch Template and Versioning
 

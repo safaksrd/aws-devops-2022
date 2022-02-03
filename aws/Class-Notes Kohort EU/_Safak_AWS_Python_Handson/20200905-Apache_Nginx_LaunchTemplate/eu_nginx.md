@@ -84,7 +84,6 @@ sudo chmod -R 777 /usr/share/nginx/html
 
 7. Remove existing `index.html`.
 
-
 sudo rm index.html
 Not: Default gelen index.html i siliyoruz. Sonra kendimizinkini ekleyecegiz.
 

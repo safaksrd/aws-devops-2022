@@ -1,6 +1,4 @@
 Ozet: 2020-09-05
-Yeni repoya uygun sekilde wget adresleri guncellendi!!
-
 
 launch template icin kullanilan userdata:
 
@@ -90,7 +88,7 @@ then Check from browser with DNS
 
 sudo systemctl enable httpd
 
-Not: Isntance ı stop ettikten sonra tekrar strat edince de calismasi icin.
+Not: Isntance i stop ettikten sonra tekrar strat edince de calismasi icin.
 
 8. Set permission of the files and folders under `/var/www/html/` folder to everyone.
 

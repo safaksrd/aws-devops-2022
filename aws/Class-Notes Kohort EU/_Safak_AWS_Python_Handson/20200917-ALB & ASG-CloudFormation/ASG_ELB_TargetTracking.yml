@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: 2010-09-09
 # Template i yazarken konuya iliskin hangi resource lari olusturacagimiza hakim olmaliyiz. 
 # Ornegin AWS konsolundan Launch Configuration ile ASG li bir ALB mimarisi olustururken menülerde neleri sectigimizi hatirlamaliyiz
 # Bu hatirladiklarimizi Template a nasil yazacagimiza AWS Documentation sayfasinda Cloud Formation User Guide bölümünden (gerektiginde alt bölümlere girerek) bakiyoruz.
-# VSCode daki CloudFormation eklentisi sayesinde maouse un üzerinde olan bölümün AWS Documentation linki görünüyor.
+# VSCode daki CloudFormation eklentisi sayesinde mouse un üzerinde olan bölümün AWS Documentation linki görünüyor.
 # Ornegin konsolda VpcId seciyorduk. Bunu Template e girmek icin Template in ilgili bölümünde VpcId yazarsak, VSCode eklentisi VpcId yi getirir
 # Gelen bilgiler arasinda bize lazim olanlari Documentation daki yönlendirmelere gore düzenleriz.
 # Burada önemli olan AWS konsoluna ve resource lara hakimiyet. Örnegin AWS de ClassicLoadBalancer v1, ElasticLoadBalancer v2 diye geciyor.
