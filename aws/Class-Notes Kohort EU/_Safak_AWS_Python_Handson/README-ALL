@@ -1,1 +1,10 @@
 tum  notlari buraya topladim
+
+arka arkaya ic ice EC2 lara agent kullanarak baglanmak icin:
+
+ssh-add ~/key/leon.pem
+
+Sorun cikarsa yukaridaki komuttan once agent i eklemek icin
+eval "$(ssh-agent)" yap
+
+ssh -A ec2-user@XXXXXX

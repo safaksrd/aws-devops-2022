@@ -8,7 +8,7 @@ Description: > # > ya da | ile altsatira gecip aciklama yapilabilir
   is downloaded from Github repository, then deployed on Apache Web Server.
 
 Resources:
-  LeonsSecurityGroup:
+  cfn-sec-group:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable HTTP for Apache Web Server and SSH for Terminal
@@ -54,11 +54,30 @@ Resources:
             wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes%20Kohort%20EU/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/cat2.jpg
             systemctl start httpd
             systemctl enable httpd
+
+# userdatanin icinde wget kismini su sekilde de yazabiliriz
+# FOLDER="https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes%20Kohort%20EU/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web"
+# cd /var/www/html
+# wget $FOLDER/index.html
+# wget $FOLDER/cat0.jpg
+# wget $FOLDER/cat1.jpg
+# wget $FOLDER/cat2.jpg
+
+
+
+#Outputs:
+#  WebsiteURL: # Alacagimiz output un ismi, istedigimiz ismi verebiliriz
+#    Value: !Sub 
+#      - http://${PublicAddress} # PublicAddress i alt satirdan cekiyor
+#      - PublicAddress: !GetAtt WebServerHost.PublicDnsName # Her olusan EC2 nun farkli Attributelari var, 
+#                                                           # bunlari cekmek icin !GetAtt kullanilir.
+#                                                           # Burada DNS Name Attribute unu kullaniyoruz
+#    Description: Kittens Carousel Application URL
+
 Outputs:
-  WebsiteURL: # Alacagimiz output un ismi, istedigimiz ismi verebiliriz
-    Value: !Sub 
-      - http://${PublicAddress} # PublicAddress i alt satirdan cekiyor
-      - PublicAddress: !GetAtt WebServerHost.PublicDnsName # Her olusan EC2 nun farkli Attributelari var, 
-                                                           # bunlari cekmek icin !GetAtt kullanilir.
-                                                           # Burada DNS Name Attribute unu kullaniyoruz
+  WebsiteURL:
+    Value: !Join 
+      - ''
+      - - 'http://'
+        - !GetAtt WebServerHost.PublicDnsName # Olusturulan ALB nin DNSName ini GetAtt ile cekiyoruz. 
     Description: Kittens Carousel Application URL

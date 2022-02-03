@@ -15,6 +15,14 @@ NOT: Handson un Endpoint ile ilgili mimarisi VPC Endpoint S3-EC2.png isimli resi
 
 - VPC Peering ile ilgili handson da AWS nin sundugu Default VPC de yer alan bir public subnete Windows AMI kurduk. Bu subnet ile ayni regionda yer alacak sekilde (ornegin us-east-1a, bunu hizli olmasi ve daha az ucret odemek icin yapiyoruz) kendi olusturdugumuz VPC de bir NAT Gateway olusturduk. Bu NAT Gateway i kendi olusturdugumuz VPC de yer alan Private subnetlerin Route Table ina Outband Connectivity saglamak icin yazdik. Kendi olusturdugumuz VPC de Private Subnette ama hiz ve ücret acisindan Windows AMI ile ayni subnette yer alacak sekilde bir Linux EC2 instance i User Datali kurduk (KEN RYU web sayfasini icerecek sekilde bir NginX Web server). Default VPC ile kendi olusturdugumuz VPC arasina VPC Peering kurduk, Sonra her iki VPC nin Route Tables ina birbirlerinin CIDR bloklarini Destination olarak ekledik. Artik Default VPC de public subnette kurulu Windows makineden kendi olusturdugumuz VPC nin private subnetinde kurulu KEN RYU websayfasina AWS networku üzerinden baglanabiliriz.
 
+- NACL Subnetler icin, Security Group ise Resources icin (z.B. EC2 Instance) olusturulur. 
+- Dolayisiyla Subnetler NACL Rules u uygular, EC2 Instances hem NACL hem de Security Group Rules u uygular.
+- NACL sistenin girisindeki güvenlik, Security Group binanin girisindeki güvenliktir.
+- NACL rules hiyerarsik sirayla uygulanir. Security Groups da bu yoktur.
+- NACL da Allow/Deny secebiliyoruz, Security Groups da sadece Allow seciliyor.
+- NACL stateless dir, Security Groups stateful dur. Yani NACL da Inbound ve Outbound Rules ayri ayri ayarlanir. NACL Rules kapsaminda EC2 Instance a girdigin porttan disari cikamazsin. Outbound Rules icin 1024-65535 arasindaki Ephemeral Ports kullanilir. Ornegin HTTP 80 porttan EC2 Instance a giriyorsa, EC2 Instance dan cikis icin 1024-65535 arasi secilmelidir.
+- Subnetlere birden fazla NACL atayamayiz ancak bir NACL i birden fazla Subnete atayabiliriz.
+
 
 - Migration faaliyetleri kapsaminda AWS firmalara on premise leri AWS ile hibrit sekilde kullanmalari ve yavas yavas pacayi kapip komple AWS ye tasimak icin sundugu yontemler var.
 1) AWS VPN : Internet aracaligi ile firmanin on premise deki resource lari ile AWS deki resource larini baglar.
