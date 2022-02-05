@@ -1,3 +1,27 @@
+Ozet: 15.10.2020
+
+- Elastik Beanstalk CLI ile Developer icin Application u deploy edip Environment olusturmak cok daha kolay.
+- AWS Konsola girip zip li dosyayi yüklemeye gerek yok. Eger Credentials lar ayarlanmis ise Developer in yaptigi tek sey zip li dosyanin acik haline terminalden ulasip once `eb init` sonra `eb create` dir. Application dosyalari birbirinden farkli ise her dosyanin icinde bu komutlari ayrica calistirmak gerekiyor.
+- Terminalden `eb open` dersek web sayfasi aciliyor.
+- Terminalden `eb console` dersek AWS Konsolu acar.
+- Terminalden `eb status` dersek Environment bilgilerini gosterir.
+- Terminalden `eb list` dersek Environment larin listesini gosterir.
+- Terminalden `eb config` dersek Environment ile ilgili config dosyasini acar. Bu dosyada "on the go" bir degisiklik yapinca environment update oluyor. Bu degisikligi bir sonraki sefer tekrar kullanmak istiyorsak `eb config save` komutuyla degismis config dosyasini application klasorune kaydederiz.
+- Diyelim ki Application dosyasinda ornegin index.php de bir degisiklik yaptik ve versiyon 2 olustu. `eb deploy` demek yeterli, hemen Version 2 olusuyor. Konsoldan bu is cok daha uzun sürüyor. Versiyon 2'nin zip li halini tekrar yüklüyoruz vs.
+- Terminalden `eb terminate` dersek terminate etmek istedigimiz environment i sorar, bunu girdikten sonra terminate islemi baslar.
+- Buraya kadar olan notlar Readme de olmayan hands-on a ait notlardi. 
+- Daha kapsamli bir application (webpage uzeridnen database e baglanma vs) deploy edeceksek Elastik Beanstalk in default olusturdugu IAM Role yeterli olmuyor. IAM Role menusunden Elastik Beanstalk e yeni bir ole atamamiz gerekiyor. Use Case olarak `Elastic Beanstalk Customizable` secilir.
+- Bir onceki php ile yazilmis olan basit bir uygulama oldugu icin `en init` dedikten sonra `eb create` demek Environment olusturmak icin yeterliydi. Ama python ile calisan application da create kismina ekleme yapiyoruz.
+- Farkli deployment yontemleri var. Which AWS Elastic Beanstalk Deployment Method Should You Use? sorusuyla ilgili asagidaki sayfa aciklayici
+https://blog.shikisoft.com/which_elastic_beanstalk_deployment_should_you_use/
+- Python ile calisan application da bir RDS database var. Buradaki database e workbench ya da mariadb kurulu bir ec2 instance uzerinden baglanabiliriz. Ancak Security Group mevcut haliyle buna izin vermiyor, cünkü Elastik Beanstalk uzerinden gelen trafigi kabul edecek sekilde ayarli, bunu anywhere seklinde degistirince database e girebiliriz.
+- Terminalden `eb terminate` dersek terminate etmek istedigimiz environment i sorar, bunu girdikten sonra terminate islemi baslar. Ancak bu sefer silinirken database in snapshot i alinmis olacak, elle bu snapshot i silmek gerekiyor. Ayrica AWSEB CLI uzerinden application u silemiyoruz. Bunu AWS nin kendi CLI i uzerinden silebiliriz.
+- AWS CLI uzerinden application silme komutu
+aws elasticbeanstalk delete-application --application-name app_ismi
+- 
+
+
+
 # Hands-on EB-02 : Introduction to AWS Elastic Beanstalk CLI
 
 Purpose of this hands-on training is to give the students basic knowledge of installing and configuring the AWS Elastic Beanstalk CLI and how to deploy applications using AWS Elastic Beanstalk CLI.
@@ -46,7 +70,7 @@ At the end of this hands-on training, students will be able to;
 - Enter `aws-elastic-beanstalk-service-role` as `Role name` and click `Create role`.
 
 
-## Part 2 - Install and Configure AWSEC CLI
+## Part 2 - Install and Configure AWSEB CLI
 
 - Open your terminal.
 
@@ -223,6 +247,6 @@ To confirm, type the environment name:
 
 - Wait for a while and show the environment is deleted.
 
-- RDS takes a snapshot during the process above, to avoid extra charges, go to the RDS service on AWS console and delete the snapshot.
+- RDS takes a snapshot during the process above, to avoid extra charges, go to the RDS service on AWS console and delete the snapshot. (manuel snapshots)
 
 - You can optionally delete the beanstalk application.

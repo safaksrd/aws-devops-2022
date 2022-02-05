@@ -7,7 +7,8 @@ Ozet: 13.10.2020
 - Worker Environment : Back End Server (Resmin islendigi kisim
 - Terminate edilen bir environment 1 saat icinde tekrar restore (deploy) edilebilir. 
 - Calisan Environment da Application Versions ve Saved Configurations var. Calisacak application a ozel instance type i vs degistirip save edebiliriz. Soz konusu application u calistirmak istedigimizde Saved Configurations dan environment secilebilir.
-- Environment da default olusan EC2 Instance in Public IP sinden PHP ile olusturulan web sayfasina baglanamiyoruz cünkü arada Elastik Beanstalk un Security Group undan geciyor. Environment EC2 ya Elastik BeanstalkSecurity Group uzerinden trafik gelecek sekilde tasarlaniyor. 
+- Environment da default olusan EC2 Instance in Public IP sinden PHP ile olusturulan web sayfasina baglanamiyoruz cünkü arada Elastik Beanstalk un Security Group undan geciyor. Environment EC2 ya Elastik Beanstalk Security Group uzerinden trafik gelecek sekilde tasarlaniyor. 
+- Applicationun kondugu S3 DNS Name ile Elastik Beanstalk DNS Name arasinda Route 53 de record olusturuluyor.
 - Silme asamasinda once Application u silersek Environment da silinir. Once Environment silinirse Application kalir. Bir gun sonra tekrar Application u Deploy edip yeni bir environment olusturabiliriz.
 - Elastik Beanstalk tarafindan Environment icin olusturulan S3 Bucket lar i Bucket Policy ye Elastik Beanstalk tarafindan eklenen ayardan dolayi silinemiyor, önce bu policy i siler sonra Bucket i sileriz.
 
