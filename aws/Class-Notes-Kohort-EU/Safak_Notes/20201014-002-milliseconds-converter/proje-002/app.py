@@ -29,7 +29,7 @@ def main_post():
         return render_template('index.html', developer_name = 'Safak', not_valid = True) # not_valid=True olunca "Please enter a number greater than zero." mesaji cikacak
     
     # yukaridaki sartlar saglanmazsa asagidakini donecek.
-    return render_template('result.html', developer_name=' Safak', milliseconds = alpha, result = convert(int(alpha))) # result.html sayfasinin bizden beklediklerini gonderiyoruz.
+    return render_template('result.html', developer_name=' Safak', milliseconds = alpha, result = convert(int(alpha))) # result.html sayfasinin bizden beklediklerini gonderiyoruz. result.html de miliseconds olarak beklenen degere alpha yi, result olarak beklenen degere ise alpha nin convert fonksiyonundan elde edilen cevabini gondeririz.
 
 if __name__ == '__main__':
     #app.run(debug=True)
