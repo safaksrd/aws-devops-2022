@@ -1,17 +1,17 @@
 Ozet: 2020-09-23
-Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
-Lokal PC de asagidakiler kurulacak.
+- Lokal PC de asagidakiler kurulacak.
 
 pip3 install flask_sqlalchemy
 pip3 install flask_mysql
 
-SQLite ve mySQL ile pythonda database olusturacagiz. Lokalde ve AWS RDS de ekleme gorme vs denemeler yapacagiz.
+- SQLite ve mySQL ile pythonda database olusturacagiz. 
+- Lokalde ve AWS RDS de ekleme gorme vs denemeler yapacagiz.
 
-Olusturdugumuz kullanicilari asagidaki komutla gorecegiz
+- Olusturdugumuz kullanicilari asagidaki komutla gorecegiz
 select * from clarusway.users
 
-EC2 uzerinde basarili olmak icin asagidaki komutlari baslangicta calistir:
+- EC2 uzerinde basarili olmak icin asagidaki komutlari baslangicta calistir:
 
 • sudo yum install python3 -y
 • sudo pip3 install flask

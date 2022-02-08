@@ -6,12 +6,15 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__) # Burada object olarak tanimlanan app asagida SQLAlcemy ile birlesiyor
 
 # Configure sqlite database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./email.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
-db = SQLAlchemy(app) # SQLAlcemy ile app i birlestiriyoruz
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./email.db' # burada olusturulan ne varsa email.db ye yaz. baslangicta email.db yok, program calistirilinca otomatik olusturacak. Bulundugum directory i . ile ifade ediyoruz.
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False # Tüm modifikasyonlari takip ediyor, bize lazim degil. False dedik
+db = SQLAlchemy(app) # SQLAlcemy ile app i birlestiriyoruz. Python tarafi ile SQLAlchemy tarafi birlesiyor. app icindeki degisiklikleri db ye atiyor
 
-# Execute the code below only once.
-# Write sql code for initializing users table..
+# Execute the code below only once. Bu kod bir defa calistirilacak, cünkü her calistirildiginda sistem resetleniyor
+# Write sql code for initializing users table. SQL query lerini python kodunun icine gömüyoruz. 
+# Ilk once mevcut tablolari siliyoruz, sonra yeni tablo yaratiyoruz, tablonun sütunlarini belirliyoruz
+# ilk kolon username, ikinci kolon email
+
 drop_table= """
 DROP TABLE IF EXISTS users;
 """
@@ -24,20 +27,22 @@ data = """
 INSERT INTO users
 VALUES
     ("Levent Akyuz", "levent.akyuz@gmail.com"),
-    ("Ahmet Kanat", "mustafa.kanat@yahoo.com"),
+    ("Ahmet Kanat", "ahmet.kanat@yahoo.com"),
     ("Hakan Sule", "hakan.sule@clarusway.com");
 """
-db.session.execute(drop_table)
-db.session.execute(users_table)
-db.session.execute(data)
+db.session.execute(drop_table) # yukarida calisan statement ler cevrime sokuluyor. drop_table ile mevcut user varsa siliniyor
+db.session.execute(users_table) # users_table ile users isimli 2 sütunlu tablo yaratiyoruz
+db.session.execute(data) # data ile yeni olusturulan users isimli tabloya veri giriyoruz.
 db.session.commit()
 
 # Write a function named `find_emails` which find emails using keyword from the users table in the db,
 # and returns result as tuples `(name, email)`.
-# keyword un sag ve solundaki % isaretleri sayesinde Mustafa yerine usta bile yazsak Mustafa yi bulur.
+
+# keyword un sag ve solundaki % isaretleri sayesinde Hakan yerine aka bile yazsak Hakan i bulur. 
+
 def find_emails(keyword):
     query=f"""
-    SELECT * FROM users WHERE username like '%{keyword}%';
+    SELECT * FROM users WHERE username like '%{keyword}%'; 
     """
     result = db.session.execute(query)
     user_emails = [(row[0], row[1]) for row in result]
@@ -68,6 +73,7 @@ def insert_email(name, email):
 # Write a function named `emails` which finds email addresses by keyword using `GET` and `POST` methods,
 # using template files named `emails.html` given under `templates` folder
 # and assign to the static route of ('/')
+
 # keyword olarak girilen user_name veritabaninda var ise find_emails function calisiyor ve user_emails i buluyor
 @app.route('/', methods =['GET','POST']) # kök rout a gelen bir istek
 def emails():
@@ -81,6 +87,7 @@ def emails():
 #Write a function named `add_email` which inserts new email to the database using `GET` and `POST` methods,
 # using template files named `add-email.html` given under `templates` folder
 # and assign to the static route of ('add')
+
 # girilen name-email ikilisi database de yoksa insert_email function calisiyor ve yeni bilgiyi database ekliyor
 
 @app.route('/add', methods =['GET','POST'])
@@ -97,5 +104,5 @@ def add_email():
 
 # Add a statement to run the Flask application which can be reached from any host on port 80.
 if __name__ =='__main__':
-    app.run(debug=True)
-    #app.run(host='0.0.0.0', port=80)
+    #app.run(debug=True)
+    app.run(host='0.0.0.0', port=80)

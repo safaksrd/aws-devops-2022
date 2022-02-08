@@ -77,8 +77,7 @@ Resources:
           cd templates
           wget https://raw.githubusercontent.com/Musti4096/aws_devops_workshop/master/aws/projects/002-milliseconds-converter/templates/index.html
           wget https://raw.githubusercontent.com/Musti4096/aws_devops_workshop/master/aws/projects/002-milliseconds-converter/templates/result.html
-          cd ..
-          python3 app.py
+          python3 /home/ec2-user/app.py
 
   MyCPUPolicy: #completed
     Type: "AWS::AutoScaling::ScalingPolicy"

@@ -72,17 +72,28 @@ Resources:
           cd templates
           wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/templates/index.html
           wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/templates/result.html
-          cd ..
-          python3 app.py
+          python3 /home/ec2-user/app.py
 
 # /home/ec2-user dizinine gecmezsek wget ile cekilen dosyalar roota gelir, bu production ortaminda istedigimiz birsey degil
 
-# mkdir template
-# cd templates
-# wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/templates/index.html
+#1 cd /home/ec2-user
+#2 wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/app.py
+#3 mkdir templates
+#4 cd templates
+#5 wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/templates/index.html
+#6 wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/templates/result.html
+        
+# Yukaridaki 6 satir ile yapmak yerine alttaki 4 satir da ayni isi görürmüs!
+# FOLDER="https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/"
+# wget -P /home/ec2-user /app.py
+# wget -P /home/ec2-user/templates "$FOLDER"templates/index.html
+# wget -P /home/ec2-user/templates "$FOLDER"templates/result.html
 
-# Üc satir ile yapmak yerine alttaki de ayni isi görürmüs!
-# wget -P templates https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/templates/index.html
+# Yukaridaki 6 satir ile yapmak yerine alttaki 4 satir da ayni isi görürmüs!
+# FOLDER="https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/"
+# curl -s --create-dirs -o "/home/ec2-user/templates/index.html" -L "$FOLDER"templates/index.html
+# curl -s --create-dirs -o "/home/ec2-user/templates/result.html" -L "$FOLDER"templates/result.html
+# curl -s --create-dirs -o "/home/ec2-user/app.py" -L "$FOLDER"app.py
 
 
 Outputs: 

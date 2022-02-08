@@ -8,7 +8,7 @@ Description: > # > ya da | ile altsatira gecip aciklama yapilabilir
   is downloaded from Github repository, then deployed on Apache Web Server.
 
 Resources:
-  cfn-sec-group:
+  LeonsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable HTTP for Apache Web Server and SSH for Terminal

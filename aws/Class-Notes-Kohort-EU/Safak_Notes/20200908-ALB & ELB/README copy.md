@@ -1,5 +1,4 @@
 Ozet: 2020-09-08
-Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 - Nginx firmasinin Load Balancer (LB) konusunda ustun cozumleri var. Amazon Nginx cozumlerinden esinleniyor.
 - Algoritmalar: Round Robin: sirayla random dagitiyor, Least Outstanding Requests: isi bitene dagitiyor, sirayla dagitmak esit dagitmak degildir.
@@ -7,10 +6,13 @@ Yeni repoya uygun sekilde wget adresleri guncellendi!!
 - Launch Instances with Launch Template, 
 - Creating a Target Group (bos havuz olusturmaliyiz), 
 - Select two instances that is created from Launch Template before and add to them to the target group. Click `Include as pending below` button.
-- Creating Application Load Balancer (ALB) together with Target Group
-- Auto Scaling (ASG) olmadan launch template ile kendi olusturdugumuz instance lari kullanarak ALB yapiyoruz. ALB web sayfasina olan istekleri saglikli olan instance lar arasinda dagitiyor.
+- Creating Application Load Balancer (ALB) together with Target Group (ALB, Elastik Load Balancer (ELB) in 4 türünden biridir). Web Application ile ugrastigimiz icin ALB seciyoruz.
+- Load Balancer basically consists of 2 components: Listener and Configuration
+- Listener, as the name suggests, listens to the incoming traffic through a specific port according to the component adjustments.
+- Configuration is a set of rules that takes into account the Listener's analysis and provides to direct traffic.
+- Auto Scaling Group (ASG) olmadan launch template ile kendi olusturdugumuz instance lari kullanarak ALB yapiyoruz. ALB web sayfasina olan istekleri saglikli olan instance lar arasinda dagitiyor. 
 - 3 instance dan 1 tanesini "sudo systemctl stop httpd" komutu ile kapatirsak ALB 2 instance arasinda yükü dagitmaya basliyor. Kapatilan instance tekrar acildiginda ALB tekrar 3 instance arasinda yükü dagitmaya basliyor.
-- İleriki ornekte Auto Scaling i ALB nin onune koyacagiz. Instance acma ve kapamayi Auto Scaling ayarlayacak.
+- İleriki ornekte ASG yi ALB nin onune koyacagiz. Instance acma ve kapamayi ASG ayarlayacak.
 
 - Reihenfolge der Löschung : Instances -> Load Balancer -> Target Group
 
