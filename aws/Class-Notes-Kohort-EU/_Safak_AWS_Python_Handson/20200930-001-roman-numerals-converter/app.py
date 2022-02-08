@@ -27,8 +27,8 @@ def main_get():
 @app.route('/', methods=['POST']) # Root da POST metodu ile veri girisi olursa asagidakiler gerceklesir
 def main_post():
     alpha = request.form['number'] # index.html sayfasinda girilen number degiskenini alpha degiskenine atadi ve flaskin icinde kullaniyor
-    if not alpha.isdecimal(): # hepsi rakamsa alpha.isdecimal True gelir. not True = False olur, alttaki ifade gelmez. hepsi rakam degilse alpha.decimal False gelir. not False=True olur, alttaki ifade gelir.
-        return render_template('index.html', developer_name='Safak', not_valid=True) # not_valid=True olunca "Please enter a number between 1 and 3999, inclusively. mesaji cikacak
+    if not alpha.isdecimal(): # hepsi rakamsa alpha.isdecimal True gelir. not True = False olur, alttaki ifade gelmez. hepsi rakam degilse alpha.isdecimal False gelir. not False=True olur, alttaki ifade gelir.
+        return render_template('index.html', developer_name='Safak', not_valid=True) # not_valid=True olunca "Please enter a number between 1 and 3999, inclusively." mesaji cikacak
 
     number = int(alpha) # alpha degiskenini integer a cevirip number degiskenine atadi
     
@@ -36,7 +36,6 @@ def main_post():
         return render_template('index.html', developer_name='Safak', not_valid=True) # not_valid=True olunca "Please enter a number between 1 and 3999, inclusively." mesaji cikacak
     
     # yukaridaki sartlar saglanmazsa asagidakini donecek.
-    #
     return render_template('result.html', number_decimal = number , number_roman= convert(number), developer_name='Safak') # result.html sayfasinin bizden beklediklerini gonderiyoruz.
 
 if __name__ == '__main__':

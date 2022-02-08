@@ -75,8 +75,8 @@ def greet_admin():
 def greet(ad):
     return render_template('greet.html', isim = ad)
 
-# render_template icerisindeki atama ilgili html sayfasi icinde kullanilir.
-
+# render_template icerisinde yapilan atama ilgili html sayfasi icinde kullanilir.
+# render_template app.py icerisindeki verilerimi hangi html i yazarsam oraya gönderiyor.
 
 # Create a function named list10 which creates a list counting from 1 to 100 within `list100.html` 
 # and assign to the route of ('/list100')
