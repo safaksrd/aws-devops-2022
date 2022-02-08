@@ -99,7 +99,7 @@ Not:Recursive olarak icine konan dosyalara da uyguluyor.
 
 9. Go to the /var/www/html
 
-cd /var/www/html
+cd var/www/html
 
 10. Create a custom `index.html` file under `/var/www/html/` folder to be served on the Server.
 

@@ -1,3 +1,11 @@
+Ozet: 17.10.2020
+Cloud Trail: Hangi IP ne yapti takip eden servis.
+Cloud Config: Konfigurasyonlarda yapilan degisiklikleri takip eder.
+
+- Cloudwatch ile Alarm kurduk. EC2 instance in CPUUtilization u %60 in ustune cikinca EC2 Instance i kapattik ve e-mail gonderdik.
+- EC2 da log kaydi almak icin EC2 ya agent yüklemeliyiz.
+- Agent sayesinde Nginx kurulu EC2 Instance da nginx ile ilgili log kayitlarini (access, error) cloudwatcha gonderdik.
+
 # Hands-on CW-01 : Setting Cloudwatch Alarm Events, and Logging
 
 Purpose of the this hands-on training is to create Dashboard, Cloudwatch Alarm, configure Events option and set Logging up.
@@ -285,7 +293,10 @@ log_group_name = ErrorLog
 sudo systemctl stop awslogsd
 sudo systemctl start awslogsd
 ```
-- go to the Cloudwatch logs group again 
+
+- Instance'a HTTP den baglan. Baglaninca AccessLog olusur. URL adresinin sonuna hata verecek sekilde ekleme yap. Baglanamayacagi icin ErrorLog olusur.
+
+- go to the Cloudwatch log groups again 
 
 - click the created log group named "AccessLog" and "ErrorLog" ---> show the newly created "log streams"
 
