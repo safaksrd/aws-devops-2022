@@ -67,22 +67,22 @@ Resources:
           yum install python3 -y
           pip3 install flask
           cd /home/ec2-user
-          wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200930-001-roman-numerals-converter/app.py
+          wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/app.py
           mkdir templates
           cd templates
-          wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200930-001-roman-numerals-converter/templates/index.html
-          wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200930-001-roman-numerals-converter/templates/result.html
+          wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/templates/index.html
+          wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/templates/result.html
           cd ..
           python3 app.py
 
-# /home/ec2-user dizinine gecmezsek wget ile cekilen dosyalar roota gelir, bu production ortaminda istediigmiz birsey degil
+# /home/ec2-user dizinine gecmezsek wget ile cekilen dosyalar roota gelir, bu production ortaminda istedigimiz birsey degil
 
 # mkdir template
 # cd templates
-# wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200930-001-roman-numerals-converter/templates/index.html
+# wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/templates/index.html
 
-# Üc satr ile yapmak yerine alttaki de ayni isi görür
-# wget -P templates https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/class-notes/_Safak_AWS_Python_Handson/20200930-001-roman-numerals-converter/templates/index.html
+# Üc satir ile yapmak yerine alttaki de ayni isi görürmüs!
+# wget -P templates https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200930-001-roman-numerals-converter/templates/index.html
 
 
 Outputs: 
