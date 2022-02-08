@@ -44,9 +44,9 @@ Resources:
   WebServerHost:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-09d95fab7fff3776c
+      ImageId: ami-0ed9277fb7eb570c9
       InstanceType: !Ref InstanceType #Parameters altinda tanimlanan InstanceType refere ediliyor. Oradaki kisitlamalara gore secim yapilacak
-      KeyName: call.training
+      KeyName: leon
       SecurityGroupIds:
         - !Ref WebServerSecurityGroup
       Tags:                
@@ -60,10 +60,10 @@ Resources:
             yum update -y
             yum install httpd -y
             cd /var/www/html/
-            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes%20Kohort%20EU/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/index.html
-            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes%20Kohort%20EU/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/cat0.jpg
-            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes%20Kohort%20EU/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/cat1.jpg
-            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes%20Kohort%20EU/_Safak_AWS_Python_Handson/20200916-101-kittens-carousel-static-website-ec2/proje%20101-serdar%20hoca/static-web/cat2.jpg
+            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200916-101-kittens-carousel-static-website-ec2/proje-101/static-web/index.html
+            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200916-101-kittens-carousel-static-website-ec2/proje-101/static-web/cat0.jpg
+            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200916-101-kittens-carousel-static-website-ec2/proje-101/static-web/cat1.jpg
+            wget https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20200916-101-kittens-carousel-static-website-ec2/proje-101/static-web/cat2.jpg
             systemctl start httpd
             systemctl enable httpd
 Outputs:
