@@ -50,8 +50,8 @@ Resources:
               pip3 install flask
               FOLDER="https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20201014-002-milliseconds-converter/proje-002/"
               wget -P /home/ec2-user "$FOLDER"app.py
-              wget -P templates "$FOLDER"templates/index.html
-              wget -P templates "$FOLDER"templates/result.html
+              wget -P /home/ec2-user/templates "$FOLDER"templates/index.html
+              wget -P /home/ec2-user/templates "$FOLDER"templates/result.html
               python3 /home/ec2-user/app.py
 
 # curl -s ile baslayan kisimda mkdir ile dosya olusturup icine girmek yerine bu sekilde yaptik. Bunun icin bir baska yontem daha var. wget -P templates !!

@@ -35,7 +35,7 @@ data = """
 INSERT INTO clarusway.users 
 VALUES 
     ("Hasan Akyuz", "levent.akyuz@gmail.com"),
-    ("Mustafa Kanat", "mustafa.kanat@yahoo.com"),
+    ("Abdullah Kanat", "abdullah.kanat@yahoo.com"),
 	("Hakan Sule", "hakan.sule@clarusway.com");
 """
 cursor.execute(drop_table)

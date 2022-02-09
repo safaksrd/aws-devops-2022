@@ -1,22 +1,29 @@
 Ozet: 2020-09-23
 
 - Lokal PC de asagidakiler kurulacak.
-
-pip3 install flask_sqlalchemy
-pip3 install flask_mysql
-
-- SQLite ve mySQL ile pythonda database olusturacagiz. 
-- Lokalde ve AWS RDS de ekleme gorme vs denemeler yapacagiz.
-
-- Olusturdugumuz kullanicilari asagidaki komutla gorecegiz
-select * from clarusway.users
+• pip3 install flask_sqlalchemy
+• pip3 install flask_mysql
 
 - EC2 uzerinde basarili olmak icin asagidaki komutlari baslangicta calistir:
-
 • sudo yum install python3 -y
 • sudo pip3 install flask
 • sudo pip3 install flask_sqlalchemy
 • sudo pip3 install flask_mysql
+
+- SQLite ve MySQL ile pythonda database olusturacagiz. 
+- SQLite da yazilmis database i lokalde gorecegiz, uzerinde islemler yapacagiz.
+- MySQL de yazilmis database i RDS de ayaga kaldiracagiz, RDS e gonderip RDS ile baglantisini saglayacagiz.
+- MySQL ile SQLite in en temel farki MySQL 3306 portunu surekli dinler, SQLite ise bir portu dinlemez, herhangi bir PC uzerinde SQLite calisabilir, dolayisiyla bir Server a ihtiyac duymaz. 
+- SQLite in kurulumu kolay oldugu icin developer lar lokaldeki denemelerini oncelikle SQLite da yapip sonuc alinca MySQL e geciyor.
+- Ozetle lokalde ve RDS de database olusturma, database e birseyler ekleme, eklediklerimizi gorme vs denemeler yapacagiz.
+
+- GET: Bir internet sayfasini request ettiginizde default olarak calisan metoddur. 
+- POST: Bir veri giriyor sonucunu almak istiyorsak kullanilan metoddur.
+- RDS in endpointini kullanarak lokalden calistirdigimiz uygulama araciligi ile RDS deki database e kayit yapiyoruz. 
+- Ayni RDS endpointi kullanan bir baskasi da ayni database e kayit yapabilir. 
+- Program her calistirildiginda drop_table kisminda database her seferinde resetlenir.
+- Olusturdugumuz kullanicilari asagidaki komutla gorecegiz
+select * from clarusway.users
 
 
 # Hands-on Flask-03 : Handling Forms and SQL with Flask Web Application
@@ -124,7 +131,7 @@ When sending request, the client can send data with using different http methods
 
 - Create an object named app
 
-`bu kisimdan sonrasinda serdar hoca bazi degisiklikler yapmis`
+`****app-with-sqlite.py de SERDAR HOCA BURADAN`
 - Create a function named `home` which uses template file named `index.html` given under `templates` folder,
 - send your name as template variable, and assign route of no path ('/')
 
@@ -139,6 +146,8 @@ When sending request, the client can send data with using different http methods
 
 
 - Write an application with database implementation using `MySQL` and save the complete code as `app-with-mysql.py` under `hands-on/flask-03-handling-forms-and-sql-on-ec2-linux2` folder.
+
+`****BURAYA ATLAMIS`
 
 
 - Write a function named `find_emails` which find emails using keyword from the user table in the db,
