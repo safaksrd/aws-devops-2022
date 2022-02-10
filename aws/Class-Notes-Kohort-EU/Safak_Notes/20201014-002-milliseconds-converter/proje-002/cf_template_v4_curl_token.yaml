@@ -3,16 +3,6 @@ Description: |
   Cloudformation template for milliseconds converter application. This app runs on application load balancer. In addition, it is observed by Autoscaling Group
   
 Resources:
-  ALBSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription:  Enable HTTP for ALB
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-  
   WebServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -26,18 +16,29 @@ Resources:
           FromPort: 80
           ToPort: 80
           SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId
+# 80 portu icin Source Sec Group Id tanimladik. Disaridan web sayfasini talep eden User once ALB nin DNS ine ulasacak, ALB den gelen istekler, EC2 instance lara ulasabilecek, yani EC2 instance icindeki app.py yi calistiracak . ALB EC2 lari cepecevree saracak.
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP for ALB
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
   
-  WebServerLaunchTemplate:
+  WebServerLT:
     Type: AWS::EC2::LaunchTemplate
     Properties:
       LaunchTemplateData: 
-        ImageId: ami-0947d2ba12ee1ff75
+        ImageId: ami-033b95fb8079dc481
         InstanceType: t2.micro
         KeyName: leon
         SecurityGroupIds: 
           - !GetAtt WebServerSecurityGroup.GroupId
         TagSpecifications:
-          - ResourceType: instance
+          - ResourceType: instance # olusacak EC2 instance larin adlarini belirliyoruz
             Tags:
               - Key: Name
                 Value: !Sub Web Server of ${AWS::StackName} 
@@ -49,13 +50,13 @@ Resources:
               yum install python3 -y
               pip3 install flask
               TOKEN="xxxxxxxx"
-              FOLDER="https://$TOKEN@xxxxxxxxxxx"
+              FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20201014-002-milliseconds-converter/proje-002/"
               curl -s --create-dirs -o "/home/ec2-user/templates/index.html" -L "$FOLDER"templates/index.html
               curl -s --create-dirs -o "/home/ec2-user/templates/result.html" -L "$FOLDER"templates/result.html
               curl -s --create-dirs -o "/home/ec2-user/app.py" -L "$FOLDER"app.py
               python3 /home/ec2-user/app.py
 
-  WebServerTargetGroup:
+  WebServerTG:
     Type: "AWS::ElasticLoadBalancingV2::TargetGroup"
     Properties:
       Port: 80
@@ -71,20 +72,22 @@ Resources:
       SecurityGroups:
         - !GetAtt ALBSecurityGroup.GroupId
       Subnets:
-        - subnet-077c9758
-        - subnet-3246e63c
-        - subnet-3ccd235a
-        - subnet-8d8dbfb3
-        - subnet-c41ba589
-        - subnet-ed49bccc
+        - subnet-09c7b169bc3091295
+        - subnet-066a874056a5249be
+        - subnet-01c2a24554b2ed1bd
+        - subnet-00aee72d56623669d
+        - subnet-0440277dd2320c599
+        - subnet-0afa176de4f1e6d5b
       Type: application
+
+# subnet ler regiona gore girilmeli
 
   ALBListener:
     Type: "AWS::ElasticLoadBalancingV2::Listener"
     Properties:
       DefaultActions: #required
-        - TargetGroupArn: !Ref WebServerTargetGroup
-          Type: forward
+        - TargetGroupArn: !Ref WebServerTG
+          Type: forward # neden?
       LoadBalancerArn: !Ref ApplicationLoadBalancer #required
       Port: 80 #required
       Protocol: HTTP #required
@@ -93,17 +96,17 @@ Resources:
     Type: "AWS::AutoScaling::AutoScalingGroup"
     Properties:
       AvailabilityZones:
-        !GetAZs ""
+        !GetAZs "" # tüm AZ leri almasi icin
       DesiredCapacity: 2
       HealthCheckGracePeriod: 90
       HealthCheckType: ELB
       LaunchTemplate: 
-        LaunchTemplateId: !Ref WebServerLaunchTemplate
-        Version: !GetAtt WebServerLaunchTemplate.LatestVersionNumber
+        LaunchTemplateId: !Ref WebServerLT
+        Version: !GetAtt WebServerLT.LatestVersionNumber
       MaxSize: 3 #required
       MinSize: 1 #required
       TargetGroupARNs:
-        - !Ref WebServerTargetGroup
+        - !Ref WebServerTG
     
 
 Outputs:

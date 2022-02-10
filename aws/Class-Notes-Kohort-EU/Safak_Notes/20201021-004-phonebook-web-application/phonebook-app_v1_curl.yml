@@ -60,8 +60,7 @@ Resources:
                 pip3 install flask
                 pip3 install flask_mysql
                 echo "${MyDBURI}" > /home/ec2-user/dbserver.endpoint
-                TOKEN="xxxxxxxxxxxxxxx!!!!!!!!!!!!!"
-                FOLDER="https://$TOKEN@raw.githubusercontent.com/serdarcw/004-Phonebook-web-app-EU/master/"
+                FOLDER="https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20201021-004-phonebook-web-application/"
                 curl -s --create-dirs -o "/home/ec2-user/templates/index.html" -L "$FOLDER"templates/index.html
                 curl -s --create-dirs -o "/home/ec2-user/templates/add-update.html" -L "$FOLDER"templates/add-update.html
                 curl -s --create-dirs -o "/home/ec2-user/templates/delete.html" -L "$FOLDER"templates/delete.html
@@ -89,12 +88,12 @@ Resources:
       SecurityGroups:
         - !GetAtt ALBSecurityGroup.GroupId
       Subnets:
-        - subnet-077c9758
-        - subnet-3246e63c
-        - subnet-3ccd235a
-        - subnet-8d8dbfb3
-        - subnet-c41ba589
-        - subnet-ed49bccc
+        - subnet-09c7b169bc3091295
+        - subnet-066a874056a5249be
+        - subnet-01c2a24554b2ed1bd
+        - subnet-00aee72d56623669d
+        - subnet-0440277dd2320c599
+        - subnet-0afa176de4f1e6d5b
       Type: application
 
   ALBListener:
@@ -102,7 +101,7 @@ Resources:
     Properties:
       DefaultActions: #required
         - TargetGroupArn: !Ref WebServerTG
-          Type: forward
+          Type: forward # neden?
       LoadBalancerArn: !Ref ApplicationLoadBalancer #required
       Port: 80 #required
       Protocol: HTTP #required
@@ -111,7 +110,7 @@ Resources:
     Type: "AWS::AutoScaling::AutoScalingGroup"
     Properties:
       AvailabilityZones:
-        !GetAZs ""
+        !GetAZs "" # tüm AZ leri almasi icin
       DesiredCapacity: 2
       HealthCheckGracePeriod: 300
       HealthCheckType: ELB
@@ -128,8 +127,8 @@ Resources:
     Properties:
       GroupDescription: Front-end access
       DBSecurityGroupIngress:
-        - CIDRIP: 0.0.0.0/0
-        - EC2SecurityGroupId: !GetAtt WebServerSecurityGroup.GroupId
+        - CIDRIP: 0.0.0.0/0 # ozellikle ulasmasini istedigimiz bir subnet araligimiz varsa burada belirtebiliriz
+        - EC2SecurityGroupId: !GetAtt WebServerSecurityGroup.GroupId # EC2 larin Sec Group
 
   MyDatabaseServer:
     Type: AWS::RDS::DBInstance
@@ -139,7 +138,7 @@ Resources:
       AllowMajorVersionUpgrade: false 
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 0
-      DBInstanceIdentifier: phonebook-app-db2
+      DBInstanceIdentifier: phonebook-app-db2 # burada da hata almistik, hey gidi gunler
       DBName: phonebook
       DBSecurityGroups: 
         - !Ref MyDBSecurityGroup
@@ -147,7 +146,7 @@ Resources:
       DBInstanceClass: db.t2.micro #Required
       EngineVersion: 8.0.19
       MasterUsername: admin
-      MasterUserPassword: Serdar_1
+      MasterUserPassword: clarusway-1
       MultiAZ: false
       Port: 3306
       PubliclyAccessible: true
@@ -155,7 +154,7 @@ Resources:
  
 Outputs:
   WebsiteURL:
+    Description: Phonebook Application Load Balancer URL
     Value: !Sub 
       - http://${ALBAddress}
       - ALBAddress: !GetAtt ApplicationLoadBalancer.DNSName
-    Description: Phonebook Application Load Balancer URL

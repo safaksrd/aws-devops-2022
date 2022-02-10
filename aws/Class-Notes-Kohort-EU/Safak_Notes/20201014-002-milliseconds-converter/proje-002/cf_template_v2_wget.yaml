@@ -86,7 +86,7 @@ Resources:
     Properties:
       DefaultActions: #required
         - TargetGroupArn: !Ref WebServerTG
-          Type: forward
+          Type: forward # neden?
       LoadBalancerArn: !Ref ApplicationLoadBalancer #required
       Port: 80 #required
       Protocol: HTTP #required
@@ -95,7 +95,7 @@ Resources:
     Type: "AWS::AutoScaling::AutoScalingGroup"
     Properties:
       AvailabilityZones:
-        !GetAZs ""
+        !GetAZs "" # tüm AZ leri almasi icin
       DesiredCapacity: 2
       HealthCheckGracePeriod: 90
       HealthCheckType: ELB

@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: |
   Cloudformation template for milliseconds converter application. This app runs on application load balancer. In addition, it is observed by Autoscaling Group
-
+  
 Resources:
   WebServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -16,18 +16,18 @@ Resources:
           FromPort: 80
           ToPort: 80
           SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId
- # 80 portu icin Source Sec Group Id tanimladik. Disaridan web sayfasini talep eden User once ALB nin DNS ine ulasacak, ALB den gelen istekler, EC2 instance lara ulasabilecek, yani EC2 instance icindeki app.py yi calistiracak . ALB EC2 lari cepecevree saracak.
-  
+# 80 portu icin Source Sec Group Id tanimladik. Disaridan web sayfasini talep eden User once ALB nin DNS ine ulasacak, ALB den gelen istekler, EC2 instance lara ulasabilecek, yani EC2 instance icindeki app.py yi calistiracak . ALB EC2 lari cepecevree saracak.
+
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription:  Enable HTTP for ALB
+      GroupDescription: Enable HTTP for ALB
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
-
+  
   WebServerLT:
     Type: AWS::EC2::LaunchTemplate
     Properties:
@@ -49,10 +49,11 @@ Resources:
               yum update -y
               yum install python3 -y
               pip3 install flask
-              FOLDER="https://raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20201014-002-milliseconds-converter/proje-002/"
-              curl -s --create-dirs -o "/home/ec2-user/templates/index.html" -L "$FOLDER"templates/index.html
-              curl -s --create-dirs -o "/home/ec2-user/templates/result.html" -L "$FOLDER"templates/result.html
-              curl -s --create-dirs -o "/home/ec2-user/app.py" -L "$FOLDER"app.py
+              TOKEN="xxxxxxxx"
+              FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/aws-devops-2022/main/aws/Class-Notes-Kohort-EU/Safak_Notes/20201014-002-milliseconds-converter/proje-002/"
+              wget -P /home/ec2-user "$FOLDER"app.py
+              wget -P /home/ec2-user/templates "$FOLDER"templates/index.html
+              wget -P /home/ec2-user/templates "$FOLDER"templates/result.html
               python3 /home/ec2-user/app.py
 
   WebServerTG:
