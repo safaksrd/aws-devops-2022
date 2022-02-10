@@ -1,5 +1,4 @@
 Ozet: 2020-09-06
-Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 Icinde userdatali nginx olan bir instance yarat.
 Devaminda sunlari gerceklestir:

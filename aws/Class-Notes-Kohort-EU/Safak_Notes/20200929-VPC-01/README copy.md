@@ -203,7 +203,7 @@ clarus-default-rt (internet access is available even on private subnets)
   - clarus-az1c-private-subnet
   - and click save
 
-- create a private route table (not allowing access to the internet) 
+- create a public route table (allowing access to the internet) 
 
 - push the create route table button
   - name: 'clarus-public-rt'

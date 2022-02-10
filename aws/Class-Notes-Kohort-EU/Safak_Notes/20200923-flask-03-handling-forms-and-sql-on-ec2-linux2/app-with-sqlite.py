@@ -107,8 +107,7 @@ def add_email():
         user_name =request.form['username']     # HTML sayfasina girilen username i oradan request eder aliriz ve bunu program icindeki user_name e atar
         user_email = request.form['useremail']  # HTML sayfasina girilen useremail i oradan request eder aliriz ve bunu program icindeki user_email e atar
         result = insert_email(user_name, user_email) # yukariki satirda elde edilen user_name ve user_email i degisken olarak insert_email fonksiyonuna sokar, fonksiyon sonucunu result a atariz
-        return render_template('add-email.html', result_html=result, show_result=True) # Elde edilen result -> add-email.html deki result_html degiskenine gondeririz.  
-                                                                                    # showresult=True ise yeni bir kayit girdigimiz anlamina gelir ve "successfully added" donecek
+        return render_template('add-email.html', result_html=result, show_result=True) # Elde edilen result -> add-email.html deki result_html degiskenine gondeririz.                                                                            # showresult=True ise yeni bir kayit girdigimiz anlamina gelir ve "successfully added" donecek
     else:   
 
         return render_template('add-email.html', show_result=False)     # Kullanicidan degerleri aldigin sayfada showresult=False ise varolan bir kayit girildigi anlamina gelir ve  "already exist" donecek.        

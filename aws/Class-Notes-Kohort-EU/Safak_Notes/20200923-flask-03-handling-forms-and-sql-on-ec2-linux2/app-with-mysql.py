@@ -7,10 +7,10 @@ app = Flask(__name__)
 
 # Configure mysql database
 # host name serdar hocanın RDS database name i , oraya kendi RDS database name i yazmaliyiz
-app.config['MYSQL_DATABASE_HOST'] = 'leon-rds-2.c1ffydqfnpju.us-east-1.rds.amazonaws.com'
+app.config['MYSQL_DATABASE_HOST'] = 'phonebook-project.c1ffydqfnpju.us-east-1.rds.amazonaws.com'
 app.config['MYSQL_DATABASE_USER'] = 'admin'
-app.config['MYSQL_DATABASE_PASSWORD'] = '123456789'
-app.config['MYSQL_DATABASE_DB'] = 'clarusway'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'clarusway-1'
+app.config['MYSQL_DATABASE_DB'] = 'phonebook'
 app.config['MYSQL_DATABASE_PORT'] = 3306
 mysql = MySQL()
 mysql.init_app(app)
@@ -32,7 +32,7 @@ CREATE TABLE users (
      # dolayı küçük farklılıklar ouşmaktadır. Bunlardan biri varchar olarak 50 dememiz gerekiyor 
      # burada. Ayrıca en sonda ENGINE tipi belirtmemiz gerekmektedir.
 data = """
-INSERT INTO clarusway.users 
+INSERT INTO phonebook.users 
 VALUES 
     ("Hasan Akyuz", "levent.akyuz@gmail.com"),
     ("Abdullah Kanat", "abdullah.kanat@yahoo.com"),

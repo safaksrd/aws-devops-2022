@@ -1,14 +1,16 @@
 # Import Flask modules
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request
 from flaskext.mysql import MySQL
 
 # Create an object named app
 app = Flask(__name__)
 
 db_endpoint = open("/home/ec2-user/dbserver.endpoint", 'r', encoding='UTF-8') 
+
 # EC2 instance in home dizininde dbserver.endpoint isimli bir file olusturulacak, 
 # bu file icinde RDS endpoint yazacak, bu bilgi 'r' okuma yetkisiyle okunacak 
 # ve mySQL database konfigurasyonunda kullanilacak
+# buradaki adreslemeyi yaml dosyasinda da kullanacagiz.
 
 # Configure mysql database
 app.config['MYSQL_DATABASE_HOST'] = db_endpoint.readline().strip() # strip ile db_endpoint in kenarlarinda bosluk varsa siliniyor
@@ -26,10 +28,14 @@ cursor = connection.cursor()
 # Write a function named `init_todo_db` which initializes the todo db
 # Create P table within sqlite db and populate with sample data
 # Execute the code below only once.
+
+# database i initialize eden fonksiyon kodun sonunda calistiriliyor ki database initialize olsun!
+# ASG devrede olunca bu fonksiyon sorun cikarir, cunku ASG ile her yeni olusan instance bu fonksiyonu tekrar calistirip database i resetler, bu istenen bir durum degildir. Cozum olarak bu fonksiyonu yani database i initialize gorevini ASG dan bagimsiz sekilde bir baska EC2 instance a verebiliriz.
+
 def init_phonebook_db():
-    drop_table = 'DROP TABLE IF EXISTS phonebook.phonebook;'
+    drop_table = 'DROP TABLE IF EXISTS phonebook.phonelist;'
     phonebook_table = """
-    CREATE TABLE phonebook(
+    CREATE TABLE phonelist(
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     number VARCHAR(100) NOT NULL,
@@ -37,7 +43,7 @@ def init_phonebook_db():
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     """
     data = """
-    INSERT INTO phonebook.phonebook (name, number)
+    INSERT INTO phonebook.phonelist (name, number)
     VALUES
         ("Callahan", "1234567890"),
         ("Sergio Taco", "67854"),
@@ -193,6 +199,6 @@ def delete_record():
 
 # Add a statement to run the Flask application which can be reached from any host on port 80.
 if __name__== '__main__':
-    # init_phonebook_db()
-    # app.run(debug=True)
-    app.run(host='0.0.0.0', port=80) 
+    init_phonebook_db()     # yukarida olusturulan database i initialize edecek fonksiyon
+    app.run(debug=True)
+    #app.run(host='0.0.0.0', port=80) 
