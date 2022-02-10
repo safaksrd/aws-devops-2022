@@ -58,7 +58,7 @@ def init_phonebook_db():
 # `[{'id': 1, 'name':'XXXX', 'number': 'XXXXXX'}]`.
 def find_persons(keyword):
     query = f"""
-    SELECT * FROM phonebook WHERE name like '%{keyword.strip().lower()}%';
+    SELECT * FROM phonelist WHERE name like '%{keyword.strip().lower()}%';
     """
     cursor.execute(query)
     result = cursor.fetchall()
@@ -72,7 +72,7 @@ def find_persons(keyword):
 # and returns text info about result of the operation
 def insert_person(name, number):
     query = f"""
-    SELECT * FROM phonebook WHERE name like '{name.strip().lower()}';
+    SELECT * FROM phonelist WHERE name like '{name.strip().lower()}';
     """
     cursor.execute(query)
     row = cursor.fetchone()
@@ -80,7 +80,7 @@ def insert_person(name, number):
         return f'Person with name {row[1].title()} already exits.'
 
     insert = f"""
-    INSERT INTO phonebook (name, number)
+    INSERT INTO phonelist (name, number)
     VALUES ('{name.strip().lower()}', '{number}');
     """
     cursor.execute(insert)
@@ -91,7 +91,7 @@ def insert_person(name, number):
 # and returns text info about result of the operation
 def update_person(name, number):
     query = f"""
-    SELECT * FROM phonebook WHERE name like '{name.strip().lower()}';
+    SELECT * FROM phonelist WHERE name like '{name.strip().lower()}';
     """
     cursor.execute(query)
     row = cursor.fetchone()
@@ -99,7 +99,7 @@ def update_person(name, number):
         return f'Person with name {name.strip().title()} does not exist.'
         
     update = f"""
-    UPDATE phonebook
+    UPDATE phonelist
     SET name='{row[1]}', number = '{number}'
     WHERE id= {row[0]};
     """
@@ -112,7 +112,7 @@ def update_person(name, number):
 # and returns returns text info about result of the operation
 def delete_person(name):
     query = f"""
-    SELECT * FROM phonebook WHERE name like '{name.strip().lower()}';
+    SELECT * FROM phonelist WHERE name like '{name.strip().lower()}';
     """
     cursor.execute(query)
     row = cursor.fetchone()
@@ -120,7 +120,7 @@ def delete_person(name):
         return f'Person with name {name.strip().title()} does not exist, no need to delete.'
 
     delete = f"""
-    DELETE FROM phonebook
+    DELETE FROM phonelist
     WHERE id= {row[0]};
     """
     cursor.execute(delete)
