@@ -138,7 +138,7 @@ Resources:
       AllowMajorVersionUpgrade: false 
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 0
-      DBInstanceIdentifier: phonebook-app-db2 # burada da hata almistik, hey gidi gunler
+      DBInstanceIdentifier: phonebook-app-db # burada da hata almistik, hey gidi gunler
       DBName: phonebook
       DBSecurityGroups: 
         - !Ref MyDBSecurityGroup
