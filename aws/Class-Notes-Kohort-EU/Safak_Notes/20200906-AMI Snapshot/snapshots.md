@@ -1,7 +1,14 @@
 Ozet: 2020-09-06
 
-Icinde userdatali nginx olan bir instance yarat.
-Devaminda sunlari gerceklestir:
+- AMI: Amazon Machine Image, Snapshota gore daha ete kemige burunmus halde (saganda yumurta), 
+- Snapshot: AMI ye gore daha ham halde (pismemis haldeki yunurta). Instance yada Volume in anlik kopyasini almak. Amac: 1) Backup 2) Snapshottan bir AMI olusturmak 3) Volume olusturmak
+- Snapshotta incremental backup alinir (RDS de incremental aliniyor)
+- RDS yada EC2 instance olustururken basta volume encrypted edilmediyse, bu unencrypted volume un snapshot ini aldiktan sonra tekrar kopyalarken encrypted hale getireebiliriz.
+- Incremental Backup kullanilan bir Snapshotta bir yere referans gosterilmis bir bilgi varsa AWS onu silmene izin vermiyor, diger bilgileri silebilirsin.
+- Golden AMI: Just enough OS (JeOS)
+
+- Icinde userdatali nginx olan bir instance yarat.
+- Devaminda sunlari gerceklestir:
 
 1.yol: Snapshot menusunden instance'in snapshot unu al. Bu snapshot dan AMI (image) yarat. Bu AMI dan instance olustur. Bu uzun yol. AWS zaten instance in AMI sini direk alma izni veriyor. 
 2.yol: Instance in AMI sini direk al. Direk AMI alindiginda AWS arka planda zaten snapshot olusturuyor. Bu AMI dan instance olustur.
