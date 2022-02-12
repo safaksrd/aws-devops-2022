@@ -1,23 +1,27 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: |
   Cloudformation Template for kittens carousel static website deploy on s3. cloudfront and route 53
+
 Parameters:
-  DomainName:
+  DomainName: # Cloud53 den satin aldigimiz domain name imizi yani hosted zone u parameter olarak tanimladik -> safaks.net
     Description: DNS Name of existing Amazon Route 53 hosted zone ex. clarusway.us
     Type: AWS::Route53::HostedZone::Id
-  KittensDomainName:
+  KittensDomainName: # cagiracagimiz adresi yani full domain name i parameter olarak tanimladik -> www.safaks.net ya da info.safaks.net
     Description: Full domain name for the App. ex. kittens.clarusway.us
     Type: String
-    AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
+    AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-) # Kisitlama koyuyoruz. Basa ve sona gelemeyecek olan karakterleri belirledik. Kullanilabilecek karakterleri belirledik. En fazla 63 karakter olabilir
+
 Resources:
-  KittensBucket:
+
+  KittensBucket: # Stack icinde cagrilacak olan Bucket i olusturalim
     Type: "AWS::S3::Bucket"
     Properties:
       AccessControl: PublicRead
-      BucketName: !Ref KittensDomainName
+      BucketName: !Ref KittensDomainName # Uniq olan S3 konsolda olusturulacak olan Bucket Name ismini Full Domain Name den alacak
       WebsiteConfiguration:
         IndexDocument: index.html
-  KittensBucketPolicy:
+  
+  KittensBucketPolicy: # Bucket in Policy sini ayarliyoruz
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: !Ref KittensBucket
@@ -27,27 +31,30 @@ Resources:
             Effect: Allow
             Principal: '*'
             Action: s3:GetObject
-            Resource: !Join ['', ['arn:aws:s3:::', !Ref 'KittensBucket', /*]]
-            # Resource: !Sub "${KittenBucket.Arn}/*"
-  KittensCertificate:
+            Resource: !Join ['', ['arn:aws:s3:::', !Ref 'KittensBucket', /*]] # birlestirme fonksiyonu. en bastaki '' anlami aralarinda bosluk olmasin. '!' olsaydi birlesecek bilgilerin arasina ! koyardi
+            # Resource: !Sub "${!GetAtt KittenBucket.Arn}/*"
+  
+  KittensCertificate: # Sertifikayi ayarliyoruz
     Type: "AWS::CertificateManager::Certificate"
     Properties:
-      CertificateTransparencyLoggingPreference: ENABLED
-      DomainName: !Ref KittensDomainName #required
+      CertificateTransparencyLoggingPreference: ENABLED # Sahte sertifikalarin üretilip attach edilmesini engelliyor
+      DomainName: !Ref KittensDomainName # konsolda hepsini kapsamasi icin *.safaks.net olarak almistik ama stack te www.safaks.net e sertifika alacak sekilde ayarliyoruz
       DomainValidationOptions:
-        - DomainName: !Ref KittensDomainName
-          HostedZoneId: !Ref DomainName
+        - DomainName: !Ref KittensDomainName # sertifikanin hangi full domain name icin alinacagini belirledik, ornegin www.safaks.net ya da info.safaks.net
+          HostedZoneId: !Ref DomainName # sertifikanin hangi hostedzone a kaydedilecegini belirledik
       ValidationMethod: DNS
-  KittenDNSName:
+  
+  KittenDNSName: # Cloud53 den record kaydi yapiyoruz 
     Type: AWS::Route53::RecordSetGroup
     Properties:
-      HostedZoneId: !Ref DomainName
+      HostedZoneId: !Ref DomainName # record un hangi hostedzone a kaydedilecegini belirledik
       RecordSets: 
-        - Name: !Ref KittensDomainName
+        - Name: !Ref KittensDomainName # record kaydinin hangi full domain name icin alinacagini belirledik, ornegin www.safaks.net ya da info.safaks.net
           Type: A
           AliasTarget:
-            HostedZoneId: Z2FDTNDATAQYW2
-            DNSName: !GetAtt KittensCloudfront.DomainName
+            HostedZoneId: Z2FDTNDATAQYW2 # CloudFront distribution: Specify Z2FDTNDATAQYW2. This is always the hosted zone ID when you create an alias record that routes traffic to a CloudFront distribution.
+            DNSName: !GetAtt KittensCloudfront.DomainName # CloudFront un Domain Name ini aliyoruz
+  
   KittensCloudfront:
     Type: "AWS::CloudFront::Distribution"
     Properties:
@@ -55,29 +62,31 @@ Resources:
         Comment: Cloudfront Distribution pointing to Kittens S3 bucket
         Aliases:
         - !Ref KittensDomainName
-        ViewerCertificate:          
+        ViewerCertificate: # Sertifikayi giriyoruz
           AcmCertificateArn: !Ref KittensCertificate
           SslSupportMethod: sni-only
-        Origins:
-        - DomainName: !Select [2, !Split ["/", !GetAtt KittensBucket.WebsiteURL]]
+        Origins: # Cloudfront da distribution yarat dedigimizde acilan sayfanin en ust kismi : Origin Settings
+        - DomainName: !Select [2, !Split ["/", !GetAtt KittensBucket.WebsiteURL]] # ornegin statik web sayfamizin kondugu S3 bucket adresi soyle olsun https://awsexamplebucket.s3-website.us-west-2.amazons.com Burada yapilan: split ile / referans alinarak bu adres 3 parcaya ayriliyor. 0., 1. ve 2. parcalar arasindan 2. parcayi seciyoruz.
           Id: KittensOrigin
           CustomOriginConfig: 
             OriginProtocolPolicy: http-only
-        PriceClass: PriceClass_All
+        PriceClass: PriceClass_All # PriceClass_All: Use all edge locations (best performance)
         Enabled: true
         HttpVersion: 'http2'
         DefaultRootObject: index.html
-        DefaultCacheBehavior:
+        DefaultCacheBehavior: # Cloudfront da distribution yarat dedigimizde acilan sayfanin en ustten bir alttaki kisim: Default Cache Behavior Settings
           TargetOriginId: KittensOrigin
-          Compress: true
-          ViewerProtocolPolicy: allow-all
+          Compress: true # edge location lara sikistirarak gonderirmis
+          ViewerProtocolPolicy: allow-all # allow-all: Viewers can use HTTP and HTTPS. 2 tane daha var: redirect-to-https: Redirect HTTP to HTTPS yada https-only: HTTPS Only
           AllowedMethods:
           - GET
           - HEAD
-          ForwardedValues:
+          ForwardedValues: # Odevde Cookie ayari isteniyordu. Cookies S3 Bucket a gonderilmesin deniyordu.
             QueryString: true
             Cookies:
               Forward: none 
+
+
 Outputs:
   BucketName: 
     Description: S3 Bucket URL for Kittens Website

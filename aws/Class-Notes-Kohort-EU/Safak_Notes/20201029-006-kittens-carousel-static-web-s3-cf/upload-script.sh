@@ -1,1 +1,1 @@
-aws s3 sync static-web s3://kittens.clarusway.us
+aws s3 sync static-web s3://info.safaks.net

@@ -1,3 +1,7 @@
+Ozet: 29.10.2020
+
+aws s3 sync static-web s3://info.safaks.net komutunu static-web in bir ust dizininde calistiriyoruz. Bu komut static-web klasorunu info.safaks.net bucketina yukluyor.
+
 # Project-006 : Kittens Carousel Static Website deployed on AWS Cloudfront, S3 and Route 53 using Cloudformation
 
 ## Description
