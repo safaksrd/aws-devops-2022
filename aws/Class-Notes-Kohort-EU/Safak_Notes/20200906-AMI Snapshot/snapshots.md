@@ -1,12 +1,5 @@
 Ozet: 2020-09-06
 
-- AMI: Amazon Machine Image, Snapshota gore daha ete kemige burunmus halde (saganda yumurta), 
-- Snapshot: AMI ye gore daha ham halde (pismemis haldeki yunurta). Instance yada Volume in anlik kopyasini almak. Amac: 1) Backup 2) Snapshottan bir AMI olusturmak 3) Volume olusturmak
-- Snapshotta incremental backup alinir (RDS de incremental aliniyor)
-- RDS yada EC2 instance olustururken basta volume encrypted edilmediyse, bu unencrypted volume un snapshot ini aldiktan sonra tekrar kopyalarken encrypted hale getireebiliriz.
-- Incremental Backup kullanilan bir Snapshotta bir yere referans gosterilmis bir bilgi varsa AWS onu silmene izin vermiyor, diger bilgileri silebilirsin.
-- Golden AMI: Just enough OS (JeOS)
-
 - Icinde userdatali nginx olan bir instance yarat.
 - Devaminda sunlari gerceklestir:
 

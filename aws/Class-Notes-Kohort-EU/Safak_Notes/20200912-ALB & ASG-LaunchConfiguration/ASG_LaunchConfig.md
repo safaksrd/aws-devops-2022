@@ -1,9 +1,10 @@
-Ozet: 2020-09-12
-Yeni repoya uygun sekilde wget adresleri guncellendi!!
+Ozet: 12.09.2020
 
 - Nginx firmasinin Load Balancer (LB) konusunda ustun cozumleri var. Amazon Nginx cozumlerinden esinleniyor.
-- Algoritmalar: Round Robin: sirayla random dagitiyor, Least Outstanding Requests: isi bitene dagitiyor, sirayla dagitmak esit dagitmak degildir.
-- Auto Scaling Group (ASG) neden lazim? Cunku tek basina Application Load Balancer (ALB) olursa sadece eldeki MANUEL SEKILDE olusturulan mevcut instancelar arasinda yükü dagitir. Eger eldeki instance lardan biri bozulursa tüm yükü geride kalan instance lara dagitir. Ya eldeki instance in kapasitesi bu yükü kaldirmazsa, ya da eldeki tüm instance lar cökerse ne olacak? Iste bunun cözümü ASG nin ALB nin onunde calismasidir. Ihtiyac halinde ASG instance sayisini LAUNCH TEMPLATE (Version verilebiliyor) yada LAUNCH CONFIGURATION kullanarak OTOMATIK SEKILDE arttirir ya da azaltir.
+- Algoritmalar: 
+- Round Robin: sirayla random dagitiyor, 
+- Least Outstanding Requests: isi bitene dagitiyor, sirayla dagitmak esit dagitmak degildir.
+- Auto Scaling Group (ASG) neden lazim? Cunku tek basina Application Load Balancer (ALB) olursa sadece eldeki MANUEL SEKILDE olusturulan mevcut instancelar arasinda yükü dagitir. Eger eldeki instance lardan biri bozulursa tüm yükü geride kalan instance lara dagitir. Ya eldeki instance in kapasitesi bu yükü kaldirmazsa, ya da eldeki tüm instance lar cökerse ne olacak? ELB bozuk bile olsa yükü instance lara gondermeye devam eder. Iste bunun cözümü ASG nin ALB nin onunde calismasidir. Ihtiyac halinde ASG instance sayisini LAUNCH TEMPLATE (Version verilebiliyor) yada LAUNCH CONFIGURATION kullanarak OTOMATIK SEKILDE arttirir ya da azaltir.
 - Creating a Security Group, 
 - Creating a Target Group (bos havuz olusturmaliyiz), 
 - !!! Unlike Application Load Balancer hands-on, do not register any instances into the target group.
