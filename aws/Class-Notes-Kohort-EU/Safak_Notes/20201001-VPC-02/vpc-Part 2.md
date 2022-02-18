@@ -18,6 +18,7 @@ Yeni repoya uygun sekilde guncellendi!!
 - Son olarak NAT Gateway ile yaptigimizi NAT Instance ile yapacagiz. Community AMIs bölümünde nat ile search edip bir tane linux ami sec, ec2 Instance i kur, harddisk magnetic gelirse SSD sec. Bu yöntemde bütün sorumluluk bizde, instance in guncellenmesi bakimi, security group ayalarinin yapilmasi vs. Kurulumun ayrintilari asagidaki ilgili bölümdedir. Private subnetteki EC2 Intance in internete cikabilmesi icin NAT Instance yöntemini kullaniyorsak, Route Tables da Private Subnet ler icin olusturdugumuz Route Table'a local e ilaveten olusturdugumuz NAT Instance i ekleriz. 
 - NAT Instance in Security Group unda ICMP port acik oldugu icin NAT Instance araciligi ile artik google.com a ping atabiliriz ancak herhangi bir sey indirip kurmak istiyorsak NAT Instance in Security Group unun inbound rules una HTTP ve HTTPS anywhere eklenir.
 - NAT Instance da ayni zamanda bir Bastion Host dur. Isternise Bastion host olarak da kullanilabilir.
+- NAT Instance ilk kuruldugunda yapilmasi gerekenler: Actions Menu -> Networking -> Enable Source/Destination Check -> Stop, Save et: NAT Instance a diyoruz ki Source check yapma, sana ne geliyorsa trafigi yonlendir anlamina geliyor.
 
 ## Part 2 - Creating Bastion Host and connect to the private subnet from internet
 

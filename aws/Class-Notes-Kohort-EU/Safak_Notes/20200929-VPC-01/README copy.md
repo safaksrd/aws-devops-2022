@@ -1,5 +1,4 @@
 Ozet: 2020-09-29
-Yeni repoya uygun sekilde wget adresleri guncellendi!!
 
 - VPC: Ozel alan, ozelliklerini biz belirliyoruz. Ornegin bir firmanin binasini VPC olarak düsünelim.
 - Subnet: VPC icindeki logical bölümlerdir. VPC icinde kümelendirme yapmak icin (finans, marketing vs.) subnet kullaniyoruz. Subnet, VPC nin kuruldugu Region altindaki farkli AZ lerde kurulabilir. Bu farkli AZ leri ayni firmaya ait farkli kampusler gibi dusunebiliriz.
@@ -7,11 +6,11 @@ Yeni repoya uygun sekilde wget adresleri guncellendi!!
 - Public Subnet te yer alan birine dahili telefonun (CIDR) disinda, harici telefondan da ulasilabilir. Bu harici telefon Public IP dir. Dolayisiyla dahili telefon private IP, harici telefon public IP. 
 - Private Subnet te yer alan birine ise sadece dahili telefon (CIDR) verilir. Bu kisiye dahili telefon haricinde ulasmanin bir baska yolu Bastion Host tur (Jump Box). Yani ayni VPC deki Public Subnet ten baska birine ulasip diyoruz ki private subnet teki su kisiye haber verir misin ona ulasmaya calisiyorum.
 - lokal : ic hatlar terminali. VPC icinde dolasirken
-- igw: Internet Gateway: Dis hatlar terminali. VPC disina cikacagimiz zaman
+- igw: Internet Gateway (IGW): Dis hatlar terminali. VPC disina cikacagimiz zaman. Bir VPC e sadece bir IGW eklenir.
 - Route table (kurallar dizisi) and Router (kurallarin icrasi) : Passport
 - Security Group and Network Access List (NACL) : Security komponentleri
 - Bir VPC tek bir Region de o region icindeki farkli AZ lerde olusturuluyor.
-- Evin kapisi Securiy Group, sitenin disindaki duvarlar da NACL dir.
+- Evin kapisi Security Group, sitenin disindaki duvarlar da NACL dir.
 - CIDR: Classless Inter-Domain Routing. Kesmeden sonraki rakam büyüdükce host IP sayisi azaliyor!
 - CIDR 10.0.0.0/16 demek IP adresi 10.0.0.0 Subnetmask 255.255.0.0 demek yani Subnetmaskta 16 tane 1 var. Bu durumda 65536 tane host IP vardir.
 - CIDR 10.0.1.0/24 demek IP adresi 10.0.1.0 Subnetmask 255.255.255.0 demek yani Subnetmaskta 24 tane 1 var. Bu durumda 256 tane host IP vardir.
