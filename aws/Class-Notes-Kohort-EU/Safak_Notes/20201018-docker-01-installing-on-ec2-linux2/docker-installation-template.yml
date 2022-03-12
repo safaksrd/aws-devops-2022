@@ -9,7 +9,7 @@ Parameters:
   KeyPairName:
     Description: Enter the name of your Key Pair for SSH connections.
     Type: AWS::EC2::KeyPair::KeyName
-    ConstraintDescription: Must one of the existing EC2 KeyPair
+    ConstraintDescription: leon
 
 Resources:
   DockerMachineSecurityGroup:
@@ -28,7 +28,7 @@ Resources:
   DockerMachine:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-09d95fab7fff3776c
+      ImageId: ami-0e1d30f2c40c4c701
       InstanceType: t2.micro
       KeyName: !Ref KeyPairName
       SecurityGroupIds:

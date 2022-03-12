@@ -1,3 +1,33 @@
+Ozet: 18/10/2020
+
+- Image ler inmutable, containers mutable (ihtiyaca gore ekleme yapabiliyoruz)
+
+- docker version : version kontrol edilir.
+
+- docker pull nginx : pull komutu ile ilgili konteynir i sadece pull eder, calistirmaz.
+- docker pull clarusways/cw_web_flask1 : dockerhub daki clarusways hesabi altindaki cw_web_flask1 isimli konteynir i ceker, calistirmaz.
+
+- docker run -d -p 80:80 --name leon1 nginx : run komutu ile ilgili konteynir i hem pull eder, calistirir. 
+  -p 80:80 ile konteynir uzerindeki 80 portunu lokaldeki 80 portu uzerinden dis dunyaya expose eder. web browser da localhost:80 yazinca ilgili sayfa gorulur.
+  --name leon1 ile konteynir a leon1 ismi verilir.
+
+- docker run -d -p 90:5000 --name leon2 clarusways/cw_web_flask1 : dockerhub daki clarusways hesabi altindaki cw_web_flask1 isimli konteynir i pull eder, calistirir. 
+  -p 90:5000 ile konteynir uzerindeki 5000 portunu lokaldeki 90 portu uzerinden dis dunyaya expose eder. web browser da localhost:90 yazinca ilgili sayfa gorulur.
+  --name leon2 ile konteynir a leon2 ismi verilir.
+
+- docker inspect "CONTAINER ID ya da NAMES" : konteynir hk detayli bilgi verir
+- docker images : lokaldeki docker image lari gosterir
+- docker ps : lokalde calisan konteynir lari gosterir.
+- docker ps -a : silinmis bile olsa calisan calismayan lokaldeki tüm konteynir lari gosterir.
+- docker stop "CONTAINER ID ya da NAMES" : Calisan konteynir i durdurur. Konteyniri silmeden once durdurmaliyiz.
+- docker start "CONTAINER ID ya da NAMES" : Duran konteynir i calistirir.
+- docker rm "CONTAINER ID ya da NAMES" : Durdurulan konteynir i siler.
+- docker exec -it "CONTAINER ID ya da NAMES" sh : sh shell ile interaktif mod da konteynir in icine baglanir. Kabul ederse sh yerine baska shell isimleri de yazabiliriz.
+- Konteynirin icine girdikten sonra ps komutu ile calisan process ler gorulur. Ilk siradaki yani PID:1 konteynir icinde calisan uygulamadir.
+- Konteynir icinde cat /etc/*release* komutu ile konteynirin isletim sistemi gorulebilir.
+
+
+
 # Hands-on Docker-01 : Installing Docker on Amazon Linux 2 AWS EC2 Instance
 
 Purpose of the this hands-on training is to teach the students how to install Docker on on Amazon Linux 2 EC2 instance.
@@ -182,7 +212,7 @@ Parameters:
   KeyPairName:
     Description: Enter the name of your Key Pair for SSH connections.
     Type: String
-    Default: call.training
+    Default: leon
 
 Resources:
   DockerMachineSecurityGroup:
@@ -197,7 +227,7 @@ Resources:
   DockerMachine:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-09d95fab7fff3776c
+      ImageId: ami-0e1d30f2c40c4c701
       InstanceType: t2.micro
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
