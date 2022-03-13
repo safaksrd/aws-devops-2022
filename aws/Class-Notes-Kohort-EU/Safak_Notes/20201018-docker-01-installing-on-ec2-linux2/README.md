@@ -1,10 +1,17 @@
 Ozet: 18/10/2020
 
-- Image ler inmutable, containers mutable (ihtiyaca gore ekleme yapabiliyoruz)
+- Image ler inmutable, image lardan uretilen container lar mutable (ihtiyaca gore ekleme yapabiliyoruz)
 - docker daemon: docker engine: server
 - dcoker CLI: client
 
-- docker version : version kontrol edilir.
+- sudo yum update -y : Update the installed packages and package cache on your instance.
+- sudo amazon-linux-extras install docker -y : Install the most recent Docker Community Edition package.
+- sudo systemctl start docker : Start docker service.
+- sudo systemctl enable docker : Enable docker service so that docker service can restart automatically after reboots.
+- sudo systemctl status docker : Check if the docker service is up and running.
+- sudo usermod -a -G docker ec2-user : Add the `ec2-user` to the `docker` group to run docker commands without using `sudo`.
+- newgrp docker : Normally, the user needs to re-login into bash shell for the group `docker` to be effective, but `newgrp` command can be used activate `docker` group for `ec2-user`, not to re-login into bash shell.
+- docker version : Check the docker version without `sudo`.
 
 - docker pull nginx : pull komutu ile ilgili image i sadece pull eder, bu image dan konteynir uretmez.
 - docker pull clarusways/cw_web_flask1 : dockerhub daki clarusways hesabi altindaki cw_web_flask1 isimli image i ceker, bu image dan konteynir uretmez.
@@ -25,7 +32,6 @@ Ozet: 18/10/2020
 - docker exec -it "CONTAINER ID ya da NAMES" sh : sh shell ile interaktif mod da konteynir in icine baglanir. Kabul ederse sh yerine baska shell isimleri de yazabiliriz.
 - Konteynirin icine girdikten sonra ps komutu ile calisan process ler gorulur. Ilk siradaki yani PID:1 konteynir icinde calisan uygulamadir.
 - Konteynir icinde cat /etc/*release* komutu ile konteynirin isletim sistemi gorulebilir.
-
 
 
 # Hands-on Docker-01 : Installing Docker on Amazon Linux 2 AWS EC2 Instance
