@@ -1,19 +1,19 @@
 Ozet: 18/10/2020
 
 - Image ler inmutable, containers mutable (ihtiyaca gore ekleme yapabiliyoruz)
+- docker daemon: docker engine: server
+- dcoker CLI: client
 
 - docker version : version kontrol edilir.
 
-- docker pull nginx : pull komutu ile ilgili konteynir i sadece pull eder, calistirmaz.
-- docker pull clarusways/cw_web_flask1 : dockerhub daki clarusways hesabi altindaki cw_web_flask1 isimli konteynir i ceker, calistirmaz.
+- docker pull nginx : pull komutu ile ilgili image i sadece pull eder, bu image dan konteynir uretmez.
+- docker pull clarusways/cw_web_flask1 : dockerhub daki clarusways hesabi altindaki cw_web_flask1 isimli image i ceker, bu image dan konteynir uretmez.
 
-- docker run -d -p 80:80 --name leon1 nginx : run komutu ile ilgili konteynir i hem pull eder, calistirir. 
+- docker run -d -p 80:80 --name leon1 nginx : run komutu ile nginx isimli image i hem pull eder, bu image dan leon1 isimli bir konteynir uretir. 
   -p 80:80 ile konteynir uzerindeki 80 portunu lokaldeki 80 portu uzerinden dis dunyaya expose eder. web browser da localhost:80 yazinca ilgili sayfa gorulur.
-  --name leon1 ile konteynir a leon1 ismi verilir.
 
-- docker run -d -p 90:5000 --name leon2 clarusways/cw_web_flask1 : dockerhub daki clarusways hesabi altindaki cw_web_flask1 isimli konteynir i pull eder, calistirir. 
+- docker run -d -p 90:5000 --name leon2 clarusways/cw_web_flask1 : dockerhub daki clarusways hesabi altindaki cw_web_flask1 isimli image i pull eder, bu image dan leon2 isimli bir konteynir uretir. 
   -p 90:5000 ile konteynir uzerindeki 5000 portunu lokaldeki 90 portu uzerinden dis dunyaya expose eder. web browser da localhost:90 yazinca ilgili sayfa gorulur.
-  --name leon2 ile konteynir a leon2 ismi verilir.
 
 - docker inspect "CONTAINER ID ya da NAMES" : konteynir hk detayli bilgi verir
 - docker images : lokaldeki docker image lari gosterir
