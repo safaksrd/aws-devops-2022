@@ -1,8 +1,13 @@
 Ozet: 18/10/2020
 
+- Docker uygulamayi altyapidan bagimsiz hale getirir. Boylece yazilim uretim ve dagitim sureci hizlanir.
+- namespaces (process / network / mount) : 2000 li yillarin basinda linux cekirdegine eklendi. uygulamalarin cekirdek uzerinde izolasyonunu sagladi.
+- control groups (C groups) : 2007'de Google muhendisleri ekledi. Processlerin kaynak kullanimini izole eder, kaynak kullanimini sinirlar.
+- Konteynir icinde uygulamanin calismasi icin gerekli tum ek paketler var, ancak linux cekirdegiyle ilgili birsey yok. Bu sayede tek bir linux isletim sistemi uzerinde cekirdekten bagimsiz izole konteynirlar ortaya cikti.
+
 - Image ler inmutable, image lardan uretilen container lar mutable (ihtiyaca gore ekleme yapabiliyoruz)
 - docker daemon: docker engine: server
-- dcoker CLI: client
+- docker CLI: client
 
 - sudo yum update -y : Update the installed packages and package cache on your instance.
 - sudo amazon-linux-extras install docker -y : Install the most recent Docker Community Edition package.
@@ -16,22 +21,22 @@ Ozet: 18/10/2020
 - docker pull nginx : pull komutu ile ilgili image i sadece pull eder, bu image dan konteynir uretmez.
 - docker pull clarusways/cw_web_flask1 : dockerhub daki clarusways hesabi altindaki cw_web_flask1 isimli image i ceker, bu image dan konteynir uretmez.
 
-- docker run -d -p 80:80 --name leon1 nginx : run komutu ile nginx isimli image i hem pull eder, bu image dan leon1 isimli bir konteynir uretir. 
+- docker run -d -p 80:80 --name leon1 nginx : run komutu ile nginx isimli image i pull eder, bu image dan leon1 isimli bir konteynir calistirir. 
   -p 80:80 ile konteynir uzerindeki 80 portunu lokaldeki 80 portu uzerinden dis dunyaya expose eder. web browser da localhost:80 yazinca ilgili sayfa gorulur.
 
-- docker run -d -p 90:5000 --name leon2 clarusways/cw_web_flask1 : dockerhub daki clarusways hesabi altindaki cw_web_flask1 isimli image i pull eder, bu image dan leon2 isimli bir konteynir uretir. 
+- docker run -d -p 90:5000 --name leon2 clarusways/cw_web_flask1 : dockerhub daki clarusways hesabi altindaki cw_web_flask1 isimli image i pull eder, bu image dan leon2 isimli bir konteynir calistirir. 
   -p 90:5000 ile konteynir uzerindeki 5000 portunu lokaldeki 90 portu uzerinden dis dunyaya expose eder. web browser da localhost:90 yazinca ilgili sayfa gorulur.
 
 - docker inspect "CONTAINER ID ya da NAMES" : konteynir hk detayli bilgi verir
 - docker images : lokaldeki docker image lari gosterir
 - docker ps : lokalde calisan konteynir lari gosterir.
-- docker ps -a : silinmis bile olsa calisan calismayan lokaldeki tüm konteynir lari gosterir.
+- docker ps -a : durdurulmus bile olsa calisan calismayan lokaldeki tüm konteynir lari gosterir.
 - docker stop "CONTAINER ID ya da NAMES" : Calisan konteynir i durdurur. Konteyniri silmeden once durdurmaliyiz.
 - docker start "CONTAINER ID ya da NAMES" : Duran konteynir i calistirir.
 - docker rm "CONTAINER ID ya da NAMES" : Durdurulan konteynir i siler.
 - docker exec -it "CONTAINER ID ya da NAMES" sh : sh shell ile interaktif mod da konteynir in icine baglanir. Kabul ederse sh yerine baska shell isimleri de yazabiliriz.
 - Konteynirin icine girdikten sonra ps komutu ile calisan process ler gorulur. Ilk siradaki yani PID:1 konteynir icinde calisan uygulamadir.
-- Konteynir icinde cat /etc/*release* komutu ile konteynirin isletim sistemi gorulebilir.
+- Konteynir icinde cat /etc/os-release komutu ile konteynirin isletim sistemi gorulebilir.
 
 
 # Hands-on Docker-01 : Installing Docker on Amazon Linux 2 AWS EC2 Instance
