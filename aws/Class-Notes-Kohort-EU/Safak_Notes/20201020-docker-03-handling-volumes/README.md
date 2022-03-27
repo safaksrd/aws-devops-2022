@@ -149,7 +149,7 @@ sudo ls -al  /var/lib/docker/volumes/cw-vol/_data
 ```
 
 - Run a `alpine` container with interactive shell open, name the container as `clarus`, attach the volume `cw-vol` to `/cw` mount point in the container, and add command to run alpine shell. Here, explain `--volume` and `v` flags.
-
+Not: lokaldeki cw-vol isimli volume u clarus isimli konteynir icindeki cw klasorune map ediyoruz.
 ```bash
 docker run -it --name clarus -v cw-vol:/cw alpine ash
 ```
@@ -322,7 +322,7 @@ docker volume create full-vol
 docker run -it --name vol-lesson -v full-vol:/cw alpine ash
 ```
 
-- Create a file in `full-vol` container under `/cw` folder.
+- Create a file in `vol-lesson` container under `/cw` folder.
 
 ```bash
 cd cw && echo "This file is created in the full-vol volume" > full.txt

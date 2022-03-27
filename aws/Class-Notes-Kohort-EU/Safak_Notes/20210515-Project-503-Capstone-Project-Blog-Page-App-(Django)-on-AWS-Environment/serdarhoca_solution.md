@@ -134,6 +134,8 @@ Region      : N.Virginia
 Block all public access : Unchecked
 Other Settings are keep them as are
 create bucket
+
+NOT!!: ACLs enabled yapmayi unutma. Serdar hocanin anlattigi menu farkliydi. S3 bucketa disaridan birinin birsey koyabilmesi icin bu ayar yapiliyor.
 ```
 
 2. S3 Bucket for failover scenario

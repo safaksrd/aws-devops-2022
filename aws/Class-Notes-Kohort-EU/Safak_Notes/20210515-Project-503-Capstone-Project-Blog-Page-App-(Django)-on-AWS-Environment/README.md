@@ -314,7 +314,7 @@ ssh         ----> anywhere
 
 3. RDS Security Groups
 Name            : aws_capstone_RDS_Sec_Group
-Description     : EC2 Security Groups only allows traffic coming from aws_capstone_EC2_Sec_Group Security Groups for MYSQL/Aurora port. 
+Description     : RDS Security Groups only allows traffic coming from aws_capstone_EC2_Sec_Group Security Groups for MYSQL/Aurora port. 
 
 VPC             : AWS_Capstone_VPC
 Inbound Rules
@@ -322,7 +322,7 @@ MYSQL/Aurora(3306)  ----> aws_capstone_EC2_Sec_Group
 
 4. NAT Instance Security Group
 Name            : aws_capstone_NAT_Sec_Group
-Description     : ALB Security Group allows traffic HTTP and HTTPS and SSH ports from anywhere 
+Description     : NAT Instance Security Group allows traffic HTTP and HTTPS and SSH ports from anywhere 
 Inbound Rules
 VPC             : AWS_Capstone_VPC
 HTTP(80)    ----> anywhere
@@ -382,7 +382,7 @@ Block all public access : Unchecked
 Other Settings are keep them as are
 create bucket
 
-NOT!!: ACLs enabled yapmayi unutma. Serdar hocanin anlattigi menu farkliydi.
+NOT!!: ACLs enabled yapmayi unutma. Serdar hocanin anlattigi menu farkliydi. S3 bucketa disaridan birinin birsey koyabilmesi icin bu ayar yapiliyor.
 ```
 
 2. S3 Bucket for failover scenario
