@@ -7,5 +7,8 @@ ssh-add ~/key/leon.pem
 Sorun cikarsa yukaridaki komuttan once agent i eklemek icin
 eval "$(ssh-agent)" yap
 
-yukaridakileri yapinca instance lara su sekilde baglanabilirsin
+yukaridakileri yapinca instance lara 
+ssh -i ~/key/leon.pem ec2-user@XXXXXX yerine 
+
+artik su sekilde baglanabilirsin
 ssh -A ec2-user@XXXXXX
