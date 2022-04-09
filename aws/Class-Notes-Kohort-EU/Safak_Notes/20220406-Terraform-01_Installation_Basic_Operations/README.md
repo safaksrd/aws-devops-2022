@@ -181,7 +181,7 @@ When you create a new configuration you need to initialize the directory with `t
 
 ```bash
 $ terraform init
-
+# terraform init --upgrade yaparsak lock.hcl uzerindeki kilidi kaldirabiliriz.
 Initializing the backend...
 
 Initializing provider plugins...
