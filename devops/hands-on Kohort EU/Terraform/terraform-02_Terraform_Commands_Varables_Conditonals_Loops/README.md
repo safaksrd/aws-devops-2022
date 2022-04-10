@@ -67,7 +67,7 @@ terraform apply
 - Go to the terminal and run `terraform validate`. It validates the Terraform files syntactically correct and internally consistent.  
 
 ```bash
-terraform validate
+terraform validate # infrastructure u kurmadan once basit hatalari tespit etmemize yarar
 ```
 
 - Go to `main.tf` file and delete last curly bracket "}" and key_name's last letter (key_nam). And Go to terminal and run the command `terraform validate`. After taking the errors correct them. Then run the command again.
@@ -150,7 +150,7 @@ terraform console
  You can see tfstate file or plan in the terminal. It is more readable than `terraform.tfstate`.
 
 ```bash
-terraform show
+terraform show  # daha anlasilir formatta gosterir
 ```
 
 ### graph command.
@@ -160,7 +160,7 @@ terraform show
 - Copy the output and paste it to the `https://dreampuf.github.io/GraphvizOnline`. Then display it. If you want to display this output in your local, you can download graphviz (`sudo yum install graphviz`) and take a `graph.svg` with the command `terraform graph | dot -Tsvg > graph.svg`.
 
 ```bash
-terraform graph
+terraform graph   # diyagram cikarir
 ```
 
 ### output command.
@@ -182,7 +182,7 @@ output "tf_example_s3_meta" {
 ```bash
 terraform apply
 terraform output
-terraform output -json
+terraform output -json  #json formatinda cikti verir
 terraform output tf_example_public_ip
 ```
 
@@ -191,9 +191,13 @@ terraform output tf_example_public_ip
 - The `terraform apply -refresh-only` command is used to update the state file with the real-world infrastructure. This can be used to detect any drift from the last-known state, and to update the state file. First, check the current state of your resources with `terraform state list`. Then go to the AWS console and delete your S3 bucket `oliver-tf-test-bucket-addwhateveryouwant`. Display the state list again and refresh the state. Run the following commands.
 
 ```bash
-$ terraform state list
+$ terraform state list # terraform.tfstate file daki resource lari listeler
 aws_instance.tf-example-ec2
 aws_s3_bucket.tf-example-s3
+# main.tf de 1 adet ec2 1 adet s3 bucket var diyelim. main.tf de herhangi bir degisiklik yapmadan AWS konsoldan s3 bucket i manuel silersek main.tf bundan haberdar olmaz. 
+# Manuel silme durumunda terraform state list dersek elle silinen s3 bucket i da halen varmis gibi listeler. 
+# Manuel silme durumunda terraform apply dersek, Terraform AWS konsolunu inceliyor, s3 bucket in silindigini tespit ediyor, terraform.tfstate i refresh ederek silindi bilgisini isliyor ve bir s3 bucket olusturuyor.
+# Manuel silme durumunda terraform apply -refresh-only dersek, Terraform AWS konsolunu inceliyor, s3 bucket in silindigini tespit ediyor, terraform.tfstate i bizden onay alarak refresh edip silindi bilgisini isliyor ama bir s3 bucket olusturmuyor. Iste bu noktada terraform apply dersek s3 bucket i olusturuyor. terraform refresh komutu ise kullanimdan kaldirilmistir cunku bizden onay almadan refresh edip silindi bilgisini terraform.tfstate e isliyor.
 
 $ terraform apply -refresh-only
 
@@ -252,7 +256,7 @@ output "tf_example_private_ip" {
 - Run the command `terraform apply -refresh=false`.
 
 ```bash
-$ terraform apply -refresh=false
+$ terraform apply -refresh=false # Altyapiyi ilgilendirmeyen bir degisiklik yaptiginda ornegin main.tf e bir IP yi gormek icin sadece bir output eklediginde terraform.tfstate in refresh edilmesini beklemesini beklemek istemiyorsak ki bu buyuk altyapilarda uzun surebilir, bu komut kullanilir.
 
 An execution plan has been generated and is shown below.
 Resource actions are indicated with the following symbols:
