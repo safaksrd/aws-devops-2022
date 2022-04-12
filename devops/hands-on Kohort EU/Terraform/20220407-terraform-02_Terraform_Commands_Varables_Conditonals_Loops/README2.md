@@ -503,7 +503,7 @@ terraform apply
 
 - Go to the `variables.tf` file and create a new variable.
 
-```t
+```bash
 variable "num_of_buckets" {
   default = 2
 }
@@ -547,7 +547,7 @@ resource "aws_s3_bucket" "tf-s3" {
   bucket = "${var.s3_bucket_name}-${count.index}"
 
   # count = var.num_of_buckets
-  count = var.num_of_buckets != 0 ? var.num_of_buckets : 3
+  count = var.num_of_buckets != 0 ? var.num_of_buckets : 3 # num_of_buckets = 0 ise, default olarak ayarlanan num_of_buckets degeri kadar bucket olusturur. num_of_buckets = 0 degilse num_of_buckets = 3 e set eder. Default deger 2 idi, daha onceden 2 tane olusturdugu icin kalan 1 adedi olusturur
 }
 ```
 
@@ -574,17 +574,17 @@ resource "aws_s3_bucket" "tf-s3" {
   # bucket = "var.s3_bucket_name.${count.index}"
   # count = var.num_of_buckets
   # count = var.num_of_buckets != 0 ? var.num_of_buckets : 1
-  for_each = toset(var.users)
-  bucket   = "example-tf-s3-bucket-${each.value}"
+  for_each = toset(var.users) # alt alta olacak sekilde set yapisina cevirir. each.0=santino, each.1=michael, each.2=fredo
+  bucket   = "example-tf-s3-bucket-${each.value}" # farkli isimlerde 3 bucket olusur
 }
 
 resource "aws_iam_user" "new_users" {
   for_each = toset(var.users)
-  name = each.value
+  name = each.value # each.value ile degerleri kastediyor yani "santino", "michael", "fredo". Boylece farkli isimlerde 3 iam_user olusur
 }
 
 output "uppercase_users" {
-  value = [for user in var.users : upper(user) if length(user) > 6]
+  value = [for user in var.users : upper(user) if length(user) > 6] # karakteri 6 dan fazla olanlari buyuk harfe cevirir
 }
 ```
 

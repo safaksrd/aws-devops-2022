@@ -29,6 +29,7 @@ At the end of the this hands-on training, students will be able to;
 - Go to the `variables.tf` file and comment the variable `ec2-ami`.
 
 - Go to the `main.tf` file make the changes in order.
+self (the current account), or an AWS owner alias (e.g., amazon, aws-marketplace, microsoft).
 
 ```go
 data "aws_ami" "tf_ami" {
@@ -131,6 +132,9 @@ resource "aws_dynamodb_table" "tf-remote-state-lock" {
   billing_mode = "PAY_PER_REQUEST"
 }
 ```
+````bash
+# server_side_encryption_configuration, versioning, dynamodb_table s3 e koydugumuz state i korumak icin ekleniyor. dynamodb_table lock layarak ayni anda farkli kisilerin ayni state uzerinde islem yapmasini engelliyor.
+````
 
 - Run the commands below.
 
