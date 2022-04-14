@@ -126,7 +126,7 @@ $ mkdir terraform-aws && cd terraform-aws && touch main.tf
 
 - Create a file named `main.tf` for the configuration code and copy and paste the following content. 
 
-```t
+```go
 terraform {
   required_providers {
     aws = {
@@ -303,7 +303,7 @@ Note: You didn't specify an "-out" parameter to save this plan, so Terraform can
 - Run `terraform apply`. You should see an output similar to the one shown above.
 
 ```bash
-terraform apply
+$ terraform apply
 ```
 
 - Terraform will wait for your approval before proceeding. If anything in the plan seems incorrect it is safe to abort (ctrl+c) here with no changes made to your infrastructure.
@@ -346,7 +346,7 @@ aws_instance.tf-ec2
 
 - Create a S3 bucket. Go to the `main.tf` and add the followings.
 
-```t
+```go
 terraform {
   required_providers {
     aws = {
@@ -379,9 +379,9 @@ resource "aws_s3_bucket" "tf-s3" {
 - Run the command `terraform plan` and `terraform apply`.
 
 ```bash
-terraform plan
+$ terraform plan
 
-terraform apply
+$ terraform apply
 ```
 
 ```txt
@@ -392,7 +392,7 @@ Error: Error creating S3 bucket: AccessDenied: Access Denied
 - Attach `S3FullAccess` policy to the "terraform" role.
 
 ```bash
-terraform apply -auto-approve
+$ terraform apply -auto-approve
 ```
 
 - `-auto-approve` means to skip the approval of plan before applying.
@@ -402,12 +402,12 @@ terraform apply -auto-approve
 - Now we will use `terraform plan -out namewhateveryouwant`. This command will create an execution plan and it will save it in a file. It will be a binary file. Lets comment the EC2 instance resource block.
 
 ```bash
-terraform plan -out=justs3
+$ terraform plan -out=justs3
 ```
 - Now we have just an S3 bucket in justs3. Check that `terraform.tfstate` file has both ec2 and s3 bucket (real infrastructure). If we apply justs3 file it will delete the EC2 instance and modify the tfstate file. You can save your plans with -out flag. First, you can uncomment the EC2 instance.
 
 ```bash
-terraform apply justs3
+$ terraform apply justs3
 ```
 
 ### Destroy
@@ -416,5 +416,5 @@ The `terraform destroy` command terminates resources defined in your Terraform c
 
 
 ```bash
-terraform destroy
+$ terraform destroy
 ```

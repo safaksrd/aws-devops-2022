@@ -44,7 +44,7 @@ data "aws_ami" "tf_ami" {
 
 resource "aws_instance" "tf-ec2" {
   ami           = data.aws_ami.tf_ami.id
-  instance_type = var.ec2-type
+  instance_type = var.ec2_type
   key_name      = "mk"
   tags = {
     Name = "${local.mytag}-this is from my-ami"
@@ -166,7 +166,7 @@ terraform {
 }
 ```
 
-- Go to the `terraform-aws` directoy and run the commands below. First try to terraform apply command.
+- Go to the `terraform-aws` directory and run the commands below. First try to terraform apply command.
 
 ```bash
 - cd ../terraform-aws
@@ -269,9 +269,9 @@ provider "aws" {
 }
 
 resource "aws_instance" "instance" {
-  ami = "ami-061ac2e015473fbe2"
+  ami = "ami-0c02fb55956c7d316"
   instance_type = "t2.micro"
-  key_name = "oliver"
+  key_name = "leon"
   security_groups = ["tf-provisioner-sg"]
   tags = {
     Name = "terraform-instance-with-provisioner"
@@ -286,7 +286,7 @@ resource "aws_instance" "instance" {
     host = self.public_ip
     type = "ssh"
     user = "ec2-user"
-    private_key = file("~/oliver.pem")
+    private_key = file("~/key/leon.pem")
   }
 
   provisioner "remote-exec" {

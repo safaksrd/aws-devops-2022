@@ -26,7 +26,7 @@ $ mkdir terraform-aws && cd terraform-aws && touch main.tf
 
 - Create a file named `main.tf` for the configuration code and copy and paste the following content. 
 
-```t
+```go
 provider "aws" {
   region  = "us-east-1"
 }
@@ -57,9 +57,9 @@ resource "aws_s3_bucket" "tf-s3" {
 - Run the command `terraform plan` and `terraform apply`.
 
 ```bash
-terraform plan
+$ terraform plan
 
-terraform apply
+$ terraform apply
 ```
 
 ### Validate command.
@@ -67,7 +67,7 @@ terraform apply
 - Go to the terminal and run `terraform validate`. It validates the Terraform files syntactically correct and internally consistent.  
 
 ```bash
-terraform validate # infrastructure u kurmadan once basit hatalari tespit etmemize yarar
+$ terraform validate # infrastructure u kurmadan once basit hatalari tespit etmemize yarar
 ```
 
 - Go to `main.tf` file and delete last curly bracket "}" and key_name's last letter (key_nam). And Go to terminal and run the command `terraform validate`. After taking the errors correct them. Then run the command again.
@@ -114,7 +114,7 @@ $ terraform validate
 - Go to `main.tf` file and add random indentations. Then go to terminal and run the command `terraform fmt`. "terraform fmt" command reformat your configuration file in the standard style.
 
 ```bash
-terraform fmt
+$ terraform fmt
 ```
 
 - Now, show `main.tf` file. It was formatted again.
@@ -132,7 +132,7 @@ echo "hello devops" > cloud
 Run the following commands.
 
 ```bash
-terraform console
+$ terraform console
 > aws_instance.tf-ec2
 > aws_instance.tf-ec2.private_ip
 > min (1,2,3)
@@ -150,7 +150,7 @@ terraform console
  You can see tfstate file or plan in the terminal. It is more readable than `terraform.tfstate`.
 
 ```bash
-terraform show  # daha anlasilir formatta gosterir
+$ terraform show  # daha anlasilir formatta gosterir
 ```
 
 ### graph command.
@@ -160,7 +160,7 @@ terraform show  # daha anlasilir formatta gosterir
 - Copy the output and paste it to the `https://dreampuf.github.io/GraphvizOnline`. Then display it. If you want to display this output in your local, you can download graphviz (`sudo yum install graphviz`) and take a `graph.svg` with the command `terraform graph | dot -Tsvg > graph.svg`.
 
 ```bash
-terraform graph   # diyagram cikarir
+$ terraform graph   # diyagram cikarir
 ```
 
 ### output command.
@@ -256,7 +256,7 @@ output "tf_example_private_ip" {
 - Run the command `terraform apply -refresh=false`.
 
 ```bash
-$ terraform apply -refresh=false # Altyapiyi ilgilendirmeyen bir degisiklik yaptiginda ornegin main.tf e bir IP yi gormek icin sadece bir output eklediginde terraform.tfstate in refresh edilmesini beklemesini beklemek istemiyorsak ki bu buyuk altyapilarda uzun surebilir, bu komut kullanilir.
+$ terraform apply -refresh=false # Altyapiyi ilgilendirmeyen bir degisiklik yaptiginda ornegin main.tf e bir IP yi gormek icin sadece bir output eklediginde terraform.tfstate in refresh edilmesini beklemek istemiyorsak ki bu buyuk altyapilarda uzun surebilir, bu komut kullanilir.
 
 An execution plan has been generated and is shown below.
 Resource actions are indicated with the following symbols:
@@ -351,7 +351,7 @@ output "tf-example-s3" {
 ```
 
 ```bash
-terraform apply
+$ terraform apply
 ```
 
 - Create a file name `variables.tf`. Take the variables from `main.tf` file and paste into "variables.tf". 
@@ -389,7 +389,7 @@ terraform plan
 - You can define variables with `-var` command
 
 ```bash
-terraform plan -var="s3_bucket_name=oliver-new-s3-bucket-2"
+$ terraform plan -var="s3_bucket_name=oliver-new-s3-bucket-2"
 ```
 
 #### environment variables
@@ -399,7 +399,7 @@ terraform plan -var="s3_bucket_name=oliver-new-s3-bucket-2"
 - You can also define variable with environment variables that begin with `TF_VAR_`.
 
 ```bash
-export TF_VAR_s3_bucket_name=oliver-env-varible-bucket
+$ export TF_VAR_s3_bucket_name=oliver-env-varible-bucket
 terraform plan
 ```
 
@@ -426,7 +426,7 @@ s3_bucket_name = "oliver-tfvar-bucket"
 - Run the command below.
 
 ```bash
-terraform plan --var-file="oliver.tfvars"
+$ terraform plan --var-file="oliver.tfvars"
 ```
 
 - Create a file named `oliver.auto.tfvars`. Add the followings.
@@ -436,7 +436,7 @@ s3_bucket_name = "oliver-auto-tfvar-bucket"
 ```
 
 ```bash
-terraform plan
+$ terraform plan
 ```
 
 - Terraform loads variables in the following order:

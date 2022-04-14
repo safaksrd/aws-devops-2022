@@ -38,18 +38,18 @@ resource "aws_instance" "tf-ec2" {
   }
 
   provisioner "local-exec" {
-    command = "echo http://${self.public_ip} > public_ip.txt"
+    command = "echo http://${self.public_ip} >> public_ip.txt"
   }
 
   provisioner "local-exec" {
-    command = "echo http://${self.private_ip} > private_ip.txt"
+    command = "echo http://${self.private_ip} >> private_ip.txt"
   }
 
   connection {
     host        = self.public_ip
     type        = "ssh"
     user        = "ec2-user"
-    private_key = file("F:/CLA-DEVOPS/firstkey.pem")
+    private_key = file("~/key/leon.pem")
   }
 
   provisioner "remote-exec" {
