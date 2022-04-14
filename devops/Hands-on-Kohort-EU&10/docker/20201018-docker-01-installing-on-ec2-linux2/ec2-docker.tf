@@ -13,6 +13,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# istenirse bu variable lar daha sade bir gosterim icin ayri bir tf dosyasina yazilabilir
 variable "secgr-dynamic-ports" {
   default = [22, 80, 443]
 }
