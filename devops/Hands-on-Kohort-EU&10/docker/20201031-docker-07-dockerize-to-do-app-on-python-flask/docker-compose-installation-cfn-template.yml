@@ -28,7 +28,7 @@ Resources:
   DockerMachine:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-02354e95b39ca8dec
+      ImageId: ami-03ededff12e34e59e
       InstanceType: t2.micro
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
