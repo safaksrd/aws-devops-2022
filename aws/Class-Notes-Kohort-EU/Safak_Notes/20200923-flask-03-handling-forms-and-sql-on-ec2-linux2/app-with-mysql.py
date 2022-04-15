@@ -6,8 +6,7 @@ from flaskext.mysql import MySQL
 app = Flask(__name__)
 
 # Configure mysql database
-# host name serdar hocanın RDS database name i , oraya kendi RDS database name i yazmaliyiz
-app.config['MYSQL_DATABASE_HOST'] = 'phonebook-project.c1ffydqfnpju.us-east-1.rds.amazonaws.com'
+app.config['MYSQL_DATABASE_HOST'] = 'phonebook-project.c1ffydqfnpju.us-east-1.rds.amazonaws.com' # host name serdar hocanın RDS database name i , oraya kendi RDS database name i yazmaliyiz
 app.config['MYSQL_DATABASE_USER'] = 'admin'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'clarusway-1'
 app.config['MYSQL_DATABASE_DB'] = 'phonebook'
