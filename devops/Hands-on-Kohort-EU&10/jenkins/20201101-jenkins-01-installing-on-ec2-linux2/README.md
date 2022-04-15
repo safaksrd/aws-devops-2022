@@ -241,7 +241,7 @@ wget http://mirrors.jenkins.io/war-stable/latest/jenkins.war
 - Start Jenkins application.
 
 ```bash
-java -jar jenkins.war --httpPort=8080
+java -jar jenkins.war --httpPort=8080 # Sonuna & koyarsak back process de calisir, shell i serbest birakir
 ```
 
 - Copy the admin password from log or from the file `~/.jenkins/secrets/initialAdminPassword`.
@@ -324,7 +324,7 @@ docker version
 - Install `docker-compose`
 
 ```bash
-sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose # docker-compose u kurariz 
 
 sudo chmod +x /usr/local/bin/docker-compose
 ```
@@ -364,7 +364,7 @@ RUN apt-get update && apt-get install python3-pip -y && \
 USER jenkins
 ```
 
-- Exectue the following command.
+- Execute the following command.
 
 ```bash
 docker-compose up -d
@@ -373,6 +373,11 @@ docker-compose up -d
 - The administrator password can also be taken from Docker logs.
 ```bash
 docker logs jenkins
+
+ya da 
+
+docker exec -it jenkins bash
+cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
 - Enter the temporary password to unlock the Jenkins.
