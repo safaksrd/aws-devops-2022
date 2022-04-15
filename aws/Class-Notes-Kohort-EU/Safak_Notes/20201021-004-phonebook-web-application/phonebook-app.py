@@ -30,7 +30,8 @@ cursor = connection.cursor()
 # Execute the code below only once.
 
 # database i initialize eden fonksiyon kodun sonunda calistiriliyor ki database initialize olsun!
-# ASG devrede olunca bu fonksiyon sorun cikarir, cunku ASG ile her yeni olusan instance bu fonksiyonu tekrar calistirip database i resetler, bu istenen bir durum degildir. Cozum olarak bu fonksiyonu yani database i initialize gorevini ASG dan bagimsiz sekilde bir baska EC2 instance a verebiliriz.
+# ASG devrede olunca bu fonksiyon sorun cikarir, cunku ASG ile her yeni olusan instance bu fonksiyonu tekrar calistirip database i resetler, 
+# bu istenen bir durum degildir. Cozum olarak bu fonksiyonu yani database i initialize gorevini ASG dan bagimsiz sekilde bir baska EC2 instance a verebiliriz.
 
 def init_phonebook_db():
     drop_table = 'DROP TABLE IF EXISTS phonebook.phonelist;'
