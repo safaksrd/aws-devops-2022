@@ -2,8 +2,11 @@ AWSTemplateFormatVersion: 2010-09-09
 
 Description: >
   This Cloudformation Template creates a Jenkins Server (based on BlueOcean Docker Image)
-  on Docker machine on EC2 Instance. Jenkins Server will run on Amazon Linux 2 EC2 Instance
-  with custom security group allowing SSH (22) and HTTP (80, 8080) connections from anywhere.
+  using the AMI of Clarusway (ami-0644c22f90412d908) on Docker machine on EC2 Instance. 
+  The AMI of Clarusway Jenkins Server is published on North Virginia Region for educational purposes.
+  Jenkins Server will run on Amazon Linux 2 EC2 Instance with custom security group 
+  allowing SSH (22) and HTTP (80, 8080) connections from anywhere.
+  Jenkins Server is configured with admin user `call-jenkins` and password `Call-jenkins1234`.
 
 Parameters:
   KeyPairName:
@@ -32,7 +35,7 @@ Resources:
   JenkinsServer:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-09d95fab7fff3776c
+      ImageId: ami-03ededff12e34e59e
       InstanceType: t2.micro
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
@@ -44,14 +47,6 @@ Resources:
       UserData:
         Fn::Base64: |
           #! /bin/bash
-          yum update -y
-          amazon-linux-extras install docker -y
-          systemctl start docker
-          systemctl enable docker
-          usermod -a -G docker ec2-user
-          docker network create jenkins
-          docker volume create jenkins-docker-certs
-          docker volume create jenkins-data
           docker container run --name jenkins-docker --rm --detach \
           --privileged --network jenkins --network-alias docker \
           --env DOCKER_TLS_CERTDIR=/certs \

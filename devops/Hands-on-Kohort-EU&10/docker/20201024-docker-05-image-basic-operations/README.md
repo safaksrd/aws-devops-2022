@@ -1,6 +1,6 @@
 # Hands-on Docker-05 : Docker Image Basic Operations
 
-Purpose of the this hands-on training is to give the students understanding to images in Docker.
+Purpose of this hands-on training is to give the students understanding to images in Docker.
 
 ## Learning Outcomes
 
@@ -56,7 +56,7 @@ ssh -i .ssh/call-training.pem ec2-user@ec2-3-133-106-98.us-east-2.compute.amazon
 
 - Sign up to Docker Hub and explain the UI.
 
-- Create a repository with the name of `flask-app` and description of `This image repo holds Flask apps on Python:Alpine`.
+- Create a repository with the name of `flask-app` and description of `This image repo holds Flask apps.`.
 
 - Check if the docker service is up and running on EC2 instance.
 
@@ -107,16 +107,10 @@ docker image inspect ubuntu
 docker image inspect ubuntu:18.04
 ```
 
-- Show the history of image `ubuntu` and explain Docker image layers.
-
-```bash
-docker image history ubuntu
-```
-
-- Search for Docker Images both on `bash` and on Docker Hub. Show which version of Python corresponds to when `python:alpine` selected. (`3.8.5`)
+- Search for Docker Images both on `bash` and on Docker Hub. 
   
 ```bash
-docker search python
+docker search ubuntu
 ```
 
 ## Part 3 - Building Docker Images with Dockerfile
@@ -144,45 +138,31 @@ if __name__ == "__main__":
 ' > welcome.py
 ```
 
-- Create a file listing necessary packages and modules, and name it `requirements.txt`
+- Create a Dockerfile listing necessary packages and modules, and name it `Dockerfile`.
 
-```bash
-echo '
-flask
-' > requirements.txt
-```
-
-- Create a Dockerfile listing necessary packages and modules, and name it `Dockerfile`
-  
-```bash
-echo '
-FROM python:alpine
+```Dockerfile
+FROM ubuntu
+RUN apt-get update -y
+RUN apt-get install python3 -y
+RUN apt-get install python3-pip -y
+RUN pip3 install flask
 COPY . /app
 WORKDIR /app
-RUN pip install -r requirements.txt
-EXPOSE 80
-CMD python ./welcome.py
-' > Dockerfile
+CMD python3 ./welcome.py
 ```
 
 - Build Docker image from Dockerfile locally, tag it as `<Your_Docker_Hub_Account_Name>/<Your_Image_Name>:<Tag>` and explain steps of building. Note that repo name is the combination of `<Your_Docker_Hub_Account_Name>/<Your_Image_Name>`.
 
 ```bash
-docker build -t "callahanclarus/flask-app:1.0" .
+docker build -t "clarusway/flask-app:1.0" .
 docker image ls
 ```
 
 - Run the newly built image as container in detached mode, connect host `port 80` to container `port 80`, and name container as `welcome`. Then list running containers and connect to EC2 instance from the browser to show the Flask app is running.
 
 ```bash
-docker run -d --name welcome -p 80:80 callahanclarus/flask-app:1.0
-docker ps
-```
-
-- Stop and remove the container `welcome`.
-
-```bash
-docker stop welcome && docker rm welcome
+docker run -d --name welcome -p 80:80 clarusway/flask-app:1.0
+docker container ls
 ```
 
 - Login in to Docker with credentials.
@@ -194,7 +174,54 @@ docker login
 - Push newly built image to Docker Hub, and show the updated repo on Docker Hub.
 
 ```bash
-docker push callahanclarus/flask-app
+docker push clarusway/flask-app:1.0
+```
+
+- This time, we reduce the size of image.
+
+- Create a Dockerfile listing necessary packages and modules, and name it `Dockerfile-alpine`
+  
+```Dockerfile
+FROM python:alpine
+RUN pip install flask
+COPY . /app
+WORKDIR /app
+EXPOSE 80
+CMD python ./welcome.py
+```
+
+- Build Docker image from Dockerfile locally, tag it as `<Your_Docker_Hub_Account_Name>/<Your_Image_Name>:<Tag>` and explain steps of building. Note that repo name is the combination of `<Your_Docker_Hub_Account_Name>/<Your_Image_Name>`.
+
+```bash
+docker build -t "clarusway/flask-app:2.0" -f ./Dockerfile-alpine . 
+docker image ls
+```
+
+- Note that while the size of `clarusway/flask-app:1.0` is approximately 400MB, the size of `clarusway/flask-app:2.0` is 56MB.
+
+- Run the newly built image as container in detached mode, connect host `port 80` to container `port 80`, and name container as `welcome`. Then list running containers and connect to EC2 instance from the browser to show the Flask app is running.
+
+```bash
+docker run -d --name welcome -p 8080:80 clarusway/flask-app:2.0
+docker ps
+```
+
+- Stop and remove the container `welcome`.
+
+```bash
+docker stop welcome && docker rm welcome
+```
+
+- Push newly built image to Docker Hub, and show the updated repo on Docker Hub.
+
+```bash
+docker push clarusway/flask-app:2.0
+```
+
+- We can also tag the same image with different tags.
+
+```bash
+docker image tag clarusway/flask-app:2.0 clarusway/flask-app:latest
 ```
 
 - Delete image with `image id` locally.

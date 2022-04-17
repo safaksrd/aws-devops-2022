@@ -39,7 +39,7 @@ ssh -i .ssh/call-training.pem ec2-user@ec2-3-133-106-98.us-east-2.compute.amazon
 - Download the current stable release of `Docker Compose` executable.
 
 ```bash
-sudo curl -L "https://github.com/docker/compose/releases/download/v2.4.1/docker-compose-$(uname -s)-$(uname -m)" \
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" \
 -o /usr/local/bin/docker-compose
 ```
 
@@ -180,10 +180,100 @@ Description : -
 
 - Enter http://`ec2-host-name`:5000/ in a browser to see the application running.
 
-- Press `Ctrl+C` to stop containers, and run `docker ps -a` to see containers created by Docker Compose.
+
+- Open an other terminal and connect to EC2 instance. 
+
+
+- Run either `docker-compose` or `docker-compose help` to see the help docs about docker-compose commands.
+
+```bash
+docker-compose help | less
+```
+
+- Run `docker-compose ps` command. Notice that it will not work, produces an error. Mention that docker-compose commands must be implemented in related directory.
+
+```bash
+cd composetest
+docker-compose ps
+```
+
+- Change directory to "composetest" and run `docker-compose ps` command to see the containers. Show the naming convention of docker-compose.
+
+```bash
+cd composetest
+docker-compose ps
+```
+
+- Run `docker-compose images` command to see the images used for container. Show the naming convention of docker-compose.
+
+```bash
+docker-compose images
+```
+
+- Run `docker-compose config` command to see the configuration of docker-compose file. Show that it has a reverse structure.
+
+```bash
+docker-compose config
+```
+
+- Go back to the first terminal. Press `Ctrl+C` to stop containers, and run `docker ps -a` to see containers created by Docker Compose.
 
 - Remove the containers with `Docker Compose`.
 
 ```bash
 docker-compose down
+```
+
+- Run `docker ps -a` to see containers are removed.
+
+```bash
+docker ps -a
+```
+
+- Run `docker images` command to see images are not removed. Notice that images and volumes are not removed with `docker-compose down` commmand.
+
+```bash
+docker images
+```
+
+- Open "app.py" file with an editor. Change the last section as mentinoned here:
+
+```python
+@app.route('/')
+def hello():
+    count = get_hit_count()
+    return 'Hello World! This is modified app. I have been seen {} times.\n'.format(count)
+```
+-Save the file. And run `docker-compose up` command.
+
+```bash
+docker-compose up
+```
+- Enter http://`ec2-host-name`:5000/ in a browser, check if the app updated. Show that the changes do not take place on the browser. Explain that it needs `docker-compose up --build` command to refresh the image. 
+
+- Press `Ctrl+C` to stop containers. Run `docker-compose down` command and remove the containers.
+
+```bash
+docker-compose down
+```
+
+- Run `docker-compose up --build` command to update the image. 
+
+```bash
+docker-compose up --build
+```
+
+- Enter http://`ec2-host-name`:5000/ in a browser, check if the app updated. Show that the changes took place on the browser. 
+
+
+- Press `Ctrl+C` to stop containers. Run `docker-compose down` command and remove the containers.
+
+```bash
+docker-compose down
+```
+
+- Run `docker ps -a` to see containers are removed.
+
+```bash
+docker ps -a
 ```

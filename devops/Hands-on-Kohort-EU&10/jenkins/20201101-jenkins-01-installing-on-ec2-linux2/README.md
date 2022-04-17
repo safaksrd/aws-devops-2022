@@ -262,7 +262,7 @@ cat ~/.jenkins/secrets/initialAdminPassword
 
 
 ## Part 4 - Installing Jenkins Server on Amazon Linux 2 with Docker and Docker Compose
-
+Not: Joe Hoca image a mudahale edilebildigi icin bu yontemle kurmayi tavsiye etti
 - Launch an AWS EC2 instance of Amazon Linux 2 AMI with security group allowing SSH and Tomcat (8080) ports and name it as `call-jenkins`.
 
 - Connect to the `call-jenkins` instance with SSH.

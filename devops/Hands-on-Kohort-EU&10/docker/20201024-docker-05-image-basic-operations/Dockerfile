@@ -1,6 +1,8 @@
-FROM python:alpine
+FROM ubuntu
+RUN apt-get update -y
+RUN apt-get install python3 -y
+RUN apt-get install python3-pip -y
+RUN pip3 install flask
 COPY . /app
 WORKDIR /app
-RUN pip install -r requirements.txt
-EXPOSE 80
-CMD python ./welcome.py
+CMD python3 ./welcome.py

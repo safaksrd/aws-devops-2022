@@ -5,9 +5,9 @@ ENV FLASK_RUN_HOST 0.0.0.0
 RUN apk add --no-cache gcc musl-dev linux-headers
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-EXPOSE 80
+EXPOSE 5000
 COPY . .
 CMD ["flask", "run"]
 
-# EXPOSE 80 neyin portu? host mu konteynir mi? 
-# Bu degeri 80 de yapsam 5000 de yapsam lokalhost dan baglandim
+# EXPOSE 5000 konteynirlar arasi ping leyebilmek icin
+# Bu degeri 80 de yapsam 5000 de yapsam lokalhost dan baglanabiliyoruz

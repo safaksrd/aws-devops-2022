@@ -46,7 +46,7 @@ At the end of the this hands-on training, students will be able to;
 
 ## Part 1 - Install Jenkins on Docker using Cloudformation Template
 
-- Launch a pre-configured `Clarusway Jenkins Server` from the AMI of Clarusway (ami-0644c22f90412d908) running on Amazon Linux 2, allowing SSH (port 22) and HTTP (ports 80, 8080) connections using the [Clarusway Jenkins Server Cloudformation Template](./clarusway-jenkins-on-docker-cfn-template.yml). Clarusway Jenkins Server is configured with admin user `call-jenkins` and password `Call-jenkins1234`.
+- Launch a pre-configured `Clarusway Jenkins Server` from the AMI of Clarusway (ami-03ededff12e34e59e) running on Amazon Linux 2, allowing SSH (port 22) and HTTP (ports 80, 8080) connections using the [Clarusway Jenkins Server Cloudformation Template](./clarusway-jenkins-on-docker-cfn-template.yml). Clarusway Jenkins Server is configured with admin user `call-jenkins` and password `Call-jenkins1234`.
 
 - Or launch and configure a Jenkins Server on Amazon Linux 2 AMI with security group allowing SSH (port 22) and HTTP (ports 80, 8080) connections using the [Cloudformation Template for Jenkins on Docker Installation](./jenkins-on-docker-cfn-template.yml).
 
@@ -100,7 +100,7 @@ sudo yum install java-devel
 sudo su
 cd /opt
 rm -rf maven
-wget https://ftp.itu.edu.tr/Mirror/Apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+sudo wget https://ftp.itu.edu.tr/Mirror/Apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
 tar -zxvf $(ls | grep apache-maven-*-bin.tar.gz)
 rm -rf $(ls | grep apache-maven-*-bin.tar.gz)
 sudo ln -s $(ls | grep apache-maven*) maven
@@ -154,7 +154,7 @@ https://github.com/callahan-cw/jenkins-first-project/
 - Click on the `Webhooks` on the left hand menu, and then click on `Add webhook`.
 
 - Copy the Jenkins URL from the AWS Management Console, paste it into `Payload URL` field, add `/github-webhook/` at the end of URL, and click on `Add webhook`.
-
+Not: Jenkins Server in URL sini Githuba girerek github da bir degisiklik oldugunda jenkins server in tetiklenmesini sagliyoruz.
 ```text
 http://ec2-54-144-151-76.compute-1.amazonaws.com:8080/github-webhook/
 ```

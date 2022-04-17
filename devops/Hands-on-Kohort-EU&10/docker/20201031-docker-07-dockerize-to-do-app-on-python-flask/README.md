@@ -28,6 +28,19 @@ ssh -i .ssh/call-training.pem ec2-user@ec2-3-133-106-98.us-east-2.compute.amazon
 
 ## Part 2 - Configuring Multi Containers (Python Flask App and MySQL) with Docker Compose
 
+- (Optional) You can install git with: 
+
+```
+sudo yum install git -y
+```
+
+then clone the project resources from:
+
+```
+git clone https://github.com/walter-cw/todo-app-docker-compose.git
+```
+
+
 - Create a folder for the project and change into your project directory:
   
 ```bash
@@ -250,7 +263,7 @@ CMD python ./to-do-api.py
 
 - Create a file called `docker-compose.yml` in your project folder with following setup.
 
-```text
+```yaml
 version: "3.7"
 
 services:

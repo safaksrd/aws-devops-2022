@@ -32,7 +32,7 @@ Resources:
   JenkinsServer:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-09d95fab7fff3776c
+      ImageId: ami-03ededff12e34e59e
       InstanceType: t2.micro
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
@@ -53,6 +53,7 @@ Resources:
           -v jenkins-data:/var/jenkins_home \
           -v /var/run/docker.sock:/var/run/docker.sock \
           jenkins/jenkins:lts
+
 Outputs:
   JenkinsDNS:
     Description: Jenkins Server DNS Name
