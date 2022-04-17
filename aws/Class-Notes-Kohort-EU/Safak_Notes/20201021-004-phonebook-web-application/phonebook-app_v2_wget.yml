@@ -49,11 +49,10 @@ Resources:
           - ResourceType: instance # olusacak EC2 instance larin adlarini belirliyoruz
             Tags:
               - Key: Name
-                Value: !Sub Web Server of ${AWS::StackName} Stack
+                Value: !Sub Web Server of ${AWS::StackName}
         UserData:
           Fn::Base64:
-            !Sub 
-              - |
+            !Sub |
                 #! /bin/bash
                 yum update -y
                 yum install python3 -y
@@ -95,6 +94,8 @@ Resources:
         - subnet-0440277dd2320c599
         - subnet-0afa176de4f1e6d5b
       Type: application
+
+# subnet ler regiona gore girilmeli
 
   ALBListener:
     Type: "AWS::ElasticLoadBalancingV2::Listener"

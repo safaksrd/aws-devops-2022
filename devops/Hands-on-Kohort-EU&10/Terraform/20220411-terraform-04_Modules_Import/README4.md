@@ -1,3 +1,4 @@
+Not: 20220411-terraform-04_Modules_Import 15.04.2022 de tekrarlandi
 # Hands-on Terraform-04 : Terraform Modules and import.
 
 Purpose of the this hands-on training is to give students the knowledge of terraform modules and import in Terraform.

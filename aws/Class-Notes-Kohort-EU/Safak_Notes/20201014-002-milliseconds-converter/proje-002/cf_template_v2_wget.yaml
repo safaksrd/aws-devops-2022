@@ -21,7 +21,7 @@ Resources:
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Enable HTTP for ALB
+      GroupDescription: Enable HTTP for Application Load Balancer
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
@@ -31,7 +31,7 @@ Resources:
   WebServerLT:
     Type: AWS::EC2::LaunchTemplate
     Properties:
-      LaunchTemplateData: 
+      LaunchTemplateData: # extension Launch Template Data yi otomatik getirmiyor, AWS documentation dan cekiyoruz
         ImageId: ami-033b95fb8079dc481
         InstanceType: t2.micro
         KeyName: leon
@@ -61,6 +61,8 @@ Resources:
       Port: 80
       Protocol: HTTP
       TargetType: instance
+      UnhealthyThresholdCount: 3
+      HealthyThresholdCount: 2
       VpcId: !GetAtt WebServerSecurityGroup.VpcId
 
   ApplicationLoadBalancer:
@@ -97,7 +99,7 @@ Resources:
       AvailabilityZones:
         !GetAZs "" # tüm AZ leri almasi icin
       DesiredCapacity: 2
-      HealthCheckGracePeriod: 90
+      HealthCheckGracePeriod: 300
       HealthCheckType: ELB
       LaunchTemplate: 
         LaunchTemplateId: !Ref WebServerLT
@@ -112,5 +114,5 @@ Outputs:
   WebsiteURL:
     Description: Milliseconds Converter Application Load Balancer URL
     Value: !Sub 
-      - http://${ALBaddress}
-      - ALBaddress: !GetAtt ApplicationLoadBalancer.DNSName
+      - http://${ALBAddress}
+      - ALBAddress: !GetAtt ApplicationLoadBalancer.DNSName
