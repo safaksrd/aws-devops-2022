@@ -1,3 +1,4 @@
+Not: 20201031-docker-07-dockerize-to-do-app-on-python-flask 16.04.2022 de tekrarlandi
 # Hands-on Docker-07 : Dockerize To-Do Web API Developed in Python Flask
 
 Purpose of the this hands-on training is to dockerize an Python Flask application with Dockerfile and Docker compose.
