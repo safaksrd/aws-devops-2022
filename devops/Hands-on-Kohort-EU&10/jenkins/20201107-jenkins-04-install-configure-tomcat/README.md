@@ -70,14 +70,14 @@ tar.gz (pgp, sha512)
   
 ```bash
 cd /tmp
-wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.59/bin/apache-tomcat-8.5.59.zip
+wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.zip
 ```
 
 - Unzip tomcat file and move to `/opt`
   
 ```bash
 unzip apache-tomcat-*.zip
-sudo mv apache-tomcat-8.5.59 /opt/tomcat
+sudo mv apache-tomcat-8.5.78 /opt/tomcat
 ```
 
 ## Part 4 - Configure tomcat
@@ -105,7 +105,7 @@ sudo chmod +x *
 - Set Credentials of Tomcat that Jenkins will use.
 
 ```bash
-cd /opt/tomcat/conf
+cd /opt/tomcat/conf # Not: sudo vi ile alttaki dosyaya gir ve degisiklik yap
 ```
 - Update `tomcat-users.xml` file.
 
@@ -188,7 +188,7 @@ cd /opt/tomcat/conf
 
 
 - Restart the tomcat server
-
+Not sudo ile alttaki komutlari gir
 ```bash
 /opt/tomcat/bin/shutdown.sh
 /opt/tomcat/bin/startup.sh

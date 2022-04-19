@@ -23,7 +23,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
-          SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId
+          SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId # terraformda bunun karsiligi security_groups = [aws_security_group.alb-sg.id] ile refere ediyoruz
 # 80 portu icin Source Sec Group Id tanimladik. Disaridan web sayfasini talep eden User once ALB nin DNS ine ulasacak, ALB den gelen istekler, EC2 instance lara ulasabilecek, yani EC2 instance icindeki app.py yi calistiracak . ALB EC2 lari cepecevree saracak.
 
   ALBSecurityGroup:
@@ -40,7 +40,7 @@ Resources:
     Type: AWS::EC2::LaunchTemplate
     Properties:
       LaunchTemplateData: # extension Launch Template Data yi otomatik getirmiyor, AWS documentation dan cekiyoruz
-        ImageId: ami-033b95fb8079dc481
+        ImageId: ami-033b95fb8079dc481 
         InstanceType: t2.micro
         KeyName: leon
         SecurityGroupIds: 
@@ -129,7 +129,7 @@ Resources:
       GroupDescription: Front-end access
       DBSecurityGroupIngress:
         - CIDRIP: 0.0.0.0/0 # ozellikle ulasmasini istedigimiz bir subnet araligimiz varsa burada belirtebiliriz
-        - EC2SecurityGroupId: !GetAtt WebServerSecurityGroup.GroupId # EC2 larin Sec Group
+        - EC2SecurityGroupId: !GetAtt WebServerSecurityGroup.GroupId # EC2 larin Sec Groupu refere ettik. Terraformdaki karisiligi security_groups = [aws_security_group.server-sg.id]
 
   MyDatabaseServer:
     Type: AWS::RDS::DBInstance

@@ -101,8 +101,8 @@ sudo su
 cd /opt
 rm -rf maven
 sudo wget https://ftp.itu.edu.tr/Mirror/Apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-tar -zxvf $(ls | grep apache-maven-*-bin.tar.gz)
-rm -rf $(ls | grep apache-maven-*-bin.tar.gz)
+sudo tar -zxvf $(ls | grep apache-maven-*-bin.tar.gz)
+sudo rm -rf $(ls | grep apache-maven-*-bin.tar.gz)
 sudo ln -s $(ls | grep apache-maven*) maven
 echo 'export M2_HOME=/opt/maven' > /etc/profile.d/maven.sh
 echo 'export PATH=${M2_HOME}/bin:${PATH}' >> /etc/profile.d/maven.sh
@@ -519,7 +519,7 @@ https://github.com/callahan-cw/jenkins-maven-project/
 ```
 
 - Click `apply` and `save`. Note that the script `Jenkinsfile` should be placed under root folder of repo.
-
+Not: Default olarak Jenkinsfile i Github daki reponun root dizininde arar, burada ise Jenkinsfile hello-app klasorunun altinda oldugu icin bunu belirtmeliyiz.
 - Since the Jenkins Server is running on Docker Machine, we can leverage from docker image of maven to setup the java and maven environment.
 
 - Create a `Jenkinsfile` with the following pipeline script, and explain the script.

@@ -120,7 +120,7 @@ sudo yum install git -y
 - Setting System Maven Path for default usage
   
 - Go to `Manage Jenkins`
-  - Select `Configure System`
+  - Select `Configure System` from Global properties
   - Find `Environment variables` part,
   - Click `Add`
     - for `Name`, enter `PATH+EXTRA` 

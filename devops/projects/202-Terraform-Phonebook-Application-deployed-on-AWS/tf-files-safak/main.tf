@@ -25,7 +25,8 @@ resource "aws_launch_template" "asg-lt" {
   key_name = "leon"
   vpc_security_group_ids = [aws_security_group.server-sg.id]
   user_data = filebase64("user-data.sh")
-  depends_on = [github_repository_file.dbendpoint]
+  depends_on = [aws_db_instance.db-server] # launch template dolayisiyla userdata dbserver olusmadan calismayacak
+  #depends_on = [github_repository_file.dbendpoint]
   tag_specifications {
     resource_type = "instance"
     tags = {
@@ -100,12 +101,21 @@ resource "aws_db_instance" "db-server" {
   port = 3306
   publicly_accessible = false
   skip_final_snapshot = true
+
+  provisioner "local-exec" {
+    command = "sed -i 's/db-endpoint/${self.address}/' user-data.sh"
+  }
 }
 
-resource "github_repository_file" "dbendpoint" {
-  content = aws_db_instance.db-server.address
-  file = "dbserver.endpoint"
-  repository = "phonebook"
-  overwrite_on_create = true
-  branch = "main"
-}
+# Hocam phonebook klasorunu onceden beri kullandigim aws-devops-2022 isimli reponun 3 dizin altinda yer alan bir klasore koymak istiyorum, 
+# Bunu asagidaki resource da nasil adresleyebilirim acaba?
+
+# https://$TOKEN@raw.githubusercontent.com/safaksrd/aws-devops-2022/main/devops/projects/202-Terraform-Phonebook-Application-deployed-on-AWS/phonebook/
+
+# resource "github_repository_file" "dbendpoint" {
+#   content = aws_db_instance.db-server.address # terraform ile githubdaki phonebook repoda olusturacagimiz dbserver.endpoint isimli dosyanin icine konulacak bilgi
+#   file = "dbserver.endpoint" # terraform ile githubdaki phonebook repoda olusturacagimiz dosyanin adi
+#   repository = "phonebook"
+#   overwrite_on_create = true
+#   branch = "main"
+# }

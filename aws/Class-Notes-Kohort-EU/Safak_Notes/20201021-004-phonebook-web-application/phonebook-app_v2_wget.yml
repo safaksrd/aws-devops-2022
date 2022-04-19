@@ -24,7 +24,7 @@ Resources:
           FromPort: 80
           ToPort: 80
           SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId
-# 80 portu icin Source Sec Group Id tanimladik. Disaridan web sayfasini talep eden User once ALB nin DNS ine ulasacak, ALB den gelen istekler, EC2 instance lara ulasabilecek, yani EC2 instance icindeki app.py yi calistiracak . ALB EC2 lari cepecevree saracak.
+# 80 portu icin Source Sec Group Id tanimladik. Disaridan web sayfasini talep eden User once ALB nin DNS ine ulasacak, ALB den gelen istekler, EC2 instance lara ulasabilecek, yani EC2 instance icindeki app.py yi calistiracak. ALB EC2 lari cepecevree saracak.
 
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -49,10 +49,11 @@ Resources:
           - ResourceType: instance # olusacak EC2 instance larin adlarini belirliyoruz
             Tags:
               - Key: Name
-                Value: !Sub Web Server of ${AWS::StackName}
+                Value: !Sub Web Server of ${AWS::StackName} #Stack den attribute cekerken !Sub kullaniyoruz. Resource dan attribute cekerke GetAtt kullaniyoruz.
         UserData:
           Fn::Base64:
-            !Sub |
+            !Sub 
+              - |
                 #! /bin/bash
                 yum update -y
                 yum install python3 -y
@@ -67,7 +68,7 @@ Resources:
                 python3 /home/ec2-user/phonebook-app.py
               - MyDBURI: !GetAtt MyDatabaseServer.Endpoint.Address
 # Database Server in Endpoint Address bilgisini MyDBURI degiskenine atariz
-# Userdatanin icindeki echo ile baslayan kisimda MyDBURI degiskenine atanmis bilgiyi phonebook.app.py de beklenen yere yaziyoruz.
+# Userdatanin icindeki echo ile baslayan kisimda MyDBURI degiskenine atanmis bilgiyi phonebook.app.py de beklenen yere kaydediyoruz / yaziyoruz.
   
   WebServerTG:
     Type: "AWS::ElasticLoadBalancingV2::TargetGroup"

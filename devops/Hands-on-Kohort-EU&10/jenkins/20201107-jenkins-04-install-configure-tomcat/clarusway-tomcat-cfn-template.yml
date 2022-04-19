@@ -31,7 +31,7 @@ Resources:
   TomcatServerStage:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-09d95fab7fff3776c
+      ImageId: ami-03ededff12e34e59e
       InstanceType: t2.micro
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
@@ -47,14 +47,15 @@ Resources:
           yum install java-1.8.0-openjdk -y
           yum install unzip wget -y
           cd /tmp
-          wget https://downloads.apache.org/tomcat/tomcat-8/v8.5.59/bin/apache-tomcat-8.5.59.zip
+          wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.zip
           unzip apache-tomcat-*.zip
-          mv apache-tomcat-8.5.59 /opt/tomcat
+          mv apache-tomcat-8.5.78 /opt/tomcat
           chmod +x /opt/tomcat/bin/*
+  
   TomcatServerProduction:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-09d95fab7fff3776c
+      ImageId: ami-03ededff12e34e59e
       InstanceType: t2.micro
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
@@ -70,10 +71,11 @@ Resources:
           yum install java-1.8.0-openjdk -y
           yum install unzip wget -y
           cd /tmp
-          wget https://ftp.itu.edu.tr/Mirror/Apache/tomcat/tomcat-8/v8.5.59/bin/apache-tomcat-8.5.59.zip
+          wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.zip
           unzip apache-tomcat-*.zip
-          mv apache-tomcat-8.5.59 /opt/tomcat
+          mv apache-tomcat-8.5.78 /opt/tomcat
           chmod +x /opt/tomcat/bin/*
+
 Outputs:
   TomcatServerStage:
     Description: Tomcat Server Stage DNS Name
