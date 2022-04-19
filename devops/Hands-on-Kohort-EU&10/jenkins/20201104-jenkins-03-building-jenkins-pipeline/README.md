@@ -232,7 +232,7 @@ pipeline {
 ```text
 https://github.com/callahan-cw/jenkins-first-project/
 ```
-
+Not: Branch kontrolu yap. Branch Specifier bölümüne Github da yazan branch ismini gir
 - Click `apply` and `save`. Note that the script `Jenkinsfile` should be placed under root folder of repo.
 
 - Create a `Jenkinsfile` within the `jenkins-first-project` repo and save following pipeline script.

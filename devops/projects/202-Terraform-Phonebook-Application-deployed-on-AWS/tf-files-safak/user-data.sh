@@ -14,7 +14,7 @@ echo "${MyDB}" > /home/ec2-user/dbserver.endpoint
 # echo "$aws_db_instance.db-server.address" oldugunda cevap cat dbserver.endpoint -> .db-server.address
 # echo "$[aws_db_instance.db-server.address]" oldugunda cevap cat dbserver.endpoint -> cevap bos
 
-TOKEN="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"
+TOKEN="xxxxx"
 FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/aws-devops-2022/main/devops/projects/202-Terraform-Phonebook-Application-deployed-on-AWS/phonebook/"
 wget -P /home/ec2-user/phonebook "$FOLDER"phonebook-app.py
 #wget -P /home/ec2-user "$FOLDER"dbserver.endpoint #repoma gonderebilsem bu sekilde cekecegim ancak repoya nasil gonderecegimi bilmiyorum
