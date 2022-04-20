@@ -253,12 +253,12 @@ sudo yum install git -y
 -  Go to the `Package-Application`
    -  Select `Configure`
    -  Select the `Post-build Actions` tab
-   -  From `Add post-build action`, `Build othe projects`
+   -  From `Add post-build action`, `Build other projects`
       -  For `Projects to build`, fill in `Deploy-Application-Staging-Environment`
       -  And select `Trigger only if build is stable` option.
    - Go to the `Build Triggers` tab
      - Select `Poll SCM`
-       - In `Schedule`, fill in `* * * * *` (5 stars)
+       - In `Schedule`, fill in `* * * * *` (5 stars) Not: Dakikada bir bakacak. 
          - You will see the warning `Do you really mean "every minute" when you say "* * * * *"? Perhaps you meant "H * * * *" to poll once per hour`
   
    - `Save` the modified job.
@@ -379,7 +379,7 @@ sudo yum install git -y
 
   - Select `Git`
   
-  - Select the path to download the DSL file, so for `Repository URL`, enter `https://github.com/JBCodeWorld/jenkins-project-settings.git`
+  - Select the path to download the DSL file, so for `Repository URL`, enter `https://github.com/safaksrd/jenkins-project-settings.git`
 
 - Inside `Build Options` tab
 
@@ -387,7 +387,7 @@ sudo yum install git -y
 
   - for `DSL Scripts`, enter `MavenProjectDSL.groovy`
   
-- Now click the  `Build Now` option, it will fail. Chect the console log for the fail reason.
+- Now click the  `Build Now` option, it will fail. Check the console log for the fail reason.
 
 - Go to `Manage Jenkins` ,  select the `In-process Script Approval`, `approve` the script.
   
@@ -397,8 +397,8 @@ sudo yum install git -y
 
 - Go to the `First-Maven-Project-Via-DSL` job.
 
-- Select `Configure`, at `Buld` section set `Maven Version` to a defined/valid one.
-
+- Select `Configure`, at `Build` section set `Maven Version` to a defined/valid one.
+Not: Maven Version ayarla. Ayrica "Manage Jenkins" > "Configure System" altinda Git Plugin bölümünde user.name = jenkins ve user.email = jenkins@localhostolarak ayarla. 
 - `Save` and click the `Build Now` option.
 
 - Ckeck the console log
@@ -490,7 +490,7 @@ pipeline {
      -  for `Days to keep builds` enter `5` and 
      -  `Max # of builds to keep` enter `1`.
 
-- At `Advanced Project Options: Pipeline` section
+- At `Pipeline` section
 
   - for definition, select `Pipeline script from SCM`
   - for SCM, select `Git`
@@ -523,10 +523,10 @@ pipeline {
 
 
 - Go to the `deploy-application-staging-environment-pipeline` job
-
+- configure
 - Find the `Build` section,
   - for `Project name`, enter `package-application-code-pipeline` 
-  - select `Last successful build`
+  - select `Last successful build`--> bu secilince bir kez elle calistirmak gerekiyor, bunun yerine upstream build that triggered this job secilirse elle calistirmaya gerek kalmiyor.
 
 - At `Post-build Actions (manual steps)`, click the `X` to remove this section.
 
@@ -537,7 +537,7 @@ pipeline {
 
 - Find the `Build` section,
   - for `Project name`, enter `package-application-code-pipeline` 
-  - select `Last successful build`
+  - select `Last successful build`--> bu secilince bir kez elle calistirmak gerekiyor, bunun yerine upstream build that triggered this job secilirse elle calistirmaya gerek kalmiyor.
 
 - `Save` the job
 

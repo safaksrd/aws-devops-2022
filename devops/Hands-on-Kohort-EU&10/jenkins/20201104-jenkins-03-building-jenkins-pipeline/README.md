@@ -354,7 +354,7 @@ git push
 
 ## Part 7 - Configuring Jenkins Pipeline with GitHub Webhook to Run the Python Code
 
-- To build the `python` code with Jenkins pipeline using the `Jenkinsfile` and `GitHub Webhook`, we will leverage from the same job created in ***Part 5*** (named as `pipeline-with-jenkinsfile-and-webhook`). To accomplish this task, we need;
+- To build the `python` code with Jenkins pipeline using the `Jenkinsfile` and `GitHub Webhook`, we will leverage from the same job created in ***Part 6*** (named as `pipeline-with-jenkinsfile-and-webhook`). To accomplish this task, we need; 
 
   - a python code to build
 
@@ -419,7 +419,7 @@ git push
 
 ## Part 8 - Configuring Jenkins Pipeline with GitHub Webhook to Build the Java Code
 
-- To build the `java` code with Jenkins pipeline using the `Jenkinsfile` and `GitHub Webhook`, we will leverage from the same job created in ***Part 5*** (named as `pipeline-with-jenkinsfile-and-webhook`). To accomplish this task, we need;
+- To build the `java` code with Jenkins pipeline using the `Jenkinsfile` and `GitHub Webhook`, we will leverage from the same job created in ***Part 6*** (named as `pipeline-with-jenkinsfile-and-webhook`). To accomplish this task, we need;
 
   - a java code to build
 
@@ -521,7 +521,7 @@ https://github.com/callahan-cw/jenkins-maven-project/
 - Click `apply` and `save`. Note that the script `Jenkinsfile` should be placed under root folder of repo.
 Not: Default olarak Jenkinsfile i Github daki reponun root dizininde arar, burada ise Jenkinsfile hello-app klasorunun altinda oldugu icin bunu belirtmeliyiz.
 - Since the Jenkins Server is running on Docker Machine, we can leverage from docker image of maven to setup the java and maven environment.
-
+- Not: Github Webhook ayarini unutma!-
 - Create a `Jenkinsfile` with the following pipeline script, and explain the script.
 
 ```groovy
