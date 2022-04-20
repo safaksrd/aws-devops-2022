@@ -49,6 +49,12 @@ Resources:
         -                        
           Key: Name
           Value: !Sub Docker Machine 1st of ${AWS::StackName}
+      UserData:
+        Fn::Base64: |
+          #! /bin/bash
+          yum update -y
+          # set server hostname as manager-1
+          hostnamectl set-hostname manager-1
   DockerMachine2:
     Type: AWS::EC2::Instance
     Properties:
@@ -60,7 +66,13 @@ Resources:
       Tags:                
         -                        
           Key: Name
-          Value: !Sub Docker Machine 2nd of ${AWS::StackName} 
+          Value: !Sub Docker Machine 2nd of ${AWS::StackName}
+      UserData:
+        Fn::Base64: |
+          #! /bin/bash
+          yum update -y
+          # set server hostname as worker-1
+          hostnamectl set-hostname worker-1
   DockerMachine3:
     Type: AWS::EC2::Instance
     Properties:
@@ -73,6 +85,12 @@ Resources:
         -                        
           Key: Name
           Value: !Sub Docker Machine 3rd of ${AWS::StackName} 
+      UserData:
+        Fn::Base64: |
+          #! /bin/bash
+          yum update -y
+          # set server hostname as worker-2
+          hostnamectl set-hostname worker-2
   DockerMachine4:
     Type: AWS::EC2::Instance
     Properties:
@@ -85,6 +103,12 @@ Resources:
         -                        
           Key: Name
           Value: !Sub Docker Machine 4th of ${AWS::StackName} 
+      UserData:
+        Fn::Base64: |
+          #! /bin/bash
+          yum update -y
+          # set server hostname as worker-3
+          hostnamectl set-hostname worker-3
   DockerMachine5:
     Type: AWS::EC2::Instance
     Properties:
@@ -97,6 +121,12 @@ Resources:
         -                        
           Key: Name
           Value: !Sub Docker Machine 5th of ${AWS::StackName} 
+      UserData:
+        Fn::Base64: |
+          #! /bin/bash
+          yum update -y
+          # set server hostname as worker-4
+          hostnamectl set-hostname worker-4
 Outputs:
   1stDockerMachineDNSName:
     Description: Docker Machine 1st DNS Name
