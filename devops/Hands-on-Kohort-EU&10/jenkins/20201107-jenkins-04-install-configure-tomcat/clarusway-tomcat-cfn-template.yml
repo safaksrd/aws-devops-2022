@@ -28,6 +28,7 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
+  
   TomcatServerStage:
     Type: AWS::EC2::Instance
     Properties:
@@ -44,6 +45,8 @@ Resources:
         Fn::Base64: |
           #! /bin/bash
           yum update -y
+          # set server hostname as Stage-Server
+          hostnamectl set-hostname Stage-Server
           yum install java-1.8.0-openjdk -y
           yum install unzip wget -y
           cd /tmp
@@ -68,6 +71,8 @@ Resources:
         Fn::Base64: |
           #! /bin/bash
           yum update -y
+          # set server hostname as Production-Server
+          hostnamectl set-hostname Production-Server
           yum install java-1.8.0-openjdk -y
           yum install unzip wget -y
           cd /tmp
