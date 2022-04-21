@@ -167,7 +167,7 @@ docker node ls
 > Warning: If you have problem with `docker swarm` installation, you can use following link for lesson.
 https://labs.play-with-docker.com
 
-- Create a service for visualization. 
+- Create a service for visualization. (Not: on manager-1 node)
 
 ```bash
 docker service create \

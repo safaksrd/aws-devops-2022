@@ -6,7 +6,7 @@ Description: >
   The AMI of Clarusway Compose enabled Docker Machine (clarusway-docker-machine-with-compose-amazon-linux-2)
   is published on North Virginia Region for educational purposes. 
   Docker Machines will run on Amazon Linux 2 with custom security group 
-  allowing SSH (22), HTTP (80) and TCP(2377, 8080) connections from anywhere.
+  allowing SSH (22), HTTP (80), TCP(2377, 7946, 8080) and UDP (4789, 7946) connections from anywhere.
   User needs to select appropriate key name when launching the template.
 
 Parameters:
@@ -34,6 +34,18 @@ Resources:
           ToPort: 2377
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
+          FromPort: 7946
+          ToPort: 7946
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: udp
+          FromPort: 7946
+          ToPort: 7946
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: udp
+          FromPort: 4789
+          ToPort: 4789
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
           FromPort: 8080
           ToPort: 8080
           CidrIp: 0.0.0.0/0
@@ -49,6 +61,12 @@ Resources:
         -                        
           Key: Name
           Value: !Sub Docker Machine 1st of ${AWS::StackName}
+      UserData:
+        Fn::Base64: |
+          #! /bin/bash
+          yum update -y
+          # set server hostname as manager-1
+          hostnamectl set-hostname manager-1
   DockerMachine2:
     Type: AWS::EC2::Instance
     Properties:
@@ -60,7 +78,13 @@ Resources:
       Tags:                
         -                        
           Key: Name
-          Value: !Sub Docker Machine 2nd of ${AWS::StackName} 
+          Value: !Sub Docker Machine 2nd of ${AWS::StackName}
+      UserData:
+        Fn::Base64: |
+          #! /bin/bash
+          yum update -y
+          # set server hostname as manager-2
+          hostnamectl set-hostname manager-2
   DockerMachine3:
     Type: AWS::EC2::Instance
     Properties:
@@ -73,6 +97,12 @@ Resources:
         -                        
           Key: Name
           Value: !Sub Docker Machine 3rd of ${AWS::StackName} 
+      UserData:
+        Fn::Base64: |
+          #! /bin/bash
+          yum update -y
+          # set server hostname as manager-3
+          hostnamectl set-hostname manager-3
   DockerMachine4:
     Type: AWS::EC2::Instance
     Properties:
@@ -85,6 +115,12 @@ Resources:
         -                        
           Key: Name
           Value: !Sub Docker Machine 4th of ${AWS::StackName} 
+      UserData:
+        Fn::Base64: |
+          #! /bin/bash
+          yum update -y
+          # set server hostname as worker-1
+          hostnamectl set-hostname worker-1
   DockerMachine5:
     Type: AWS::EC2::Instance
     Properties:
@@ -97,6 +133,12 @@ Resources:
         -                        
           Key: Name
           Value: !Sub Docker Machine 5th of ${AWS::StackName} 
+      UserData:
+        Fn::Base64: |
+          #! /bin/bash
+          yum update -y
+          # set server hostname as worker-2
+          hostnamectl set-hostname worker-2
 Outputs:
   1stDockerMachineDNSName:
     Description: Docker Machine 1st DNS Name
