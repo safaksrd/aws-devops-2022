@@ -71,8 +71,8 @@ Resources:
         Fn::Base64: |
           #! /bin/bash
           yum update -y
-          # set server hostname as worker-1
-          hostnamectl set-hostname worker-1
+          # set server hostname as manager-2
+          hostnamectl set-hostname manager-2
   DockerMachine3:
     Type: AWS::EC2::Instance
     Properties:
@@ -89,8 +89,8 @@ Resources:
         Fn::Base64: |
           #! /bin/bash
           yum update -y
-          # set server hostname as worker-2
-          hostnamectl set-hostname worker-2
+          # set server hostname as manager-3
+          hostnamectl set-hostname manager-3
   DockerMachine4:
     Type: AWS::EC2::Instance
     Properties:
@@ -107,8 +107,8 @@ Resources:
         Fn::Base64: |
           #! /bin/bash
           yum update -y
-          # set server hostname as worker-3
-          hostnamectl set-hostname worker-3
+          # set server hostname as worker-1
+          hostnamectl set-hostname worker-1
   DockerMachine5:
     Type: AWS::EC2::Instance
     Properties:
@@ -125,8 +125,8 @@ Resources:
         Fn::Base64: |
           #! /bin/bash
           yum update -y
-          # set server hostname as worker-4
-          hostnamectl set-hostname worker-4
+          # set server hostname as worker-2
+          hostnamectl set-hostname worker-2
 Outputs:
   1stDockerMachineDNSName:
     Description: Docker Machine 1st DNS Name

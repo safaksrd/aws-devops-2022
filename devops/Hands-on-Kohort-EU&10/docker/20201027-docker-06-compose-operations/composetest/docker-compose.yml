@@ -3,6 +3,6 @@ services:
   web:
     build: .
     ports:
-      - "5000:5000" # EC2 da 5000 portunu acmayi unutma
+      - "5001:5000" # EC2 da 5001 portunu acmayi unutma
   redis:
     image: "redis:alpine"
