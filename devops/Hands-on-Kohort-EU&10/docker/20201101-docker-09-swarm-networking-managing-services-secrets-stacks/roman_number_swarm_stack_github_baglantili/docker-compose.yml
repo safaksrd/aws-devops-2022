@@ -1,0 +1,27 @@
+# 7.handson dan alip uzerinde degisiklik yaptim
+version: "3.8"
+
+services:
+    database:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: R1234r
+            MYSQL_DATABASE: todo_db
+            MYSQL_USER: clarusway
+            MYSQL_PASSWORD: Clarusway_1
+        networks:
+            - clarusnet
+    myapp:
+        image: safaksrd/romannumeral
+        deploy:
+            replicas: 5
+        depends_on:
+            - database
+        ports:
+            - "80:80" # EC2 da 80 portu acik olmali
+        networks:
+            - clarusnet
+
+networks:
+    clarusnet:
+        driver: overlay
