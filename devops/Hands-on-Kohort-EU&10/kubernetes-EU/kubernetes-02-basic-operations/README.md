@@ -53,12 +53,6 @@ kubectl get node
 kubectl api-resources
 ```
 
-- To view kubectl commands:
-
-```
-kubectl help
-```
-
 - Get the documentation of `Nodes` and its fields.
 
 ```bash
@@ -91,7 +85,7 @@ metadata:
 spec:
   containers:
   - name: mynginx
-    image: nginx
+    image: nginx:1.19
     ports:
     - containerPort: 80
 ```
@@ -164,7 +158,7 @@ spec:
     spec:
       containers:
       - name: mynginx
-        image: nginx
+        image: nginx:1.19
         ports:
         - containerPort: 80
 ```
@@ -234,7 +228,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx
+        image: nginx:1.19
         ports:
         - containerPort: 80
 ```
@@ -309,10 +303,6 @@ kubectl describe rs <rs-name>
 kubectl scale deploy nginx-deployment --replicas=5
 ```
 
-- But each time do we have to apply these commands for scaling? No because there will be our yml file and we can change it when we need scale.
-
->> Show when you apply mydeployment.yaml change, how differ?
-
 - Delete a pod and show new pod is immediately created.
 
 ```bash
@@ -335,7 +325,7 @@ mkdir deployment-lesson
 cd deployment-lesson
 ```
 
-- Create a `clarus-deploy.yaml` and input text below. Pay attention that image version is 1.0.
+- Create a clarus-deploy.yaml and input text below. Pay attention that image version is 1.0.
 
 ```yaml
 apiVersion: apps/v1
@@ -345,7 +335,7 @@ metadata:
   labels:
     app: container-info
   annotations:
-    kubernetes.io/change-cause: deploy/clarus-deploy is set as container-info=clarusway/container-info:1.0
+    kubernetes.io/change-cause: deploy/clarus-deploy is set as container-info=clarusways/container-info:1.0
 spec:
   replicas: 3
   selector:
@@ -358,7 +348,7 @@ spec:
     spec:
       containers:
       - name: container-info
-        image: clarusway/container-info:1.0
+        image: clarusways/container-info:1.0
         ports:
         - containerPort: 80
 ```
@@ -375,7 +365,7 @@ kubectl apply -f clarus-deploy.yaml
 kubectl get deploy,rs,po -l app=container-info
 ```
 
-- Describe deployment and note the image of the deployment. In our case, it is clarusway/container-info:1.0.
+- Describe deployment and note the image of the deployment. In our case, it is clarusways/container-info:1.0.
 
 ```bash
 kubectl describe deploy clarus-deploy
@@ -396,7 +386,7 @@ kubectl rollout history deploy clarus-deploy --revision=1
 - Upgrade image.
 
 ```bash
-kubectl set image deploy clarus-deploy container-info=clarusway/container-info:2.0
+kubectl set image deploy clarus-deploy container-info=clarusways/container-info:2.0 --record=true
 ```
 
 - Show the rollout history.
@@ -445,12 +435,12 @@ metadata:
 ```yaml
 ...
 ...
-    kubernetes.io/change-cause: kubectl set image deploy clarus-deploy container-info=clarusway/container-info:3.0
+    kubernetes.io/change-cause: kubectl set image deploy clarus-deploy container-info=clarusways/container-info:3.0
 ...
 ...
     spec:
       containers:
-      - image: clarusway/container-info:3.0
+      - image: clarusways/container-info:3.0
 ...
 ...
 ```
@@ -468,8 +458,6 @@ kubectl rollout history deploy clarus-deploy --revision=1
 kubectl rollout history deploy clarus-deploy --revision=2
 kubectl rollout history deploy clarus-deploy --revision=3
 ```
-
-- Apply `kubectl get rs` and show how many replica set exist and explain why?
 
 - List the `Deployment`, `ReplicaSet` and `Pods` of `clarus-deploy` deployment using a label and explain ReplicaSets.
 
@@ -560,7 +548,7 @@ kubectl create namespace <namespace-name>
 
 ```bash
 kubectl create deployment default-ns --image=nginx
-kubectl create deployment clarus-ns --image=nginx -n=clarus-namespace
+kubectl create deployment clarus-ns --image=nginx  -n=clarus-namespace
 ```
 
 - List the deployments in `default` namespace.

@@ -116,7 +116,7 @@ Resources:
             apt-get upgrade -y
             hostnamectl set-hostname kube-master
             chmod 777 /etc/sysctl.conf
-            echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+            cat "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
             sysctl -p
             chmod 644 /etc/sysctl.conf
             apt install -y docker.io
@@ -173,7 +173,7 @@ Resources:
             apt-get upgrade -y
             hostnamectl set-hostname kube-worker-1
             chmod 777 /etc/sysctl.conf
-            echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+            cat "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
             sysctl -p
             chmod 644 /etc/sysctl.conf
             apt install -y docker.io
