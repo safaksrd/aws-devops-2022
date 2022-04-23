@@ -13,7 +13,7 @@ services:
   
 
   my-app:
-    image: serdarcw/bookstore:latest
+    image: safaksrd/bookstore
     restart: always
     depends_on:
       - database
