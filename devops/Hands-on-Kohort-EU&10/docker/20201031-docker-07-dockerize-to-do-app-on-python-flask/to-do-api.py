@@ -119,11 +119,11 @@ def remove_task(task):
     row = cursor.fetchone()
     return True if row is None else False
 
-# Write a function named `home` which returns 'Welcome to the Callahan's To-Do API Service',
+# Write a function named `home` which returns 'Welcome to the Safak's To-Do API Service',
 # and assign to the static route of ('/')
 @app.route('/')
 def home():
-    return "Welcome to Callahan's To-Do API Service"
+    return "Welcome to Safak's To-Do API Service"
 
 
 # Write a function named `get_tasks` which returns all tasks in JSON format for `GET`,

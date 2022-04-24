@@ -68,7 +68,7 @@ resource "aws_instance" "tf-docker-ec2" {
           mkdir -p /home/ec2-user/bookstore-api
           TOKEN="xxxx"
           FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/bookstore-repo-tf/main/"
-          curl -s --create-dirs -o "/home/ec2-user/bookstore-api/app.py" -L "$FOLDER"bookstore-api.py
+          curl -s --create-dirs -o "/home/ec2-user/bookstore-api/bookstore-api.py" -L "$FOLDER"bookstore-api.py
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/requirements.txt" -L "$FOLDER"requirements.txt
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/Dockerfile" -L "$FOLDER"Dockerfile
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/docker-compose.yml" -L "$FOLDER"docker-compose.yml
@@ -76,7 +76,7 @@ resource "aws_instance" "tf-docker-ec2" {
           docker build -t safaksrd/bookstore .
           docker-compose up -d
           EOF
-  
+# curl komutu sag taraftaki adresteki dosyayi bulur sol taraftaki adrese koyar  
   depends_on = [github_repository.myrepo, github_repository_file.app-files]
 }
 
