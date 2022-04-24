@@ -13,7 +13,7 @@ services:
   
 
   my-app:
-    image: safaksrd/bookstore
+    image: safaksrd/bookstore:cfn
     restart: always
     depends_on:
       - database

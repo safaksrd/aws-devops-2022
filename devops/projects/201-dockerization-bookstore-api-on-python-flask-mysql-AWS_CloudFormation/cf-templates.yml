@@ -50,7 +50,7 @@ Resources:
           chmod +x /usr/local/bin/docker-compose
           mkdir -p /home/ec2-user/bookstore-api
           TOKEN="xxxx"
-          FOLDER="https://$TOKEN@raw.githubusercontent.com/serdarcw/Deneme-201/master/"
+          FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/Deneme-201/master/"
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/bookstore-api.py" -L "$FOLDER"bookstore-api.py
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/requirements.txt" -L "$FOLDER"requirements.txt
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/Dockerfile" -L "$FOLDER"Dockerfile

@@ -22,7 +22,7 @@ provider "github" {
 }
 
 resource "github_repository" "myrepo" {
-  name = "bookstore-repo"
+  name = "bookstore-repo-tf"
   auto_init = true
   visibility = "private"
 }
@@ -67,7 +67,7 @@ resource "aws_instance" "tf-docker-ec2" {
           chmod +x /usr/local/bin/docker-compose
           mkdir -p /home/ec2-user/bookstore-api
           TOKEN="xxxx"
-          FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/bookstore-repo/main/"
+          FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/bookstore-repo-tf/main/"
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/app.py" -L "$FOLDER"bookstore-api.py
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/requirements.txt" -L "$FOLDER"requirements.txt
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/Dockerfile" -L "$FOLDER"Dockerfile

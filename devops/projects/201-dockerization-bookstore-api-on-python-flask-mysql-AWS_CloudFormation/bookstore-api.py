@@ -6,7 +6,7 @@ from flaskext.mysql import MySQL
 app = Flask(__name__)
 
 # Configure sqlite database
-app.config['MYSQL_DATABASE_HOST'] = 'database'
+app.config['MYSQL_DATABASE_HOST'] = 'database' # AWS projelerinde buraya RDS endpoint yazmistik ancak burada docker-compose da olusturdugumuz service (konteynir) adini yaziyoruz
 app.config['MYSQL_DATABASE_USER'] = 'clarusway'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'Clarusway_1'
 app.config['MYSQL_DATABASE_DB'] = 'bookstore_db'
@@ -122,11 +122,11 @@ def remove_book(book):
     return True if row is None else False
 
 
-# Write a function named `home` which returns 'Welcome to the Callahan's Bookstore API Service',
+# Write a function named `home` which returns 'Welcome to the Safak's Bookstore API Service',
 # and assign to the static route of ('/')
 @app.route('/')
 def home():
-    return "Welcome to Callahan's Bookstore API Service"
+    return "Welcome to Safak's Bookstore API Service"
 
 # Write a function named `get_books` which returns all books in JSON format for `GET`,
 # and assign to the static route of ('/books')

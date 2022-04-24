@@ -9,8 +9,8 @@ from flaskext.mysql import MySQL
 app = Flask(__name__)
 
 # The hardest part of this project is to get endpoint of RDS instances. Since our RDS is created within cloudformation template, we need to get RDS endpoint and paste it here as environmental variable using Launch templates user data. 
-db_endpoint = open("/home/ec2-user/phonebook/dbserver.endpoint", 'r', encoding='UTF-8') 
-
+db_endpoint = open("/home/ec2-user/phonebook-tf/dbserver.endpoint", 'r', encoding='UTF-8') 
+# AWS 004-phonebook projesinde githubdaki ilgili klasörü wget yada curl ile direk ec2 nun masaustune cekiyorduk, burada ise önce githubda phonebook-tf isimli bir repo olusturup bu repoyu ec2 nun masaüstüne klonladigimiz icin db_endpoint=open(..) bölümünde girdigimiz adres degisiyor.
 # Configure mysql database
 
 # Once we are done with the database, we are going to create database.

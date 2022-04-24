@@ -13,7 +13,7 @@ services:
   
 
   my-app:
-    image: safaksrd/bookstore:latest
+    image: safaksrd/bookstore:tf
     restart: always
     depends_on:
       - database
