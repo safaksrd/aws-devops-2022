@@ -49,8 +49,8 @@ Resources:
           -o /usr/local/bin/docker-compose
           chmod +x /usr/local/bin/docker-compose
           mkdir -p /home/ec2-user/bookstore-api
-          TOKEN="XXXX"
-          FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/bookstore-repo-cfn/main/"
+          TOKEN="hp_JFZOi1VD4Alh0cvWWfko5lnhOjqdLd4WxbA2"
+          FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/aws-devops-2022/main/devops/projects/201-dockerization-bookstore-api-on-python-flask-mysql-CloudFormation/image_file/"
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/bookstore-api.py" -L "$FOLDER"bookstore-api.py
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/requirements.txt" -L "$FOLDER"requirements.txt
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/Dockerfile" -L "$FOLDER"Dockerfile
@@ -58,6 +58,7 @@ Resources:
           cd /home/ec2-user/bookstore-api
           docker build -t "safaksrd/bookstore:cfn" .
           docker-compose up -d
+# # curl komutu sag taraftaki -L nin yanindaki adresteki dosyayi bulur sol taraftaki -o nun yanindaki adrese koyar  
 Outputs:
   WebsiteURL:
     Description: Bookstore Web API URL 

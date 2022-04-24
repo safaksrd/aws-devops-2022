@@ -21,30 +21,30 @@ provider "github" {
   token = "xxxx"
 }
 
-# resource "github_repository" "myrepo" {
-#   name = "bookstore-repo-tf"
-#   auto_init = true
-#   visibility = "private"
-# }
+resource "github_repository" "myrepo" {
+  name = "bookstore-repo-tf"
+  auto_init = true
+  visibility = "private"
+}
 
-# resource "github_branch_default" "main" {
-#   branch = "main"
-#   repository = github_repository.myrepo.name
-# }
+resource "github_branch_default" "main" {
+  branch = "main"
+  repository = github_repository.myrepo.name
+}
 
-# variable "files" {
-#   default = ["bookstore-api.py", "requirements.txt", "Dockerfile", "docker-compose.yml"]
-# }
+variable "files" {
+  default = ["bookstore-api.py", "requirements.txt", "Dockerfile", "docker-compose.yml"]
+}
 
-# resource "github_repository_file" "app-files" {
-#   for_each = toset(var.files)
-#   content = file(each.value)
-#   file = each.value
-#   repository = github_repository.myrepo.name
-#   branch = "main"
-#   commit_message = "managed by terraform"
-#   overwrite_on_create = true
-# }
+resource "github_repository_file" "app-files" {
+  for_each = toset(var.files)
+  content = file(each.value)
+  file = each.value
+  repository = github_repository.myrepo.name
+  branch = "main"
+  commit_message = "managed by terraform"
+  overwrite_on_create = true
+}
 
 resource "aws_instance" "tf-docker-ec2" {
   ami = "ami-0f9fc25dd2506cf6d"
@@ -67,7 +67,7 @@ resource "aws_instance" "tf-docker-ec2" {
           chmod +x /usr/local/bin/docker-compose
           mkdir -p /home/ec2-user/bookstore-api
           TOKEN="xxxx"
-          FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/aws-devops-2022/main/devops/projects/201-dockerization-bookstore-api-on-python-flask-mysql-Terraform/image_file/"
+          FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/bookstore-repo-tf/main/"
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/bookstore-api.py" -L "$FOLDER"bookstore-api.py
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/requirements.txt" -L "$FOLDER"requirements.txt
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/Dockerfile" -L "$FOLDER"Dockerfile
@@ -76,8 +76,8 @@ resource "aws_instance" "tf-docker-ec2" {
           docker build -t safaksrd/bookstore:tf .
           docker-compose up -d
           EOF
-# curl komutu sag taraftaki -L nin yanindaki adresteki dosyayi bulur sol taraftaki -o nun yanindaki adrese koyar  
-  #depends_on = [github_repository.myrepo, github_repository_file.app-files]
+# curl komutu sag taraftaki adresteki dosyayi bulur sol taraftaki adrese koyar  
+  depends_on = [github_repository.myrepo, github_repository_file.app-files]
 }
 
 
