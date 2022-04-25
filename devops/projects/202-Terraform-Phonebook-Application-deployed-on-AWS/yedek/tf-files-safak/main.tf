@@ -103,7 +103,7 @@ resource "aws_db_instance" "db-server" {
   skip_final_snapshot = true
 
   provisioner "local-exec" {
-    command = "sed -i 's/db-endpoint/${self.address}/' user-data.sh"
+    command = "sed -i 's/db-endpoint/${aws_db_instance.db-server.address}/' user-data.sh"
   }
 }
 
@@ -115,7 +115,7 @@ resource "aws_db_instance" "db-server" {
 # resource "github_repository_file" "dbendpoint" {
 #   content = aws_db_instance.db-server.address # terraform ile githubdaki phonebook repoda olusturacagimiz dbserver.endpoint isimli dosyanin icine konulacak bilgi
 #   file = "dbserver.endpoint" # terraform ile githubdaki phonebook repoda olusturacagimiz dosyanin adi
-#   repository = "phonebook"
+#   repository = "aws-devops-2022/main/devops/projects/202-Terraform-Phonebook-Application-deployed-on-AWS/phonebook/"
 #   overwrite_on_create = true
 #   branch = "main"
 # }

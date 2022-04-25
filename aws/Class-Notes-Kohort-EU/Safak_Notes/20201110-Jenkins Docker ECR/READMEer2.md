@@ -129,7 +129,7 @@ git push
 ```bash
 cd .git
 vi config
-
+# github sifresi sormamasi icin bu token girme islemini yapiyoruz
 Add "token" after "//" in the "url" part . And also paste "@" at the and of the token.
   "url = https://<yourtoken@>github.com/awsdevopsteam/todo-app-node-project.git
 

@@ -98,13 +98,6 @@ provisioner "local-exec" {
     command = "sed -i s/db-endpoint/${aws_db_instance.db-server.address}/i user-data.sh"
     interpreter = [ "/bin/bash", "-c"]
   }
-
-
-#   provisioner "local-exec" {
-#     command = "sed -i s/db-endpoint/${aws_db_instance.db-server.address}/i user-data.sh"
-#     /* interpreter = [ "/bin/bash", "-c"] */
-#       /* command = "sed -i "s/db-endpoint/${self.address}/i" user-data.sh"  */
-#   }
 }
 /* resource "github_repository_file" "dbendpoint" {
   content             = aws_db_instance.db-server.address

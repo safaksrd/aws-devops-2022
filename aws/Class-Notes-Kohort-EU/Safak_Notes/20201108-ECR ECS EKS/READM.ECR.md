@@ -272,6 +272,7 @@ aws ecr batch-delete-image \
 aws ecr delete-repository \
       --repository-name student2-repo/todo-app \
       --force
+      # --region us-east-1 ifadesi yazili olmayinca bölgeyi bulamadigi icin root kullanicida repoyu yada image i silemiyor, CLI credentials in tanimli olmadigi root tan cikmak gerekiyor.
 ```
 
 - Delete the image and repository of `student1-repo/todo-app` from AWS ECR Console.
