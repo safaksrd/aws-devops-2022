@@ -50,7 +50,7 @@ Resources:
           chmod +x /usr/local/bin/docker-compose
           mkdir -p /home/ec2-user/bookstore-api
           TOKEN="hp_JFZOi1VD4Alh0cvWWfko5lnhOjqdLd4WxbA2"
-          FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/aws-devops-2022/main/devops/projects/201-dockerization-bookstore-api-on-python-flask-mysql-CloudFormation/image_file/"
+          FOLDER="https://$TOKEN@raw.githubusercontent.com/safaksrd/aws-devops-2022/main/devops/projects/201-dockerization-bookstore-api-on-python-flask-mysql/CFN_version/image_file/"
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/bookstore-api.py" -L "$FOLDER"bookstore-api.py
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/requirements.txt" -L "$FOLDER"requirements.txt
           curl -s --create-dirs -o "/home/ec2-user/bookstore-api/Dockerfile" -L "$FOLDER"Dockerfile
