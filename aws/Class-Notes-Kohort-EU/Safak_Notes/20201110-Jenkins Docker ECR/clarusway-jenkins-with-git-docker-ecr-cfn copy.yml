@@ -57,7 +57,7 @@ Resources:
   JenkinsServer:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-03f1550d415dd1663 # Claruswayin kendi image i icerisinde Docker, gerekli olan IAM Role, AWS CLI ve git kurulu
+      ImageId: ami-03f1550d415dd1663 # Claruswayin kendi image i icerisinde Docker, gerekli olan IAM Role, AWS CLI, Jenkins ve git kurulu
       InstanceType: t2.micro
       KeyName: !Ref KeyPairName
       IamInstanceProfile: !Ref EC2toECRProfile
@@ -67,6 +67,7 @@ Resources:
         -                        
           Key: Name
           Value: !Sub Jenkins Server of ${AWS::StackName}
+
 Outputs:
   JenkinsDNS:
     Description: Jenkins Server DNS Name

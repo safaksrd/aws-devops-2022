@@ -62,6 +62,7 @@ sudo su
 
 ```bash
 git clone https://github.com/awsdevopsteam/todo-app-node-project.git
+# handson da awsdevopsteam e ait repo EC2 ya klonlanmis, bunu lokale klonlasak da olur. Hatta asagidaki gibi bazi adimlarda github authentication icin token kullanmaya geerek kalmaz, cünkü lokalde daha onceden zaten github password ayarlarimizi yapmistik.
 ```
 
 ### Step-3: Download the project and transfer to the project repository.
@@ -71,12 +72,13 @@ git clone https://github.com/awsdevopsteam/todo-app-node-project.git
 ```bash
 
 wget https://github.com/awsdevopsteam/jenkins-first-project/raw/master/to-do-app-nodejs.tar
+# sample nodejs projesini baska bir reepodan wget ile aliyoruz
 ```
 - Extract the `to-do-app-nodejs.tar` file 
 
 ```bash
 tar -xvf to-do-app-nodejs.tar
-
+# zipli dosyayi aciyoruz
 ```
 
 - Check the files an folder. You will see `to-do-app-nodejs.tar`, `to-do-app-nodejs` and `todo-app-node-project`
@@ -85,12 +87,12 @@ tar -xvf to-do-app-nodejs.tar
 
 ```bash
 cp -R to-do-app-nodejs/* todo-app-node-project/
-
+# zipini actigimiz dosyanin icindeki herseyi githubdan klonladigimiz todo-app-node-project klasorune kopyaliyoruz. Bu klasore asagidaki satirlarda Dockerfile ekleyecegiz
 ```
 
 ### Step-4: Create Dockerfile in project repo.
 
-- Enter the `todo-app-node-project/` and check the files. Then create a Docker file via `vi` editor.
+- Enter the `todo-app-node-project/` and check the files. Then create a Docker file via `vi` editor. 
 
 ```bash
 cd todo-app-node-project/
@@ -129,14 +131,14 @@ git push
 ```bash
 cd .git
 vi config
-# github sifresi sormamasi icin bu token girme islemini yapiyoruz
+# github sifresi sormamasi icin bu token girme islemini yapiyoruz. EC2 yerine Lokalde calisiyorsak buna gerek yok
 Add "token" after "//" in the "url" part . And also paste "@" at the and of the token.
-  "url = https://<yourtoken@>github.com/awsdevopsteam/todo-app-node-project.git
+  "url = https://<yourtoken>@github.com/awsdevopsteam/todo-app-node-project.git
 
 ```
 
 ### Step-6: Create Webhook 
-
+- Github repoda webhook ayarliyoruz
 - Go to the `todo-app-node-project` repository page and click on `Settings`.
 
 - Click on the `Webhooks` on the left hand menu, and then click on `Add webhook`.
@@ -178,7 +180,7 @@ https://github.com/xxxxxxxxxxx/todo-app-node-project.git
 - Click `apply` and `save`. Note that the script `Jenkinsfile` should be placed under root folder of repo.
 
 ### Step-2: Jenkins instance Process
-
+- Jenkinsfile ile build ve push islemini gerceklestiriyoruz. Ama halen pull, run islemlerini biz yapacagimiz icin gece kalkmak zorundayiz,
 - Go to the Jenkins instance (todo-app-node-project/ directory)to create `Jenkinsfile`
 ```bash
 cd todo-app-node-project/
@@ -233,11 +235,10 @@ git push
 ```
 
 ### Step-3: Jenkins Build Process
-
-- Go to the Jenkins project page and click `Build Now`.The job has to be executed manually one time in order for the push trigger and the git repo to be registered.
+- Githubdan triggerlama acilmadigi icin Jenkins menusunde kendimiz manuel build yapiyoruz
+- Go to the Jenkins project page and click `Build Now`. The job has to be executed manually one time in order for the push trigger and the git repo to be registered.
 
 ### Step-4: Make change to trigger Jenkins
-
 - Now, to trigger an automated build on Jenkins Server, we need to change code in the repo. For example, in the `src/static/js/app.js` file, update line 56 of `<p className="text-center">No items yet! Add one above!</p>` with following new text.
 
 ```html
@@ -252,7 +253,7 @@ git add .
 git commit -m 'updated app.js'
 git push
 ```
--if you wan to manually run 
+-if you want to manually run 
 
 ```bash
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 387408214354.dkr.ecr.us-east-1.amazonaws.com
@@ -272,6 +273,7 @@ docker container rm todo
 
 
 ### Step 5 Add Deploy stage 
+- Burada build, push ve deploy adimlarini Jenkinsfile ile otomatize ediyoruz ancak her seferinde ayni isimli konteynir olusturmaya calisacagi icin cakisma yasanacak. Bunu asmak icin 6.stepteki kod Jenkinsfile a eklenir.
 - To show the newly deployed app, first we change the node script. And then  push the changes to create new image in ECR. So when we add deploy stage to the Jenkins file and push it, Jenkins automatically deploy newly created image. 
 
 ```html
@@ -379,10 +381,9 @@ bana todo isimli konteyniri bul ve sil.
 ```groovy
  
                 sh 'docker ps -q --filter "name=todo" | grep -q . && docker stop todo && docker rm -fv todo'
- 
 ```
-pull ile run arasına yukarıdaki komutu koyuyoruz.
-
+- bir onceki konteynir otomatik olarak silinmedigi sürece gece 3 te uyanmaya devam ederiz. bu cözmek icin pull ile run arasına yukarıdaki komutu koyuyoruz ve otomatik olarak bir onceki konteyniri bulup durdurup siliyoruz.
+ 
 - Show the result.
 
 ## Part 4 - Cleaning up the Image Repository on AWS ECR
@@ -397,6 +398,7 @@ aws ecr get-login-password --region us-east-1 | docker login --username AWS --pa
 - Delete Docker image from `clarusway-repo/todo-app` ECR repository from AWS CLI.
 
 ```bash
+# ECR daki image lari ve sonrasinda repoyu siliyoruz
 aws ecr batch-delete-image \
       --repository-name clarusway-repo/todo-app \
       --image-ids imageTag=latest \
