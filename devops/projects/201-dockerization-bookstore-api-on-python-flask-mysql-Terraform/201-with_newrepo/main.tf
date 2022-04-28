@@ -20,11 +20,46 @@ provider "github" {
   # Configuration options
   token = "xxxx"
 }
+# Terraform aracaligi ile lokaldeki istedigimiz bilgileri githubda olusturacagiz
+# Burada önemli olan su: Terraform da githuba push islemi yok!!
+# Lokalde varolan dosyayi aliyor ayni isimle Github da olusturuyor
+# Bunu 202-Phonebook Terraform projesindeki gibi github_repository_file resource u ile 
+# her dosya icin ayri ayri resource tanimlayarak da Githubda olusturabiliriz
+# (31-57.satirlari kullanmak yerine 70-82.satirlari kullandim)
+# Birden fazla dosyayi tek seferde olusturmanin basit yolu ise for_each dongusu 
+  
+# resource "github_repository_file" "bookstore-api" {
+#   content = file("bookstore-api.py") # lokalimdeki bilgiyi al
+#   file = "bookstore-api.py" # github repoda icine koy
+#   repository = github_repository.myrepo.name
+#   branch = "main"
+# }
+
+# resource "github_repository_file" "requirements" {
+#   content = file("requirements.txt") # lokalimdeki bilgiyi al
+#   file = "requirements.txt" # github repoda icine koy
+#   repository = github_repository.myrepo.name
+#   branch = "main"
+# }
+
+# resource "github_repository_file" "Dockerfile" {
+#   content = file("Dockerfile") # lokalimdeki bilgiyi al
+#   file = "Dockerfile" # github repoda icine koy
+#   repository = github_repository.myrepo.name
+#   branch = "main"
+# }
+
+# resource "github_repository_file" "docker-compose" {
+#   content = file("docker-compose.yml") # lokalimdeki bilgiyi al
+#   file = "docker-compose.yml" # github repoda icine koy
+#   repository = github_repository.myrepo.name
+#   branch = "main"
+# }
 
 resource "github_repository" "myrepo" {
-  name = "bookstore-repo-tf"
-  auto_init = true
-  visibility = "private"
+  name = "bookstore-repo-tf" # Github da olusturulacak olan reponun adi
+  auto_init = true # reponun baslangic initialize icin, gerekli degil
+  visibility = "private" # Github da olusturulacak olan reponun türü
 }
 
 resource "github_branch_default" "main" {
@@ -33,13 +68,13 @@ resource "github_branch_default" "main" {
 }
 
 variable "files" {
-  default = ["bookstore-api.py", "requirements.txt", "Dockerfile", "docker-compose.yml"]
+  default = ["bookstore-api.py", "requirements.txt", "Dockerfile", "docker-compose.yml"] # isimleri lokalden gönderilecek isimlerle ayni olmak zorunda
 }
 
 resource "github_repository_file" "app-files" {
   for_each = toset(var.files)
-  content = file(each.value)
-  file = each.value
+  content = file(each.value)  # lokalimdeki belgelerin icindeki bilgiyi al
+  file = each.value # github repoda ayni isimle olusturulan belgelerin icine koy
   repository = github_repository.myrepo.name
   branch = "main"
   commit_message = "managed by terraform"
