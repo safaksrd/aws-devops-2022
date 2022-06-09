@@ -11,6 +11,7 @@ Ozet: 06.10.2020
 - Invalidation islemi: S3 Bucket ta icerik guncellesek bile web sayfamiza request olduugnda TTL süresü boyunca Edge locations cache deki icerik gelir. Bunu engellemek icin Cloud Front menusunde invalidation sekmesinden soruna aninda mudahale edip tüm cache bilgilerini degistirebiliriz.
 - Geo-Restrictions islemi: Istedigimiz ülkeleri kara veya beyaz listeye ekleriz.
 
+Not!!:  Go to the S3 service click on S3 static website bucket >>> Properties >>> Static Web Hosting >>> Copy the endpoint (without https://).
 
 
 ## Part 1 - Creating a Certificate 

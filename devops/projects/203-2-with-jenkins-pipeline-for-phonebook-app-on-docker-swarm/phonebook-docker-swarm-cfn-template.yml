@@ -11,7 +11,7 @@ Parameters:
     ConstraintDescription: Must one of the existing EC2 KeyPair
 
 Resources:
-  InstanceConnectPolicy:
+  InstanceConnectPolicy: # Private key i herhangi biryere yazmayacagiz, dolayisiyla private key siz bir cozum icin once policy olustururuz sonra bu policy i Role a atariz. private key e ihtiyac duymadan makinelerin birbirine policy araciligi ile public key gondermesini saglayan bir policy
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
       PolicyDocument: #required
@@ -21,14 +21,14 @@ Resources:
             Action:
               - ec2-instance-connect:SendSSHPublicKey
             Resource:
-              - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*
-            Condition: {"StringEquals": {"aws:ResourceTag/project":"202"}}
+              - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/* # hangi makineleer birbirine baglanmak istiyorsa yada siz bunun baglanmasini istediginiz makine hangisiyse. Sondaki * in anlami bu policy i hangi instance a  atarsam o instance bu hakka sahip olur
+            Condition: {"StringEquals": {"aws:ResourceTag/project":"202"}} # Name project keyvalue 202 olan makineler kullanacak. Bu tage sahip olan makinelerde bu policy uygulanacak
           - Effect: Allow
             Action:
               - ec2:DescribeInstances
             Resource: "*"
   
-  EC2InstanceConnect:
+  EC2InstanceConnect: # node larin kendi arasinda konusabilmesi ve ECR a ulasabilmesi icin role tanimliyoruz
     Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
@@ -36,17 +36,19 @@ Resources:
           - Effect: Allow
             Principal:
               Service:
-              - ec2.amazonaws.com
+              - ec2.amazonaws.com # bu Role ec2 lar da tanimli olacak
             Action:
               - 'sts:AssumeRole'
-      ManagedPolicyArns:
-        - !Ref InstanceConnectPolicy
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
-  EC2ConnectProfile:
+      ManagedPolicyArns: # Bu Role e 2 tane Policy ekliyoruz. birisi AWS de olmayan bizim yukarida hazirladigimiz Instance Connect Policy digeri AWS de olan Container Registry Full Access policy
+        - !Ref InstanceConnectPolicy # AWS de olmayan bir policy kullanmak istedigimizde bunu once yukaridaki gibi olustururuz sonra burada refere ederiz.
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess # AWS de varolan bir policy kullanirken ARN no girmek yeterli
+  
+  EC2ConnectProfile: # EC2 lari olustururken sadece bu profile i ec2 ya ilistirmek yeterli olacak Policy->Role->Profile üclüsü birarada sanirim
     Type: "AWS::IAM::InstanceProfile"
     Properties:
       Roles: #required
-        - !Ref EC2InstanceConnect
+        - !Ref EC2InstanceConnect # eklemek istedigimiz Role u refere ediyoruz
+  
   DockerMachinesSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -80,6 +82,7 @@ Resources:
           FromPort: 8080
           ToPort: 8080
           CidrIp: 0.0.0.0/0
+  
   ManagerLT:
     Type: "AWS::EC2::LaunchTemplate"
     Properties:
@@ -88,9 +91,9 @@ Resources:
         InstanceType: t2.micro
         KeyName: !Ref KeyPairName
         IamInstanceProfile: 
-          Arn: !GetAtt EC2ConnectProfile.Arn
+          Arn: !GetAtt EC2ConnectProfile.Arn # Instance Role eklerken Ref ile ekliyoruz. Launch Template Role eklerken arn ile ekliyoruz.
         SecurityGroupIds:
-          - !GetAtt DockerMachinesSecurityGroup.GroupId
+          - !GetAtt DockerMachinesSecurityGroup.GroupId # Sec group un goup id sini cekiyoruz
         UserData:
           Fn::Base64: 
             !Sub |
@@ -104,9 +107,9 @@ Resources:
               -o /usr/local/bin/docker-compose
               chmod +x /usr/local/bin/docker-compose
               yum install python3 -y
-              amazon-linux-extras install epel -y
-              yum install python-pip -y
-              pip install ec2instanceconnectcli
+              pip3 install ec2instanceconnectcli
+               # Asagidaki komut ile Swarm in initialize edildigi grandmaster da DockerManager1 makinesine baglanti oncesi yes/no diye sormaksizin baglanir,  ve ardindan manager node token inin yer aldigi docker komutunu ceker ve bu komutu eval ile calistirirak swarm a manager olarak eklenmesini saglariz.
+              # eval "$(echo "date")" -> parantez icinden date gelir. shell de date komutu calistirilir. 
               eval "$(mssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  \
                 --region ${AWS::Region} ${DockerManager1} docker swarm join-token manager | grep -i 'docker')"
               # uninstall aws cli version 1
@@ -114,10 +117,13 @@ Resources:
               curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
               unzip awscliv2.zip
               ./aws/install
+              # Dokumana gore: Amazon ECR Docker Credential Helper makes it easy for developers to use ECR without the need to use docker login or write logic to refresh tokens and provide transparent access to ECR repositories.
               yum install amazon-ecr-credential-helper -y
+              # Dokumana gore: Place the docker-credential-ecr-login binary on your PATH and set the contents of your ~/.docker/config.json file to be:
               mkdir -p /home/ec2-user/.docker
               cd /home/ec2-user/.docker
               echo '{"credsStore": "ecr-login"}' > config.json
+  
   WorkerLT:
     Type: "AWS::EC2::LaunchTemplate"
     Properties:
@@ -126,7 +132,7 @@ Resources:
         InstanceType: t2.micro
         KeyName: !Ref KeyPairName
         IamInstanceProfile: 
-          Arn: !GetAtt EC2ConnectProfile.Arn
+          Arn: !GetAtt EC2ConnectProfile.Arn # Instance Role eklerken Ref ile ekliyoruz. Launch Template Role eklerken arn ile ekliyoruz.
         SecurityGroupIds:
           - !GetAtt DockerMachinesSecurityGroup.GroupId
         UserData:
@@ -142,9 +148,9 @@ Resources:
               -o /usr/local/bin/docker-compose
               chmod +x /usr/local/bin/docker-compose
               yum install python3 -y
-              amazon-linux-extras install epel -y
-              yum install python-pip -y
-              pip install ec2instanceconnectcli
+              pip3 install ec2instanceconnectcli
+              # Asagidaki komut ile Swarm in initialize edildigi grandmaster da DockerManager1 makinesine baglanti oncesi yes/no diye sormaksizin baglanir,  ve ardindan worker node token inin yer aldigi docker komutunu ceker ve bu komutu eval ile calistirirak swarm a worker olarak eklenmesini saglariz.
+              # eval "$(echo "date")" -> parantez icinden date gelir. shell de date komutu calistirilir. 
               eval "$(mssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  \
                 --region ${AWS::Region} ${DockerManager1} docker swarm join-token worker | grep -i 'docker')"
               # uninstall aws cli version 1
@@ -152,17 +158,20 @@ Resources:
               curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
               unzip awscliv2.zip
               ./aws/install
+              # Dokumana gore: Amazon ECR Docker Credential Helper makes it easy for developers to use ECR without the need to use docker login or write logic to refresh tokens and provide transparent access to ECR repositories.
               yum install amazon-ecr-credential-helper -y
+              # Dokumana gore: Place the docker-credential-ecr-login binary on your PATH and set the contents of your ~/.docker/config.json file to be:
               mkdir -p /home/ec2-user/.docker
               cd /home/ec2-user/.docker
               echo '{"credsStore": "ecr-login"}' > config.json
+  
   DockerManager1:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-04d29b6f966df1537
       InstanceType: t2.medium
       KeyName: !Ref KeyPairName
-      IamInstanceProfile: !Ref EC2ConnectProfile
+      IamInstanceProfile: !Ref EC2ConnectProfile # Instance Role eklerken Ref ile ekliyoruz. Launch Template Role eklerken arn ile ekliyoruz.
       SecurityGroupIds:
         - !GetAtt DockerMachinesSecurityGroup.GroupId
       Tags:                
@@ -201,6 +210,7 @@ Resources:
           mkdir -p /home/ec2-user/.docker
           cd /home/ec2-user/.docker
           echo '{"credsStore": "ecr-login"}' > config.json
+  
   DockerManager2:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -216,6 +226,7 @@ Resources:
           Value: !Sub Docker Manager 2nd of ${AWS::StackName}
         - Key: project
           Value: "202"
+  
   DockerManager3:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -231,6 +242,7 @@ Resources:
           Value: !Sub Docker Manager 3rd of ${AWS::StackName}
         - Key: project
           Value: "202"
+  
   DockerWorker1:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -246,6 +258,7 @@ Resources:
           Value: !Sub Docker Worker 1st of ${AWS::StackName}
         - Key: project
           Value: "202"
+  
   DockerWorker2:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -261,6 +274,7 @@ Resources:
           Value: !Sub Docker Worker 2nd of ${AWS::StackName}
         - Key: project
           Value: "202" 
+
 Outputs:
   1stDockerManagerDashboard:
     Description: Dashboard for Docker Swarm

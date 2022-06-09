@@ -40,7 +40,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       ManagedPolicyArns: # Bu Role e 2 tane Policy ekliyoruz. birisi AWS de olmayan bizim yukarida hazirladigimiz Instance Connect Policy digeri AWS de olan Container Registry Full Access policy
-        - !Ref InstanceConnectPolicy  # AWS de olmayan bir policy kullanmak istedigimizde bunu once yukaridaki gibi olustururuz sonra burada refere ederiz.
+        - !Ref InstanceConnectPolicy # AWS de olmayan bir policy kullanmak istedigimizde bunu once yukaridaki gibi olustururuz sonra burada refere ederiz.
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess # AWS de varolan bir policy kullanirken ARN no girmek yeterli
   
   EC2ConnectProfile: # EC2 lari olustururken sadece bu profile i ec2 ya ilistirmek yeterli olacak Policy->Role->Profile üclüsü birarada sanirim
@@ -93,7 +93,7 @@ Resources:
         IamInstanceProfile: 
           Arn: !GetAtt EC2ConnectProfile.Arn # Instance Role eklerken Ref ile ekliyoruz. Launch Template Role eklerken arn ile ekliyoruz.
         SecurityGroupIds:
-          - !GetAtt DockerMachinesSecurityGroup.GroupId # Seec group un goup id sini cekiyoruz
+          - !GetAtt DockerMachinesSecurityGroup.GroupId # Sec group un goup id sini cekiyoruz
         UserData:
           Fn::Base64: 
             !Sub |
@@ -109,7 +109,7 @@ Resources:
               yum install python3 -y
               amazon-linux-extras install epel -y
               yum install python-pip -y
-              pip install ec2instanceconnectcli
+              pip3 install ec2instanceconnectcli
               # Asagidaki komut ile Swarm in initialize edildigi grandmaster da DockerManager1 makinesine baglanti oncesi yes/no diye sormaksizin baglanir,  ve ardindan manager node token inin yer aldigi docker komutunu ceker ve bu komutu eval ile calistirirak swarm a manager olarak eklenmesini saglariz.
               # eval "$(echo "date")" -> parantez icinden date gelir. shell de date komutu calistirilir. 
               eval "$(mssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  \
@@ -152,7 +152,7 @@ Resources:
               yum install python3 -y
               amazon-linux-extras install epel -y
               yum install python-pip -y
-              pip install ec2instanceconnectcli
+              pip3 install ec2instanceconnectcli
               # Asagidaki komut ile Swarm in initialize edildigi grandmaster da DockerManager1 makinesine baglanti oncesi yes/no diye sormaksizin baglanir,  ve ardindan worker node token inin yer aldigi docker komutunu ceker ve bu komutu eval ile calistirirak swarm a worker olarak eklenmesini saglariz.
               # eval "$(echo "date")" -> parantez icinden date gelir. shell de date komutu calistirilir. 
               eval "$(mssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  \

@@ -2,7 +2,7 @@
 
 ## Description
 
-This project aims to create a Jenkins pipeline to deploy the Phonebook web application with Docker Swarm on Elastic Compute Cloud (EC2) Instances by pulling the app images from the AWS Elastic Container Registry (ECR) repository.
+This project aims to create a Jenkins pipeline to deploy the Phonebook Application web application with Docker Swarm on Elastic Compute Cloud (EC2) Instances by pulling the app images from the AWS Elastic Container Registry (ECR) repository.
 
 ## Problem Statement
 
