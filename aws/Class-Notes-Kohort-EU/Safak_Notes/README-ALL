@@ -1,6 +1,7 @@
 NOTLAR:
+Terminalde !! yukari ok tusu gibi  islem yapar ve bir onceki komutu calistirir
 
-arka arkaya ic ice EC2 lara agent kullanarak baglanmak icin:
+Arka arkaya ic ice EC2 lara agent kullanarak baglanmak icin:
 
 ssh-add ~/key/leon.pem
 
@@ -12,3 +13,13 @@ ssh -i ~/key/leon.pem ec2-user@XXXXXX yerine
 
 artik su sekilde baglanabilirsin
 ssh -A ec2-user@XXXXXX
+
+
+keygen ile public ve private key uretmek icin komut:
+ssh-keygen -t rsa
+Hepsine enter diyerek gecilir.
+Komut hangi makinede calistirildiysa o makinede ~/.ssh altinda id_rsa ismiyle bir private ve id_rsa.pub ismiyle bir public key uretir
+EC2 instance icinde .ssh klasorunde authorized_keys icinde public key bilgisi tutuluyor. 
+Bu bilginin yerine keygen ile olusturdugumuz yeni public keyi koyariz.
+Boylece AWS konsoldan olusturdugumuz private key artik ise yaramaz.
+chmod 400 authorized_keys yapilir. chmod 400 id_rsa yapilir ve bu private key ile EC2 instance ssh ile baglanilir.

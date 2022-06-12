@@ -25,6 +25,6 @@ Instructor: Serdar
 Jenkins Server should be capable of
     - creating ECR Repository
     - building docker image
-    - pushing Docker Imageto ECR Repository
-    - creating infrastructure for Athe Application
+    - pushing Docker Image to ECR Repository
+    - creating infrastructure for the Application
     - Deploying the Application

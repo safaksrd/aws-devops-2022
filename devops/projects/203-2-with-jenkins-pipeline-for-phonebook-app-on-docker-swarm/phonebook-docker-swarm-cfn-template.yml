@@ -8,7 +8,7 @@ Parameters:
   KeyPairName:
     Description: Enter the name of your Key Pair for SSH connections.
     Type: AWS::EC2::KeyPair::KeyName
-    ConstraintDescription: Must one of the existing EC2 KeyPair
+    ConstraintDescription: Must be one of the existing EC2 KeyPair
 
 Resources:
   InstanceConnectPolicy: # Private key i herhangi biryere yazmayacagiz, dolayisiyla private key siz bir cozum icin once policy olustururuz sonra bu policy i Role a atariz. private key e ihtiyac duymadan makinelerin birbirine policy araciligi ile public key gondermesini saglayan bir policy
@@ -49,7 +49,7 @@ Resources:
       Roles: #required
         - !Ref EC2InstanceConnect # eklemek istedigimiz Role u refere ediyoruz
   
-  DockerMachinesSecurityGroup:
+  DockerMachinesSecurityGroup: # TCP port 2377 for cluster management communications, TCP and UDP port 7946 for communication among nodes, UDP port 4789 for overlay network traffic
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Enable SSH and HTTP for Docker Machines
@@ -78,7 +78,7 @@ Resources:
           FromPort: 4789
           ToPort: 4789
           CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
+        - IpProtocol: tcp # grand master daki visualizer icin
           FromPort: 8080
           ToPort: 8080
           CidrIp: 0.0.0.0/0
@@ -87,7 +87,7 @@ Resources:
     Type: "AWS::EC2::LaunchTemplate"
     Properties:
       LaunchTemplateData:
-        ImageId: ami-04d29b6f966df1537
+        ImageId: ami-0022f774911c1d690
         InstanceType: t2.micro
         KeyName: !Ref KeyPairName
         IamInstanceProfile: 
@@ -107,9 +107,10 @@ Resources:
               -o /usr/local/bin/docker-compose
               chmod +x /usr/local/bin/docker-compose
               yum install python3 -y
+              # mssh komutunun kullanilabilmesi icin asagidaki komut girilir
               pip3 install ec2instanceconnectcli
-               # Asagidaki komut ile Swarm in initialize edildigi grandmaster da DockerManager1 makinesine baglanti oncesi yes/no diye sormaksizin baglanir,  ve ardindan manager node token inin yer aldigi docker komutunu ceker ve bu komutu eval ile calistirirak swarm a manager olarak eklenmesini saglariz.
-              # eval "$(echo "date")" -> parantez icinden date gelir. shell de date komutu calistirilir. 
+              # ornek eval komutu: eval "$(echo "date")" -> parantez icinden date gelir. shell de date komutu calistirilir. 
+              # Yukarida ayarlanan policy-role-profile ayari sayesinde asagidaki komut ile Swarm in initialize edildigi grandmaster da DockerManager1 makinesine baglanti oncesi yes/no diye sormaksizin baglanilir, ardindan manager node token inin yer aldigi docker komutu cekilir ve bu komutu eval ile calistirarak swarm a manager olarak eklenmesi saglanir.
               eval "$(mssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  \
                 --region ${AWS::Region} ${DockerManager1} docker swarm join-token manager | grep -i 'docker')"
               # uninstall aws cli version 1
@@ -132,7 +133,7 @@ Resources:
         InstanceType: t2.micro
         KeyName: !Ref KeyPairName
         IamInstanceProfile: 
-          Arn: !GetAtt EC2ConnectProfile.Arn # Instance Role eklerken Ref ile ekliyoruz. Launch Template Role eklerken arn ile ekliyoruz.
+          Arn: !GetAtt EC2ConnectProfile.Arn # Instance a Role eklerken Ref ile ekliyoruz. Launch Template a Role eklerken arn ile ekliyoruz.
         SecurityGroupIds:
           - !GetAtt DockerMachinesSecurityGroup.GroupId
         UserData:
@@ -148,9 +149,10 @@ Resources:
               -o /usr/local/bin/docker-compose
               chmod +x /usr/local/bin/docker-compose
               yum install python3 -y
+              # mssh komutunun kullanilabilmesi icin asagidaki komut girilir
               pip3 install ec2instanceconnectcli
-              # Asagidaki komut ile Swarm in initialize edildigi grandmaster da DockerManager1 makinesine baglanti oncesi yes/no diye sormaksizin baglanir,  ve ardindan worker node token inin yer aldigi docker komutunu ceker ve bu komutu eval ile calistirirak swarm a worker olarak eklenmesini saglariz.
-              # eval "$(echo "date")" -> parantez icinden date gelir. shell de date komutu calistirilir. 
+              # ornek eval komutu: eval "$(echo "date")" -> parantez icinden date gelir. shell de date komutu calistirilir. 
+              # Yukarida ayarlanan policy-role-profile ayari sayesinde asagidaki komut ile Swarm in initialize edildigi grandmaster da DockerManager1 makinesine baglanti oncesi yes/no diye sormaksizin baglanilir, ardindan worker node token inin yer aldigi docker komutu cekilir ve bu komutu eval ile calistirarak swarm a worker olarak eklenmesi saglanir.
               eval "$(mssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no  \
                 --region ${AWS::Region} ${DockerManager1} docker swarm join-token worker | grep -i 'docker')"
               # uninstall aws cli version 1
@@ -171,17 +173,17 @@ Resources:
       ImageId: ami-04d29b6f966df1537
       InstanceType: t2.medium
       KeyName: !Ref KeyPairName
-      IamInstanceProfile: !Ref EC2ConnectProfile # Instance Role eklerken Ref ile ekliyoruz. Launch Template Role eklerken arn ile ekliyoruz.
+      IamInstanceProfile: !Ref EC2ConnectProfile # Instance a Role eklerken Ref ile ekliyoruz. Launch Template a Role eklerken arn ile ekliyoruz.
       SecurityGroupIds:
         - !GetAtt DockerMachinesSecurityGroup.GroupId
       Tags:                
         - Key: Name
           Value: !Sub Docker Manager 1st of ${AWS::StackName}                      
         - Key: server
-          Value: docker-grand-master
+          Value: docker-grand-master # jenkinsfile da Deploying the Application stepinde bu value filtreleme icin kullanilir
         - Key: project
           Value: "202"
-      UserData: 
+      UserData: # Grand Master in kurulumu digerlerinden farkli, burada Swarm yüklü olacak
         Fn::Base64: |
           #! /bin/bash
           yum update -y
@@ -306,5 +308,4 @@ Outputs:
     Value: !Sub 
       - ${PublicAddress}
       - PublicAddress: !GetAtt DockerWorker2.PublicDnsName
-  
   

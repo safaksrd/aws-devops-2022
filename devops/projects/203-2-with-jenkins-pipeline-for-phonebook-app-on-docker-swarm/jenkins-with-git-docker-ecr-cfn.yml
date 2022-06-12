@@ -15,7 +15,7 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
     ConstraintDescription: Must one of the existing EC2 KeyPair
 Resources:
-  InstanceConnectPolicy:
+  InstanceConnectPolicy: # Private key i herhangi biryere yazmayacagiz, dolayisiyla private key siz bir cozum icin once policy olustururuz sonra bu policy i Role a atariz. private key e ihtiyac duymadan makinelerin birbirine policy araciligi ile public key gondermesini saglayan bir policy
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
       PolicyDocument: #required
@@ -25,13 +25,14 @@ Resources:
             Action:
               - ec2-instance-connect:SendSSHPublicKey
             Resource:
-              - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*
-            Condition: {"StringEquals": {"ec2:osuser": ["ec2-user", "ubuntu"]}}
+              - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/* # hangi makineleer birbirine baglanmak istiyorsa yada siz bunun baglanmasini istediginiz makine hangisiyse. Sondaki * in anlami bu policy i hangi instance a  atarsam o instance bu hakka sahip olur
+            Condition: {"StringEquals": {"ec2:osuser": ["ec2-user", "ubuntu"]}}  # Isletim sistemi ec2-user  ve ubuntu olan makineler kullanacak. Bu tage sahip olan makinelerde bu policy uygulanacak
           - Effect: Allow
             Action:
               - ec2:DescribeInstances
             Resource: "*"
-  EC2InstanceConnect:
+
+  EC2InstanceConnect: # node larin kendi arasinda konusabilmesi ve ECR a ulasabilmesi icin role tanimliyoruz
     Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
@@ -39,19 +40,21 @@ Resources:
           - Effect: Allow
             Principal:
               Service:
-              - ec2.amazonaws.com
+              - ec2.amazonaws.com # bu Role ec2 lar da tanimli olacak
             Action:
               - 'sts:AssumeRole'
-      ManagedPolicyArns:
-        - !Ref InstanceConnectPolicy
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
-        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+      ManagedPolicyArns: # Bu Role e 4 tane Policy ekliyoruz. birisi AWS de olmayan bizim yukarida hazirladigimiz Instance Connect Policy digerleri AWS de olan policy ler
+        - !Ref InstanceConnectPolicy # AWS de olmayan bir policy kullanmak istedigimizde bunu once yukaridaki gibi olustururuz sonra burada refere ederiz.
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess # AWS de varolan bir policy kullanirken ARN no girmek yeterli
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess # jenkins in cloud formation yaml dosyasini ayaga kaldirabilmesi icin
         - arn:aws:iam::aws:policy/AdministratorAccess
-  EC2ConnectProfile:
+
+  EC2ConnectProfile: # EC2 lari olustururken sadece bu profile i ec2 ya ilistirmek yeterli olacak Policy->Role->Profile üclüsü birarada sanirim
     Type: "AWS::IAM::InstanceProfile"
     Properties:
       Roles: #required
-        - !Ref EC2InstanceConnect
+        - !Ref EC2InstanceConnect # eklemek istedigimiz Role u refere ediyoruz
+        
   JenkinsServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -72,7 +75,7 @@ Resources:
   JenkinsServer:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-02354e95b39ca8dec
+      ImageId: ami-0022f774911c1d690
       InstanceType: t2.micro
       KeyName: !Ref KeyPairName
       IamInstanceProfile: !Ref EC2ConnectProfile
