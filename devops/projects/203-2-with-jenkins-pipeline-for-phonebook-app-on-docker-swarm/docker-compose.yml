@@ -18,7 +18,7 @@ services:
 
   app-server:
     image: 241599752287.dkr.ecr.us-east-1.amazonaws.com/leon-repo/phonebook-app:latest
-    #image: "${ECR_REGISTRY}/${APP_REPO_NAME}:latest" # ECR_REGISTRY ve APP_REPO_NAME bilgisini ayni dizinde bulunan jenkinsfile dan alir
+    #image: "${ECR_REGISTRY}/${APP_REPO_NAME}:latest" # Jenkins olmayan cozumde ECR_REGISTRY ve APP_REPO_NAME bilgisini cloud formation yml dosyasinin DockerManager1 in userdatasindaki cat << EOF | tee .env kismindan ceker. Jenkins li cözümde ise yml dosyasinda .cat << EOF | tee .env yapmadigimiz icin image ismini elle giriyoruz.
     deploy:
       mode: global # default deger replicated dir. Swarm load balancer yaparak servisleri dagitir. her node da kesin kurulmasini istedigimiz bir servisi global tanimlariz
       update_config: # konteynirin hangi kurallara gore update edilecegini belirtiriz. 
