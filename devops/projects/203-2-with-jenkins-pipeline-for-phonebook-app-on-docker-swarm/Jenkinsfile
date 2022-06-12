@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'any'
-    }
+    agent any
     environment{
         PATH=sh(script:"echo $PATH:/usr/local/bin", returnStdout:true).trim()
         // returnStdout:true).trim() sag ve sol taraftaki fazlaliklari trasliyor ve PATH e ekleme yapiyoruz
