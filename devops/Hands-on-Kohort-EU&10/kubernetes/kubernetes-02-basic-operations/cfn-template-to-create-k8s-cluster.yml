@@ -16,7 +16,7 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
     ConstraintDescription: Must be one of the existing EC2 KeyPair
 
-Resources:
+Resources: # Policy-Role-Profile uclusu devrede!
   InstanceConnectPolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
