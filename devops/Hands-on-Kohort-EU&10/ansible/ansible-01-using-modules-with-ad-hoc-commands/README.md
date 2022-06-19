@@ -261,11 +261,6 @@ $ ansible node1:node2 -m shell -a "echo Hello Clarusway > /home/ec2-user/testfil
 - Run the command below.
 
 ```bash
-$ ansible webservers -b -m shell -a "yum -y update ; yum -y install nginx ; service nginx start; systemctl enable nginx" 
-``` 
-- If the above command gives an error complaining about the existance of the package, try the command below.
-
-```bash
 ansible webservers -b -m shell -a "amazon-linux-extras install -y nginx1 ; systemctl start nginx ; systemctl enable nginx" 
 ```
 
@@ -324,6 +319,8 @@ $ ansible -b -m package -a "name=nginx state=present" all
 
 ```bash
 $ vim inventory
+```
+```bash
 
 [webservers]
 node1 ansible_host=<node1_ip> ansible_user=ec2-user
@@ -338,6 +335,3 @@ ansible_ssh_private_key_file=/home/ec2-user/<YOUR-PEM-FILE-NAME>.pem
 ansible -i inventory -b -m yum -a "name=httpd state=present" node1 
 ansible -i inventory -b -m yum -a "name=httpd state=absent" node1 
 ```
-
-
-

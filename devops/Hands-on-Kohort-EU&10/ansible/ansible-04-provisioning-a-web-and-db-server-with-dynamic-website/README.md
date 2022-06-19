@@ -1,5 +1,5 @@
 
-# Hands-on Ansible-04: Provisioning a Web Server and a Database Server with a Dynamic Website Using Ansible
+# Hands-on Ansible-05: Provisioning a Web Server and a Database Server with a Dynamic Website Using Ansible
 
 The purpose of this hands-on training is to give students the knowledge of provisioning a web and database server with a dynamic website.
 
@@ -11,6 +11,7 @@ At the end of this hands-on training, students will be able to;
 - Explain how to provision a database server using Ansible
 
 ![ho-04](ho-04.png)
+
 
 ## Outline
 
@@ -158,18 +159,16 @@ $ ansible-playbook ping-playbook.yml -i inventory.txt
 ```
 [defaults]
 host_key_checking = False
+inventory = inventory.txt
+deprecation_warnings=False
+interpreter_python=auto_silent
 ```
 
 - Run the command below again.
 
 ```bash
-$ ansible-playbook ping-playbook.yml -i inventory.txt
-```
-
--  Append the content below into ```ansible.cfg``` file in order to avoid using ```-i inventory.txt``` option in ansible-playbook commands. 
-
-```conf
-inventory=inventory.txt
+$ ansible-playbook ping-playbook.yml
+$ ansible all -m ping -o
 ```
 
 ## Part4 - Install, Start and Enable MariaDB

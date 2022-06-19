@@ -17,10 +17,11 @@ At the end of the this hands-on training, students will be able to;
 ## Part 1 - Install Ansible
 
 
-- Create 2 Amazon Linux 2 and 1 Ubuntu EC2 instances. Then name the instances as below. For Security Group, allow ssh and http when creating EC2.
-1-control node
+- Create 3 Amazon Linux 2 and 1 Ubuntu EC2 instances. Then name the instances as below. For Security Group, allow ssh and http when creating EC2.
+1-control-node
 2-node1
-3-node2(ubuntu)
+3-node2
+4-node3 (ubuntu)
 
 - Connect to the control node with SSH and run the following commands.
 
@@ -44,12 +45,14 @@ $ sudo su
 $ cd /etc/ansible
 $ ls
 $ vim hosts
+```
+```bash
 [webservers]
 node1 ansible_host=<node1_ip> ansible_user=ec2-user
 node2 ansible_host=<node1_ip> ansible_user=ec2-user
 
 [ubuntuservers]
-node2 ansible_host=<node2_ip> ansible_user=ubuntu
+node3 ansible_host=<node2_ip> ansible_user=ubuntu
 
 [all:vars]
 ansible_ssh_private_key_file=/home/ec2-user/<pem file>
@@ -61,6 +64,9 @@ ansible_ssh_private_key_file=/home/ec2-user/<pem file>
 $ vim ansible.cfg
 [defaults]
 interpreter_python=auto_silent
+
+# uncomment this to disable SSH key host checking
+host_key_checking = False
 ```
 
 - Copy your pem file to the /etc/ansible/ directory. First go to your pem file directory on your local computer and run the following command.
@@ -75,7 +81,7 @@ $ scp -i <pem file> <pem file> ec2-user@<public DNS name of the control node>:/h
 
 - Create a yaml file named "playbook1.yml" and make sure all our hosts are up and running.
 
-```bash
+```yml
 ---
 - name: Test Connectivity
   hosts: all
@@ -124,7 +130,7 @@ ansible-playbook playbook2.yml
 
 ```bash
 $ vim playbook3.yml
-
+```
 ```yml
 - name: Copy for linux
   hosts: webservers
@@ -149,7 +155,7 @@ $ vim playbook3.yml
   tasks:
    - name: Copy using inline content
      copy:
-       content: '# This file was moved to /etc/ansible/testfile1'
+       content: '# This file was moved to /etc/ansible/testfile2'
        dest: /home/ec2-user/testfile2
 
    - name: Create a new text file
@@ -170,7 +176,8 @@ $ ansible-doc yum
 $ ansible-doc apt
 
 $ vim playbook4.yml
-
+```
+```yml
 ---
 - name: Apache installation for webservers
   hosts: webservers
@@ -186,6 +193,9 @@ $ vim playbook4.yml
 - name: Apache installation for ubuntuservers
   hosts: ubuntuservers
   tasks:
+   - name: update
+     shell: "apt update -y"
+     
    - name: install the latest version of Apache
      apt:
        name: apache2
@@ -202,7 +212,8 @@ $ ansible-playbook -b playbook4.yml   # Run the command again and show the chang
 
 ```bash
 $ vim playbook5.yml
-
+```
+```yml
 ---
 - name: Remove Apache from webservers
   hosts: webservers
@@ -235,7 +246,8 @@ $ ansible-playbook -b playbook5.yml
 
 ```bash
 vim playbook6.yml
-
+```
+```yml
 ---
 - name: play 4
   hosts: ubuntuservers
@@ -263,7 +275,7 @@ vim playbook6.yml
       yum:
         pkg: "{{ item }}"
         state: present
-      with_items:
+      loop:
         - httpd
         - wget
 ```
@@ -278,7 +290,8 @@ ansible-playbook -b playbook6.yml
 
 ```bash
 vim playbook7.yml
-
+```
+```yml
 ---
 - name: play 6
   hosts: ubuntuservers
@@ -300,7 +313,7 @@ vim playbook7.yml
      yum:
        pkg: "{{ item }}"
        state: absent
-     with_items:
+     loop:
        - httpd
        - wget
 ```
@@ -317,7 +330,7 @@ ansible-playbook -b playbook7.yml
 vi playbook8.yml
 ```
 
-```bash
+```yml
 ---
 - name: Create users
   hosts: "*"
@@ -346,7 +359,7 @@ vi playbook8.yml
       loop:
         - john
         - aaron
-      when: ansible_os_family == "Debian" or ansible_os_family == "20.04"
+      when: ansible_os_family == "Debian" or ansible_distribution_version == "20.04"
 ```
 
 - Run the playbook8.yml
