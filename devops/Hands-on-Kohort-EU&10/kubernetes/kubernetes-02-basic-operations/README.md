@@ -111,7 +111,7 @@ kubectl get pods
 - List pods in `ps output format` with more information (such as node name).
   
 ```bash
-kubectl get pods -o wide
+kubectl get pods -o wide # daha genis bilgi verir
 ```
 
 - Show details of pod.
@@ -129,9 +129,9 @@ kubectl get pods/nginx-pod -o yaml
 - Delete the pod.
 
 ```bash
-kubectl delete -f mypod.yaml
+kubectl delete -f mypod.yaml # tercih edilen bu
 # or
-kubectl delete pod nginx-pod
+kubectl delete pod nginx-pod # bu sekilde zor
 ```
 
 ### ReplicaSets
