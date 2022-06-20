@@ -1,4 +1,5 @@
-# Worker node u cluster a join etmeyi unuttuk diyelim. Asagidaki komutlari girerek worker node u cluster a katariz
+# Worker node u cluster a join etmeyi unuttuk diyelim. 
+#Asagidaki komutlari girerek worker node u cluster a katariz
 
 # Get join Token
 kubeadm token list | awk 'NR == 2 {print $1}'

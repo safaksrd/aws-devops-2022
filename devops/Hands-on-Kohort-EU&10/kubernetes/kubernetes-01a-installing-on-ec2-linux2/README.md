@@ -60,6 +60,7 @@ At the end of the this hands-on training, students will be able to;
 
 > **Ignore this section for AWS instances. But, it must be applied for real servers/workstations.**
 > Not: EC2 instance lar da kuracagimiz icin bu adimi atliyoruz
+
 > - Find the line in `/etc/fstab` referring to swap, and comment out it as following.
 >
 > ```bash
@@ -79,15 +80,17 @@ At the end of the this hands-on training, students will be able to;
 
 - Hostname change of the nodes, so we can discern the roles of each nodes. For example, you can name the nodes (instances) like `kube-master, kube-worker-1`
 
-Not: Ayirt edebilmek icin EC2 instance lara isim veriyoruz
 ```bash
+# Ayirt edebilmek icin EC2 instance lara isim veriyoruz
+
 sudo hostnamectl set-hostname <node-name-master-or-worker>
 bash
 ```
 
 - Install helper packages for Kubernetes.
-Not: K8s i kuruyoruz
+
 ```bash
+# K8s i kuruyoruz
 sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 
@@ -104,6 +107,8 @@ sudo apt-get install -y kubectl kubeadm kubelet kubernetes-cni docker.io # gerek
 - Start and enable Docker service.
 
 ```bash
+# docker start  ve enable ederiz
+
 sudo systemctl start docker
 sudo systemctl enable docker
 ```
@@ -111,6 +116,8 @@ sudo systemctl enable docker
 - Add the current user to the `Docker group`, so that the `Docker commands` can be run without `sudo`.
 
 ```bash
+# docker grubuna ekliyoruz
+
 sudo usermod -aG docker $USER
 newgrp docker
 ```
@@ -119,6 +126,7 @@ newgrp docker
 
 ```bash 
 # network ile ilgili  ileri seviye komutlar. Anlamaya gerek yok
+
 cat << EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
@@ -131,6 +139,7 @@ sudo sysctl --system
 - Following commands should be executed on Master Node only.
 
 - Pull the packages for Kubernetes beforehand
+
 Not: Kubernetes konteynir lardan olusan bir yapi. kubeadm ile yonetmek bizim icin daha kolay. Kubernetes yapisina ait olan image lari cekeriz
 
 ```bash
@@ -140,7 +149,8 @@ sudo kubeadm config images pull
 - By default, the Kubernetes cgroup driver is set to system, but docker is set to systemd. We need to change the Docker cgroup driver by creating a configuration file `/etc/docker/daemon.json` and adding the following line then restart deamon, docker and kubelet:
 
 ```bash
-Not: Docker icin gerekli komutlar
+# Docker icin gerekli komutlar
+
 echo '{"exec-opts": ["native.cgroupdriver=systemd"]}' | sudo tee /etc/docker/daemon.json
 sudo systemctl daemon-reload
 sudo systemctl restart docker
@@ -150,7 +160,8 @@ sudo systemctl restart kubelet
 - Let `kubeadm` prepare the environment for you. Note: Do not forget to change `<ec2-private-ip>` with your master node private IP.
 
 ```bash
-Not: k8s i initialize yani ayaga kaldiran komut. pod-network-cidr=10.244.0.0/16 kisminda pod larin alacagi IP araligini belirliyoruz
+
+# k8s i initialize yani ayaga kaldiran komut. pod-network-cidr=10.244.0.0/16 kisminda pod larin alacagi IP araligini belirliyoruz
 sudo kubeadm init --apiserver-advertise-address=<ec2-private-ip> --pod-network-cidr=10.244.0.0/16
 ```
 
@@ -175,20 +186,21 @@ sudo kubeadm reset
 Your Kubernetes control-plane has initialized successfully!
 
 To start using your cluster, you need to run the following as a regular user:
-Not: Cluster kurma komutlari. credentials bilgilerini .kube altinda tutuyor
+
+# Cluster kurma komutlari. credentials bilgilerini .kube altinda tutuyor
 
   mkdir -p $HOME/.kube
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-Not: Artik kubectl komutlarini calistirabiliriz. Ornegin kubectl get node
+# Artik kubectl komutlarini calistirabiliriz. Ornegin kubectl get node
 
 You should now deploy a pod network to the cluster.
 Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
   https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
 Then you can join any number of worker nodes by running the following on each as root:
-
+# worker node lari kluster a join etme komutu
   kubeadm join 172.31.3.109:6443 --token 1aiej0.kf0t4on7c7bm2hpa \
       --discovery-token-ca-cert-hash sha256:0e2abfb56733665c0e6204217fef34be2a4f3c4b8d1ea44dff85666ddf722c02
 ```
@@ -374,18 +386,18 @@ Not: Worker node u cluster a join etmek icin worker node terminalde asagidaki ko
 sudo kubeadm join 172.31.3.109:6443 --token 1aiej0.kf0t4on7c7bm2hpa \
     --discovery-token-ca-cert-hash sha256:0e2abfb56733665c0e6204217fef34be2a4f3c4b8d1ea44dff85666ddf722c02
 
-Ancak bu komutu gozden kacirir da worker node u cluster a eklemeyi atlarsak önce worker node uzerinde kubeadm i resetleriz 
+Not: Ancak bu komutu gozden kacirir da worker node u cluster a eklemeyi atlarsak önce worker node uzerinde kubeadm i resetleriz 
 
 sudo kubeadm reset
 
-ve Worker node terminalde asagidaki komutlari calistiririz
+Not: ve Worker node terminalde asagidaki komutlari calistiririz
 
 echo '{"exec-opts": ["native.cgroupdriver=systemd"]}' | sudo tee /etc/docker/daemon.json
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 sudo systemctl restart kubelet
 
-Sonra master nodun terminalinde handson daki join-script.sh ta bulunan asagidaki komutlari sirasiyla calistirarak 
+Not: Sonra master nodun terminalinde handson daki join-script.sh ta bulunan asagidaki komutlari sirasiyla calistirarak 
 
 kubeadm token list | awk 'NR == 2 {print $1}'
 
@@ -393,12 +405,12 @@ openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outfor
 
 kubectl cluster-info | awk 'NR == 1 {print $7}'
 
-Son olarak worker node terminalde asagidaki komutla cluster a join ederiz
+Not: Son olarak worker node terminalde asagidaki komutla cluster a join ederiz
 
 sudo kubeadm join <control-plane-host>:<control-plane-port> --token <token> \
   --discovery-token-ca-cert-hash sha256:<hash>
 
-Bu komutun join-script.sh daki compact versiyon ya da CLI versiyonlari da kullanabilirsin.
+Not: Bu komutun join-script.sh daki compact versiyon ya da CLI versiyonlari da kullanabilirsin.
 
 
 # References
