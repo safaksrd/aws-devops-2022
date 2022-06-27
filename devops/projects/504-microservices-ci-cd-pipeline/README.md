@@ -275,7 +275,7 @@ git push origin dev
 
 ## MSP 6 - Prepare Dockerfiles for Microservices
 
-Not: Her bir mikroservis klasörü icinde image i hazirlanacak. Her image icin dockerfile olusturalim. Dockerfile  lar benzer sadece  portlar farkli.
+Not: Her bir mikroservis klasörü icinde image i hazirlanacak. Her image icin dockerfile olusturalim. Dockerfile  lar benzer sadece portlar farkli.
 
 * Create `feature/msp-6` branch from `dev`.
 
@@ -291,15 +291,25 @@ git checkout feature/msp-6
 FROM openjdk:11-jre 
 # jre secmemizdeki amac zaten jar dosyalarimiz hazir, kod compile oldugu icin jre kullaniyoruz, jdk gereksiz.  image imiz kucuk boyutlu kaliyor. 
 ARG DOCKERIZE_VERSION=v0.6.1
-# 
+# Tek tek Dockerfile lar ile ugrasmayayim diye build ederken (isin icine girmeden) imperativ olarak bir variable tanimlamak icin ARG kullaniyoruz. Örnegin 1000 tane Dockerfile da DOCKERIZE_VERSION=v0.6.2 yapmak istedigimizde ayri ayri icine girip yazmak uygun bir yöntem degil. Bunun yerine
+# docker build --build-arg DOCKERIZE_VERSION=v0.6.2 -t deneme2 . dersek 0.6.1 yerine 0.6.2 yazarak yeni versiyon deneme2 isimli bir image olusur.
+# ENV ile ARG farki -> ENV konteynir icinde degistirilir ama ARG ise Dockerfile in ici degistirmeden sadece build sirasinda kullanilir, 
 ARG EXPOSED_PORT=9090
 ENV SPRING_PROFILES_ACTIVE docker,mysql
+# Spring frameworkunda default profilleri kullanirsak soyle calisir. Konfig bilgilerini almak icin localhost:8888 portuna bakar ve inmemory bir database kullanir. Buradaki profile i girersek konfig bilgilerini almak icin konteynira göre hazirlanmis kodlari kullanir ve config-server:8888 portuna bakar ve mysql database kullanir.
 ADD https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-alpine-linux-amd64-${DOCKERIZE_VERSION}.tar.gz dockerize.tar.gz
-RUN tar -xzf dockerize.tar.gz
+# ADD ile URL adresindeki bilgiler alinir, Lokaldeki tar file ADD ile alinirsa otomatik olarak aciyor. Lokalden bir dosya alacaksak COPY kullanilir. Yukaridaki komut ile dockerize iisimli uygulamanin ilgili versionunu tar dosyasi seklinde "dockerize.tar.gz" ismiyle indirir
+RUN tar -xzf dockerize.tar.gz 
+# Bu komut ile dockerize.tar.gz zip li file i aciyoruz
 RUN chmod +x dockerize
+# dockerize dosyasini  executable olarak calismasi icin script haline getirmek icin chmod yapilir
 ADD ./target/*.jar /app.jar
+# target klasöründe olusan jar dosyasini konteynirin icine /app.jar olarak at
 EXPOSE ${EXPOSED_PORT}
+# Konteynirin portunu göstertiyoruz. Konteynir 9090 dan calissa ve biz buraya 8080 yazsak kullanici zannederki konteynir 8080 den expose olmus, halbuki konteynir 9090 dan expose olmustur. Buraya girilen deger bizim bildigimizi kullaniciya göstermek icindir.
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+# docker run dedigimizde ENTRYPOINT icindeki komut calisir, hangi komutun calismasi gerektigini developerlarla yapacagimiz toplantida onlara soracagiz
+# "java", "-jar","/app.jar" -> jar uzantili app dosyasini docker run oldugunda java ile calistir demek, ortadaki urandom ile biten kisim ise random ve security amacli eklenmis kisimdir
 ```
 
 * Prepare a Dockerfile for the `api-gateway` microservice with the following content and save it under `spring-petclinic-api-gateway`.
