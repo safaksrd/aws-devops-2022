@@ -275,7 +275,7 @@ git push origin dev
 
 ## MSP 6 - Prepare Dockerfiles for Microservices
 
-Not: Her bir mikroservis klasörü icinde image i hazirlanacak. Her image icin dockerfile olusturalim
+Not: Her bir mikroservis klasörü icinde image i hazirlanacak. Her image icin dockerfile olusturalim. Dockerfile  lar benzer sadece  portlar farkli.
 
 * Create `feature/msp-6` branch from `dev`.
 
@@ -289,7 +289,7 @@ git checkout feature/msp-6
 
 ``` Dockerfile
 FROM openjdk:11-jre 
-# jre secmemizdeki amac zaten jar dosyalarimiz hazir, kod compile oldugu icin jre kullaniyoruz, image imiz kucuk boyutlu kaliyor
+# jre secmemizdeki amac zaten jar dosyalarimiz hazir, kod compile oldugu icin jre kullaniyoruz, jdk gereksiz.  image imiz kucuk boyutlu kaliyor. 
 ARG DOCKERIZE_VERSION=v0.6.1
 # 
 ARG EXPOSED_PORT=9090
