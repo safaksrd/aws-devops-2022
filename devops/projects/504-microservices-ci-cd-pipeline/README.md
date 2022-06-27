@@ -65,7 +65,6 @@ This project aims to create full CI/CD Pipeline for microservice based applicati
 * Prepare development server manually on Amazon Linux 2 (t3a.medium) for developers, enabled with `Docker`,  `Docker-Compose`,  `Java 11`,  `Git`.
 
 NOT: Asagidaki komutlari userdata olarak ekleyip ec2 yu ayaga kaldirabilirsin. t3a.medium islemci secersen daha iyi olur. Eger komutlari elle gireceksen basina sudo koymayi unutma. Sadece newgrp docker komutunda sudo ya gerek yok. Suan developerlarin calisacagi standart infrastructure i hazirliyoruz. Bunu developer in kendisinin hazirlamasi da istenebilir. Docker, Docker Compose ve Java kuruldu.
-Soru: MSP-1 ve MSP-5 deki userdata arasindaki farkin sebebi?
 
 ``` bash
 #! /bin/bash
@@ -94,7 +93,7 @@ git clone https://github.com/clarusway/petclinic-microservices-with-db.git
 * Change your working directory to **petclinic-microservices** and delete the **.git** directory.
 
 ```bash
-cd petclinic-microservices
+cd petclinic-microservices-with-db
 rm -rf .git # bunu silince normal bir dosyaya dönüsüyor. Kendi contribution larimizi github da gorebilmek icin bu  islemi yaptik
 ```
 
@@ -104,12 +103,27 @@ rm -rf .git # bunu silince normal bir dosyaya dönüsüyor. Kendi contribution l
 
 ```bash
 # proje boyunca git komutlari daima proje dizininde yapilacak. Olusturulan yeni dosyalarin icinde yapmiyoruz
+# GitHub da Branch i gösteren komut: EC2 home dizinde .bashrc icine bu komutu koyarsak her seferinde hangi branch da oldugumuzu gösterir.
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+export PS1="\[\e[36m\]\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
+
 git init
 git add .
 git commit -m "first commit"
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
 git branch -M main
 git remote add origin https://[your-token]@github.com/[your-git-account]/[your-repo-name-petclinic-microservices-with-db.git] # github repo adresimizi origin olarak tanimliyoruz. Uzak repoda da lokalde olusturdugumuz main, dev ve release brachlari olussun diye Origin push ediyoruz
 git push --set-upstream origin main # git push -u origin main -> kisa hali. Lokaldeki branchin aynisini uzak repoda da olusturuyoruz
+Buraya kadar yapinca asagidaki hatayi aldim
+error: src refspec main does not match any
+error: failed to push some refs to 'https://github.com/safaksrd/petclinic-microservices-with-db.git'
+Duzeltmek icin alttaki 3 komutu tekrar girdim:
+git add .
+git commit -m "first commit"
+git push --set-upstream origin main
 ```
 * Prepare base branches namely `main`,  `dev`,  `release` for DevOps cycle.
 
@@ -143,7 +157,13 @@ git checkout dev
 * Test the compiled source code.
 
 ``` bash
-./mvnw clean test # mavenwrapper mavenin light versiyonu, build icin maven i install etmeye gerek yok. maven wrapper uyumlu oldugu java versiyonlarin özelinde calisir. Tüm java versiyonlarinda calismaz. Maven ise tüm java versiyonlarinda calisir.
+# mavenwrapper mavenin light versiyonu, build icin maven i install etmeye gerek yok. maven wrapper uyumlu oldugu java versiyonlarin özelinde calisir. Tüm java versiyonlarinda calismaz. Maven ise tüm java versiyonlarinda calisir.
+# ./mvnw ile baslayan komutlari proje klasorunda mvnw nin bulundugu dizinde calistiriyoruz.
+./mvnw clean test # ./mvnw clean komutu mikroservislere ait klasörlerin icindeki target klasorlerini siler. ./mvnw test komutu pom.xml i calistirir
+# ./mvnw clean + ./mvnw test = ./mvnw clean test esittir, once temizler sonra pom.xml i calistirir
+# Developerlar src/main icinde source kadlari yaziyor, src/test icinde test kodlarini yaziyor. main icindeki tum kodlara test kodu yazilmak zorunda degil, ama bir test kodu yazilmissa main ve test klasor yapisi ayni oluyor
+# ./mvnw test dendiginde src/main icindeki kodlar build oluyor ve calistiriliyor, src/test icindeki kodlar build oluyor ve calistiriliyor, ve her iki kodu  test ediyor.
+
 ```
 > Note: If you get `permission denied` error, try to give execution permission to **mvnw**.  
 
@@ -153,6 +173,8 @@ git checkout dev
 * Take the compiled code and package it in its distributable `JAR` format.
 
 ``` bash
+# maven default lifecycle daki siraya gore bastan package kadar olan tüm phase lar alttaki komutla gerceklestirilir.
+# package komutu ile compile olan komutun test e ilavaten jar file ini olusturur. jar file lar her mikroservis klarosunun icindeki temizlenmis olan target klasorunun icinde olusur
 ./mvnw clean package
 ```
 
@@ -160,6 +182,11 @@ git checkout dev
 
 ``` bash
 ./mvnw clean install
+# uretilen jar file i (artifact leri) lokal repoya yükler
+# Uretilen jar file larin konuldugu lokal repoyu ilgili klasorlerin pom.xml dosyasindan bulabilirsin. Ornegin adminserver icin jar file inkonuldugu yer:
+# /home/ec2-user/.m2/repository/org/springframework/samples/petclinic/admin/spring-petclinic-admin-server
+
+# maven default cycle in install dan sonraki son adimi deploy, bunu yapmiyoruz. Biz sadece developerlar guncelleme yaptikca yeni jar file lar olusssun istiyoruz. deploy adimini da yapsaydik jar file i tomcat server gibi bir remote server a deploy edecekti.
 ```
 
 ## MSP 4 - Prepare a Script for Packaging the Application
@@ -175,6 +202,8 @@ git checkout feature/msp-4
 ```
 
 * Prepare a script to package the application with maven wrapper and save it as `package-with-mvn-wrapper.sh` under `petclinic-microservices-with-db` folder.
+
+Not: Tek satirlik script dosyasini olusturuyoruz. Developerlar guncelleme yaptiginda jar dosyasi olusturulmasi bizim icin yeterli. Bunu yapan tek satirlik script dosyasini yazalim.
 
 ``` bash
 ./mvnw clean package
@@ -193,6 +222,7 @@ git push origin dev
 
 
 ## MSP 5 - Prepare Development Server Cloudformation Template
+Not: Developer larin server larini her seferinde elle olusturmayalim diye Cloud Formation yaml dosyasi olusturalim
 
 * Create `feature/msp-5` branch from `dev`.
 
@@ -210,7 +240,7 @@ mkdir infrastructure
 
 * Prepare development server script with [Cloudformation template](./msp-5-dev-server-for-petclinic-app-cfn-template.yml) for developers, enabled with `Docker`,  `Docker-Compose`,  `Java 11`,  `Git` and save it as `dev-server-for-petclinic-app-cfn-template.yml` under `infrastructure` folder.
 
-Not: Developer larin  kullanacagi Dev Server i David Hocanin gonderdigi infrastruxture klasorunun icinde bulunan "dev-server-for-petclinic-app-cfn-template.yml" isimli yml dosyasi ile kur. 
+Not: Projeyi tekrar ederken PETCLINICDT-DEV-SERVER da olusturacagimiz infrastructure klasorune "/Users/safaksd/Desktop/AWS-DevOps/workspace/_PORTFOLIO/git-sfk-2022/aws-devops-2022/devops/projects/504-microservices-ci-cd-pipeline/infrastructure" altindaki "dev-server-for-petclinic-app-cfn-template.yml" dosyasini koy.
 
 ``` bash
 #! /bin/bash
@@ -223,10 +253,11 @@ usermod -a -G docker ec2-user
 curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" \
 -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
+newgrp docker
 yum install git -y
 yum install java-11-amazon-corretto -y
-git clone https://github.com/clarusway/petclinic-microservices.git
-cd petclinic-microservices
+git clone https://github.com/clarusway/petclinic-microservices-with-db.git
+cd petclinic-microservices-with-db
 git fetch
 git checkout dev
 ```
@@ -242,8 +273,9 @@ git merge feature/msp-5
 git push origin dev
 ```
 
-
 ## MSP 6 - Prepare Dockerfiles for Microservices
+
+Not: Her bir mikroservis klasörü icinde image i hazirlanacak. Her image icin dockerfile olusturalim
 
 * Create `feature/msp-6` branch from `dev`.
 
@@ -1759,6 +1791,7 @@ terraform --version
 - After running the job above, replace the script with the one below in order to test creating key pair for `ansible`.
 
 ```bash
+# key olusturacagiz ve bir sonraki adimda keyi global olarak degistirecegiz
 PATH="$PATH:/usr/local/bin"
 ANS_KEYPAIR="call-ansible-test-dev.key"
 AWS_REGION="us-east-1"
@@ -1781,11 +1814,14 @@ terraform apply -auto-approve #23.06.2022 burada kaldik
 - After running the job above, replace the script with the one below in order to test SSH connection with one of the instances.
 
 ```bash
+# baglanip baglanamadigimizi herhangi bir makinenin private IP sini girerek deneyelim
 ANS_KEYPAIR="call-ansible-test-dev.key"
 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${WORKSPACE}/${ANS_KEYPAIR} ubuntu@172.31.91.243 hostname
 ```
 
 - Prepare static inventory file with name of `hosts.ini` for Ansible under `ansible/inventory` folder using Docker machines private IP addresses.
+
+Not: mkdir -p ansible/inventory girebilirisn ya da elle olustur (proje ana dizinde calistir)
 
 ```ini
 172.31.91.243   ansible_user=ubuntu  
@@ -1804,6 +1840,7 @@ git push --set-upstream origin feature/msp-16
 - Configure `test-creating-qa-automation-infrastructure` job and replace the existing script with the one below in order to test ansible by pinging static hosts.
 
 ```bash
+# elle olusturdugumuz hosts.ini deki envantere pin atalim
 PATH="$PATH:/usr/local/bin"
 ANS_KEYPAIR="call-ansible-test-dev.key"
 export ANSIBLE_INVENTORY="${WORKSPACE}/ansible/inventory/hosts.ini"
@@ -1855,6 +1892,7 @@ ansible-inventory -v -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.
 
 ```bash
 # Test dev dynamic inventory by pinging
+# dinamik envanter ile ping atalim
 APP_NAME="Petclinic"
 ANS_KEYPAIR="call-ansible-test-dev.key"
 PATH="$PATH:/usr/local/bin"
@@ -1868,7 +1906,7 @@ ansible -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml all -m p
 ```yml
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
-kind: ClusterConfiguration
+kind: ClusterConfiguration # kluster capinda konfigurasyona yariyor
 kubernetesVersion: v1.23.5
 controlPlaneEndpoint: ${CONTROLPLANE_ENDPOINT}
 networking:
@@ -1876,7 +1914,7 @@ networking:
 apiServer:
   extraArgs:
     cloud-provider: external
-    enable-aggregator-routing: "true"
+    enable-aggregator-routing: "true" # birden fazla master olunca gelen trafigi alip route etmek icin gerekli
 controllerManager:
   extraArgs:
     cloud-provider: external
@@ -1900,7 +1938,7 @@ cgroupDriver: systemd
 - Create a yaml file for Kubernetes `StorageClass` object and name it as `storage.yml` under `ansible/playbooks` folder.
 
 ```yaml
-kind: StorageClass
+kind: StorageClass # storage class olusturalim
 apiVersion: storage.k8s.io/v1
 metadata:
   name: ebs-sc
@@ -1919,6 +1957,7 @@ allowedTopologies:
 ```
 
 - Create an ansible playbook to install kubernetes and save it as `k8s_setup.yaml` under `ansible/playbooks` folder.
+Not: Ansible ile Kubernetes i kuracak olan playbook u olusturalim.
 
 ```yaml
 ---
@@ -2050,8 +2089,8 @@ allowedTopologies:
 - hosts: role_master
   become: false
   tasks:
-
-  - name: Patch the instances
+# Not: https://jamesdefabia.github.io/docs/user-guide/kubectl/kubectl_patch/
+  - name: Patch the instances # Deploy the required cloud-controller-manager taskindan önce bu taski yaparak Cloud Provider (bu projede AWS) in control ve worker node lari tanimasi icin instance id lerini ekliyoruz
     become: false
     shell: |
       cd /home/ubuntu
@@ -2086,6 +2125,10 @@ allowedTopologies:
     become: false
     shell: kubectl apply -f storage.yml
 ```
+Not: Jenkins bash e baglanmip icini gormek icin , burada keyi gorebiliriz
+sudo usermod -s /bin/bash jenkins"
+sudo su - jenkins"
+cd workspace
 
 - Commit the change, then push the ansible playbooks to the remote repo.
 
@@ -2105,11 +2148,16 @@ export ANSIBLE_PRIVATE_KEY_FILE="${WORKSPACE}/${ANS_KEYPAIR}"
 export ANSIBLE_HOST_KEY_CHECKING=False
 # k8s setup
 ansible-playbook -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml ./ansible/playbooks/k8s_setup.yaml
+# Ansible ile hazirladigimiz Kubernetes i kuracak olan playbook u Jenkinsde calistiralim.
 ```
 
 - After running the job above, replace the script with the one below in order to test tearing down the Kubernetes cluster infrastructure.
 
 ```bash
+# Terraform ile infrastructure i kuruyoruz.
+# Ansible ile infrastructure  i konfigure ediyoruz.
+# Ansible playbook ile kubernetes in node larda konfigure oldugunu yani kuruldugunu gordukten sonra Terraform ile ayaga kaldirdigimiz infrastructure i destroy ile kaldiririz. 
+# Asama asama deneme yapiyoruz. 18. adimda tum herseyi birlestirecegiz.
 cd infrastructure/dev-k8s-terraform
 terraform destroy -auto-approve
 ```
@@ -2117,6 +2165,7 @@ terraform destroy -auto-approve
 - After running the job above, replace the script with the one below in order to test deleting existing key pair using AWS CLI with following script.
 
 ```bash
+# daha once olusturulan key i silelim
 PATH="$PATH:/usr/local/bin"
 ANS_KEYPAIR="call-ansible-test-dev.key"
 AWS_REGION="us-east-1"
@@ -2127,6 +2176,7 @@ rm -rf ${ANS_KEYPAIR}
 - Create a script to create QA Automation infrastructure and save it as `create-qa-automation-environment.sh` under `infrastructure` folder. (This script shouldn't be used in one time. It should be applied step by step like above)
 
 ```bash
+# yaptiklarimizi script haline getirelim
 # Environment variables
 PATH="$PATH:/usr/local/bin"
 APP_NAME="Petclinic"
@@ -2162,6 +2212,7 @@ git checkout dev
 git merge feature/msp-16
 git push origin dev
 ```
+Not: 25.06.2022 dersinde burada kaldik.
 ## MSP 17 - Prepare Petlinic Kubernetes YAML Files
 
 * Create `feature/msp-17` branch from `release`.
@@ -2474,10 +2525,10 @@ stable-petclinicapp/petclinic_chart     1.1.1           0.1.0           A Helm c
 ``` bash
 git add .
 git commit -m 'added Configuration YAML Files for Kubernetes Deployment'
-git push --set-upstream origin feature/msp-24
-git checkout release
-git merge feature/msp-24
-git push origin release
+git push --set-upstream origin feature/msp-17
+git checkout dev
+git merge feature/msp-17
+git push origin dev
 ```
 
 ## MSP 18 - Prepare a QA Automation Pipeline for Nightly Builds
