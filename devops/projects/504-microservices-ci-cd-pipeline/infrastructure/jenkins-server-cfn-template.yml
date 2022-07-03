@@ -66,11 +66,11 @@ Resources:
         - !GetAtt JenkinsServerSecurityGroup.GroupId
       Tags:                
         - Key: Name
-          Value: !Sub ${AWS::StackName}-Jenkins-32Server
+          Value: !Sub ${AWS::StackName}-Jenkins-Server
         - Key: server
           Value: jenkins
       UserData:
-        Fn::Base64: |
+        Fn::Base64: | # Ilgili adimda ECR en az AWS CLI 1.9 ile calistigi icin AWS CLI yi silip CLI version 2 yi kurariz
           #! /bin/bash
           # update os
           yum update -y
