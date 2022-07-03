@@ -1648,7 +1648,10 @@ module "iam" {
 // 3 adet Security Group var. 
 // Kubernetes ve rancher dokumanlari incelenerke hangi portlarin acilacagini belirledik
 
-// Ilki Mutual-sg : Bu Terraform u aldatmak icin
+// Birincisi Mutual-sg : Bu Terraform u aldatmak icin kullanilan araci security group.
+// Worker-sg ye diyecegiz ki Master-sg den gelenleri kabul et, 
+// Master-sg ye diyecegiz ki Worker-sg den gelenleri kabul et. Terraform da ikisine bu sekilde bagli iki resource ayni anda olusturulamadigi icin Terraformu aldatmak icin Mutual-sg olusturduk. 
+// Depends on ise yaramaz cünkü iki security group da ayni anda olusmali
 resource "aws_security_group" "matt-kube-mutual-sg" {  # 
   name = "kube-mutual-sec-group-for-matt"
 }
@@ -1695,7 +1698,7 @@ resource "aws_security_group" "matt-kube-worker-sg" {
   }
 }
 
-// Master-sg de 6443, 2380, 2379, 10250, 10251, 10252, 8472 portlari icin Mutual-sg ye ihtiyac var.
+// Master-sg de 6443, 2380, 2379, 10250, 10251, 10252, 8472 (Rancher) portlari icin Mutual-sg ye ihtiyac var.
 resource "aws_security_group" "matt-kube-master-sg" {
   name = "kube-master-sec-group-for-matt"
 
@@ -1867,6 +1870,7 @@ git checkout dev
 git merge feature/msp-15
 git push origin dev
 ```
+# Buraya kadar EC2 da tekrarlandi
 
 ## MSP 16 - Create a QA Automation Environment with Kubernetes - Part-2
 Not: 16.adim Ansible a basliyoruz
