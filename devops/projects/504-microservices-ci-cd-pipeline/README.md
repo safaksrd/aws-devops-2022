@@ -291,7 +291,7 @@ git checkout feature/msp-6
 
 ``` Dockerfile
 FROM openjdk:11-jre 
-# jre secmemizdeki amac zaten jar dosyalarimiz hazir, kod compile oldugu icin jre kullaniyoruz, jdk gereksiz.  image imiz kucuk boyutlu kaliyor. 
+# jre secmemizdeki amac zaten jar dosyalarimiz hazir, kod compile oldugu icin jre kullaniyoruz, jdk gereksiz. image imiz kucuk boyutlu kaliyor. 
 ARG DOCKERIZE_VERSION=v0.6.1
 # Tek tek Dockerfile lar ile ugrasmayayim diye build ederken (isin icine girmeden) imperativ olarak bir variable tanimlamak icin ARG kullaniyoruz. Örnegin 1000 tane Dockerfile da DOCKERIZE_VERSION=v0.6.2 yapmak istedigimizde ayri ayri icine girip yazmak uygun bir yöntem degil. Bunun yerine
 # docker build --build-arg DOCKERIZE_VERSION=v0.6.2 -t deneme2 . dersek 0.6.1 yerine 0.6.2 yazarak yeni versiyon deneme2 isimli bir image olusur.
@@ -2222,7 +2222,7 @@ Not: Ansible ile Kubernetes i kuracak olan playbook u olusturalim.
   - name: copy the configuration
     become: yes
     copy:  #  ./clusterconfig-base.yml manifesyo yaml dosyasini Master makinenin /home/ubuntu/ dizinine kopyala
-      src: ./clusterconfig-base.yml # bu dosya nerede?
+      src: ./clusterconfig-base.yml # bu dosya ansible playbookun olduğu makine, yani jenkins server da
       dest: /home/ubuntu/
   
   - name: get gettext-base # envsubst komutunu kullanmak icin bu paketi indiriyoruz
@@ -2308,7 +2308,7 @@ Not: Ansible ile Kubernetes i kuracak olan playbook u olusturalim.
   - name: copy the storage.yml file
     become: yes
     copy: # ./storage.yml manifesto yaml dosyasini Master makinenin /home/ubuntu/ dizinine kopyala
-      src: ./storage.yml # bu dosya nerede?
+      src: ./storage.yml # bu dosya ansible playbookun olduğu makine, yani jenkins server da
       dest: /home/ubuntu/ 
 
   - name: create StorageClass object
@@ -2323,7 +2323,7 @@ git add .
 git commit -m 'added ansible playbooks for dev environment'
 git push
 ```
-#  git push isleminde hata aldim
+#  git push isleminde hata aldim ve cözdüm
 Not: Support for password authentication was removed on August 13, 2021. Please use a personal access token instead. Bu sorunu github password yerine token girerek cozdum
 
 - Configure `test-creating-qa-automation-infrastructure` job and replace the existing script with the one below in order to test the playbooks to create a Kubernetes cluster.
@@ -2418,6 +2418,8 @@ docker-compose.yaml dosyasini Kubernetes manifesto yaml file lara (objelere) cev
 HELM Chart ile paketleyip S3 e atacagiz
 Klusteri olustur deyince S3 den Helm Charti release edecegiz
 
+# EC2 da burada kaldim
+
 * Create `feature/msp-17` branch from `dev`.
 
 ``` bash
@@ -2432,22 +2434,28 @@ git checkout feature/msp-17
 
 ```yaml
 # Elimizdeki docker-compose yaml dosyasinin kubernetes manifesto yaml files a donusturen Kompose isimli toolu kullanacagiz https://kompose.io/
+
+# Bu tool ile docker-compose daki her parametrenin manifesto yaml dosyasi olusturulamiyor. Conversion Matrix den kontrol edilebilir (https://kompose.io/conversion/). docker-compose da olmayan ancak eklememiz gereken bir paramatereyi olusabilmesi icin manuel labels kismina ekliyoruz. Uygulamanin ara yüzüne Api Server dan ulasiyorduk. Örnegin Api serverinde Selenium u calistirmak icin (functional tests) Api Server da nodeport servisi ile bir portu dis dünyaya acmaliyz. 
+
+# Kompose toolun yetenegi disinda kalan birseyi ise manifesto yaml files olustuktan sonra elle ekleyecegiz
+
+# Kluster IP ile kluster ici haberlesme saglaniyor, nodeport servisi ile disaridan kluster a ulasilabiliyordu.
 version: '3'
 services:
   config-server:
-    image: "{{ .Values.IMAGE_TAG_CONFIG_SERVER }}"
+    image: "{{ .Values.IMAGE_TAG_CONFIG_SERVER }}" # bu Helm den cekiyor. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
      - 8888:8888
     labels:
-      kompose.image-pull-secret: "regcred" # register credentials. image i dockerhub dan cekersek buna gerek yok ama biz ECR dan cekecegimiz icin bu credentials i veriyoruz
+      kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
   discovery-server:
-    image: "{{ .Values.IMAGE_TAG_DISCOVERY_SERVER }}"
+    image: "{{ .Values.IMAGE_TAG_DISCOVERY_SERVER }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
      - 8761:8761
     labels:
       kompose.image-pull-secret: "regcred"
   customers-service:
-    image: "{{ .Values.IMAGE_TAG_CUSTOMERS_SERVICE }}"
+    image: "{{ .Values.IMAGE_TAG_CUSTOMERS_SERVICE }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     deploy:
       replicas: 2
     ports:
@@ -2455,7 +2463,7 @@ services:
     labels:
       kompose.image-pull-secret: "regcred"
   visits-service:
-    image: "{{ .Values.IMAGE_TAG_VISITS_SERVICE }}"
+    image: "{{ .Values.IMAGE_TAG_VISITS_SERVICE }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     deploy:
       replicas: 2
     ports:
@@ -2463,7 +2471,7 @@ services:
     labels:
       kompose.image-pull-secret: "regcred"
   vets-service:
-    image: "{{ .Values.IMAGE_TAG_VETS_SERVICE }}"
+    image: "{{ .Values.IMAGE_TAG_VETS_SERVICE }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     deploy:
       replicas: 2
     ports:
@@ -2471,16 +2479,16 @@ services:
     labels:
       kompose.image-pull-secret: "regcred"
   api-gateway:
-    image: "{{ .Values.IMAGE_TAG_API_GATEWAY }}"
+    image: "{{ .Values.IMAGE_TAG_API_GATEWAY }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     deploy:
       replicas: 1
     ports:
      - 8080:8080
     labels:
       kompose.image-pull-secret: "regcred"
-      kompose.service.expose: "{{ .Values.DNS_NAME }}"
-      kompose.service.type: "nodeport"
-      kompose.service.nodeport.port: "30001"
+      kompose.service.expose: "{{ .Values.DNS_NAME }}" # Ingress de kendi DNS Name imize gidebilsin diye path belirtebiliyorduk
+      kompose.service.type: "nodeport" # Selenium tesler icin nodeport aciyoruz
+      kompose.service.nodeport.port: "30001" # Selenium tesler icin nodeport aciyoruz
   tracing-server:
     image: openzipkin/zipkin
     environment:
@@ -2488,25 +2496,25 @@ services:
     ports:
      - 9411:9411
   admin-server:
-    image: "{{ .Values.IMAGE_TAG_ADMIN_SERVER }}"
+    image: "{{ .Values.IMAGE_TAG_ADMIN_SERVER }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
      - 9090:9090
     labels:
       kompose.image-pull-secret: "regcred"
   hystrix-dashboard:
-    image: "{{ .Values.IMAGE_TAG_HYSTRIX_DASHBOARD }}"
+    image: "{{ .Values.IMAGE_TAG_HYSTRIX_DASHBOARD }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
      - 7979:7979
     labels:
       kompose.image-pull-secret: "regcred"
   grafana-server:
-    image: "{{ .Values.IMAGE_TAG_GRAFANA_SERVICE }}"
+    image: "{{ .Values.IMAGE_TAG_GRAFANA_SERVICE }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
     - 3000:3000
     labels:
       kompose.image-pull-secret: "regcred"
   prometheus-server:
-    image: "{{ .Values.IMAGE_TAG_PROMETHEUS_SERVICE }}"
+    image: "{{ .Values.IMAGE_TAG_PROMETHEUS_SERVICE }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
     - 9091:9090
     labels:
@@ -2524,7 +2532,7 @@ services:
 * Install [conversion tool](https://kompose.io/installation/) named `Kompose` on your Jenkins Server. [User Guide](https://kompose.io/user-guide/#user-guide)
 
 ```bash
-# kompose toolu indirelim
+# kompose toolu indirelim ve kuralim
 curl -L https://github.com/kubernetes/kompose/releases/download/v1.26.1/kompose-linux-amd64 -o kompose
 chmod +x kompose
 sudo mv ./kompose /usr/local/bin/kompose
@@ -2542,7 +2550,8 @@ helm version
 * Create an helm chart named `petclinic_chart` under `k8s` folder.
 
 ```bash
-# helm kubernetes teki objelerimizi paketliyor
+# k8s dizini altinda petclinic_chart isimli bir Helm Chart olusturuyoruz. Bu chart in altinda olusan dosyalar arasinda values.yaml isimli bir dosya var, biz bu dosyanin icini degistirecegiz. Yukarida olusturulan docker-compose.yaml dosyasi ici degistirilen values.yaml dosyasindaki degerleri dinamik olarak cekecek
+# Helm ile kubernetes teki objelerimizi paketliyoruz. Bunlari S3 de tutacagiz, handson yaparken lokalde ve github da tutmustuk
 cd k8s
 helm create petclinic_chart
 ```
@@ -2550,17 +2559,24 @@ helm create petclinic_chart
 * Remove all files under the petclinic_chart/templates folder.
 
 ```bash
+# petclinic_chart altinda default olusan templates dizininin icini silelim
 rm -r petclinic_chart/templates/* # rekursiv olarak yani ic ice templates altindaki tum dosyalari siler
 ```
   
 * Convert the `docker-compose.yml` into k8s/petclinic_chart/templates objects and save under `k8s/petclinic_chart` folder.
 
 ```bash
-kompose convert -f docker-compose.yml -o petclinic_chart/templates # kompose tool u ile templates altinda kubernetes manifesto file lar olusturulur
+kompose convert -f docker-compose.yml -o petclinic_chart/templates 
+# kompose tool u ile docker-compose.yml dönüstürülerek petclinic_chart/templates dizini altina kubernetes manifesto file lar olusturulur. 
+# Olusan manifesto yaml files dan birisi "api-gateway-ingress.yaml". 
+# Bu yaml dosyasinda values.dns_name kismina kendi DNS adresimizi yazarak yönlendirecegiz, böylelikle ayaga kalkan petclinic uygulamasini DNS adresimizden görebilecegiz
 ```
 
 * Update deployment files with `init-containers` to launch microservices in sequence. See [Init Containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
-Not: Kompose tarafindan olusturulan yaml file larda eksiklikler var, hersey tam olusmuyor, bazi ihtiyaclarimizi kendimiz elle ayarlamaliyiz, Örnegin önce config-server ayaga kalkmali, onun deployment.yaml dosyasina birsey eklemeyecegiz, ondan sonra discovery-server ayaga kalkacak, doscovery server dan sonra da diger server lar ayaga kalkacak, ilgili server in klasorunun altinda Kompose ile olusan deployment.yaml dosyalarinin icinde spec bölümünde initContainers bilgisini gireriz.
+
+Not: Dockerize toolunu docker-compose da kullanmis ve service in calisip calismadigini kontrol etmistik. 
+
+Not: Kompose tarafindan olusturulan yaml file larda eksiklikler var, hersey tam olusmuyor, bazi ihtiyaclarimizi kendimiz elle ayarlamaliyiz, Örnegin önce config-server ayaga kalkmali, onun deployment.yaml dosyasina birsey eklemeyecegiz, ondan sonra discovery-server ayaga kalkacak, discovery server dan sonra da diger server lar ayaga kalkacak, ilgili server in klasorunun altinda Kompose ile olusan deployment.yaml dosyalarinin icinde spec bölümünde initContainers bilgisini gireriz. Pod un icinde bir tane daha init container oluyor, bu container in amaci bir tane daha uygulama calistirmak, uygulamanin amaci servisin calisip calismadigini görmek, servisin calistigini görünce kapaniyor
 
 ```yaml
 # for discovery server (discovery server icin )
@@ -2568,6 +2584,7 @@ Not: Kompose tarafindan olusturulan yaml file larda eksiklikler var, hersey tam 
       - name: init-config-server
         image: busybox
         command: ['sh', '-c', 'until nc -z config-server:8888; do echo waiting for config-server; sleep 2; done;'] # tcp-udp baglantilarini dinliyoruz, 2 saniyede bir döndürüyor, config-server in ayaga kalkmasini bekliyor
+
 # for all other microservices except config-server, discovery-server and mysql-server
       initContainers:
       - name: init-discovery-server

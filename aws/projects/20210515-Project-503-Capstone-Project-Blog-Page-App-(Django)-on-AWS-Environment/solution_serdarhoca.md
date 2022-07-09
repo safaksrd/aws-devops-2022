@@ -129,13 +129,19 @@ Go to the S3 Consol and lets create two buckets.
 
 - Click Create Bucket
 ```text
-Bucket Name : awscapstones3<YOUR NAME>blog
+Bucket Name : awscapstones<YOUR NAME>blog
 Region      : N.Virginia
+Object Ownership
+    - ACLs enabled
+        - Bucket owner preferred
+Block Public Access settings for this bucket
 Block all public access : Unchecked
 Other Settings are keep them as are
 create bucket
 
 NOT!!: ACLs enabled yapmayi unutma. Serdar hocanin anlattigi menu farkliydi. S3 bucketa disaridan birinin birsey koyabilmesi icin bu ayar yapiliyor.
+
+
 ```
 
 2. S3 Bucket for failover scenario
@@ -144,6 +150,10 @@ NOT!!: ACLs enabled yapmayi unutma. Serdar hocanin anlattigi menu farkliydi. S3 
 ```text
 Bucket Name : www.<YOUR DNS NAME>
 Region      : N.Virginia
+Object Ownership
+    - ACLs enabled
+        - Bucket owner preferred
+Block Public Access settings for this bucket
 Block all public access : Unchecked
 Please keep other settings as are
 ```
@@ -274,6 +284,8 @@ Go to the certification manager console and click `request a certificate` button
 ## Step 12: Create ALB and Target Group
 Go to the Load Balancer section on the left hand side menu of EC2 console. Click `create Load Balancer` button and select Application Load Balancer
 ```text
+Application Load Balancer ---> Create
+Basic Configuration:
 Name                    : awscapstoneALB
 Schema                  : internet-facing
 Listeners               : HTTPS, HTTP
@@ -513,9 +525,9 @@ then, go to the Lambda Console and click create function
 - Basic Information
 ```text
 
-Function Name           : awscapsitonelambdafunction
+Function Name           : awscapstonelambdafunction
 Runtime                 : Python 3.8
-Create IAM role         : S3 full access policy
+Create IAM role         : S3 full access policy/ aws_capstone_lambda_Role
 
 Advance Setting:
 Network                 : 
@@ -591,7 +603,7 @@ def lambda_handler(event, context):
             'Event': event_name,
         })
         
-    return "Lammda success"
+    return "Lambda success"
 ```
 
 - Click deploy and all set. go to the website and add a new post with photo, then control if their record is written on DynamoDB. 
