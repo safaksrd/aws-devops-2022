@@ -124,7 +124,7 @@ girip silebilirsiniz.
 git add .
 git commit -m "first commit"
 git branch -M main
-git remote add origin https://github.com/[your-git-account]/[your-repo-name-petclinic-microservices-with-db.git] # github repo adresimizi origin olarak tanimliyoruz. Uzak repoda da lokalde olusturdugumuz main, dev ve release brachlari olussun diye Origin push ediyoruz. global user.email ve global user.name i girdigim icin token i sildim
+git remote add origin https://github.com/[your-git-account]/[your-repo-name-petclinic-microservices-with-db.git] # github repo adresimizi origin olarak tanimliyoruz. Uzak repoda da lokalde olusturdugumuz main, dev ve release branchlari olussun diye Origin push ediyoruz. global user.email ve global user.name i girdigim icin token i sildim
 git push --set-upstream origin main # git push -u origin main -> kisa hali. Lokaldeki branchin aynisini uzak repoda da olusturuyoruz
 
 ```
@@ -186,7 +186,7 @@ git checkout dev
 ``` bash
 ./mvnw clean install  # Projeyi tekrar ederken bunu calistirsan yeter!
 # uretilen jar file i (artifact leri) lokal repoya yükler
-# Uretilen jar file larin konuldugu lokal repoyu ilgili klasorlerin pom.xml dosyasindan bulabilirsin. Ornegin adminserver icin jar file inkonuldugu yer:
+# Uretilen jar file larin konuldugu lokal repoyu ilgili klasorlerin pom.xml dosyasindan bulabilirsin. Ornegin adminserver icin jar file in konuldugu yer:
 # /home/ec2-user/.m2/repository/org/springframework/samples/petclinic/admin/spring-petclinic-admin-server/2.1.2
 
 # maven default cycle in install dan sonraki son adimi deploy, bunu yapmiyoruz. Biz sadece developerlar guncelleme yaptikca yeni jar file lar olusssun istiyoruz. deploy adimini da yapsaydik jar file i tomcat server gibi bir remote server a deploy edecekti.
@@ -449,18 +449,19 @@ git checkout feature/msp-7
 * Prepare a script to build the docker images and save it as `build-dev-docker-images.sh` under `petclinic-microservices-with-db` folder.
 
 ``` bash
-# Burada olusan image lar /var/lib/docker/image klasoru altina gider. docker image ls komut ile olusan image lari görebiliriz
+# Burada olusan image lar /var/lib/docker/image klasoru altina gider. 
+# docker image ls komut ile olusan image lari görebiliriz
 ./mvnw clean package # son halini almak icin son jar file alarak image i onun üstüne kurmak icin yapiyoruz
-docker build --force-rm -t "petclinic-admin-server:dev" ./spring-petclinic-admin-server
-docker build --force-rm -t "petclinic-api-gateway:dev" ./spring-petclinic-api-gateway
-docker build --force-rm -t "petclinic-config-server:dev" ./spring-petclinic-config-server
-docker build --force-rm -t "petclinic-customers-service:dev" ./spring-petclinic-customers-service
-docker build --force-rm -t "petclinic-discovery-server:dev" ./spring-petclinic-discovery-server
-docker build --force-rm -t "petclinic-hystrix-dashboard:dev" ./spring-petclinic-hystrix-dashboard
-docker build --force-rm -t "petclinic-vets-service:dev" ./spring-petclinic-vets-service
-docker build --force-rm -t "petclinic-visits-service:dev" ./spring-petclinic-visits-service
-docker build --force-rm -t "petclinic-grafana-server:dev" ./docker/grafana
-docker build --force-rm -t "petclinic-prometheus-server:dev" ./docker/prometheus
+docker build --force-rm -t "petclinic-admin-server:dev" ./spring-petclinic-admin-server # ./spring-petclinic-admin-server dizininde yer alan tum dosyalarla birlikte petclinic-admin-server:dev isimli image olusur
+docker build --force-rm -t "petclinic-api-gateway:dev" ./spring-petclinic-api-gateway # ./spring-petclinic-api-gateway dizininde yer alan tum dosyalarla birlikte petclinic-api-gateway:dev isimli image olusur
+docker build --force-rm -t "petclinic-config-server:dev" ./spring-petclinic-config-server # ./spring-petclinic-config-server dizininde yer alan tum dosyalarla birlikte petclinic-config-server:dev isimli image olusur
+docker build --force-rm -t "petclinic-customers-service:dev" ./spring-petclinic-customers-service # ./spring-petclinic-customers-service dizininde yer alan tum dosyalarla birlikte petclinic-customers-service:dev isimli image olusur
+docker build --force-rm -t "petclinic-discovery-server:dev" ./spring-petclinic-discovery-server # ./spring-petclinic-discovery-server dizininde yer alan tum dosyalarla birlikte petclinic-discovery-server:dev isimli image olusur
+docker build --force-rm -t "petclinic-hystrix-dashboard:dev" ./spring-petclinic-hystrix-dashboard # ./spring-petclinic-hystrix-dashboard dizininde yer alan tum dosyalarla birlikte petclinic-hystrix-dashboard:dev isimli image olusur
+docker build --force-rm -t "petclinic-vets-service:dev" ./spring-petclinic-vets-service # ./spring-petclinic-vets-service dizininde yer alan tum dosyalarla birlikte petclinic-vets-service:dev isimli image olusur
+docker build --force-rm -t "petclinic-visits-service:dev" ./spring-petclinic-visits-service # ./spring-petclinic-visits-service dizininde yer alan tum dosyalarla birlikte petclinic-visits-service:dev isimli image olusur
+docker build --force-rm -t "petclinic-grafana-server:dev" ./docker/grafana # ./docker/grafana dizininde yer alan tum dosyalarla birlikte petclinic-grafana-server:dev isimli image olusur
+docker build --force-rm -t "petclinic-prometheus-server:dev" ./docker/prometheus # ./docker/prometheus dizininde yer alan tum dosyalarla birlikte petclinic-prometheus-server:dev isimli image olusur
 ```
 
 * Give execution permission to build-dev-docker-images.sh. 
@@ -718,7 +719,7 @@ public class PetTest {
 * Implement unit tests with maven wrapper for only `customer-service` microservice locally on `Dev Server`. Execute the following command under the `spring-petclinic-customers-service folder`.
 
 ``` bash
-# sadece customer service i test etmek istiyoruz. mvnw bir üst klasörde kaldigi icin  .. ile üst klasörden mvnw i cagiriyor ve custormer service klasörünü test ediyoruz.
+# sadece customer service i test etmek istiyoruz. mvnw bir üst klasörde kaldigi icin  .. ile üst klasörden mvnw i cagiriyor ve customer service klasörünü test ediyoruz.
 ../mvnw clean test
 ```
 
@@ -732,7 +733,7 @@ git push --set-upstream origin feature/msp-9
 
 * Update POM file at root folder for Code Coverage Report using `Jacoco` tool plugin. 
 
-Not: Springboot Profile inin altina plugins altina Jacoco plugin i eklenecek
+Not: Proje dizinindeki ana pom.xml icinde Springboot Profile inin altina plugins altina Jacoco plugin i eklenecek
 
 ``` xml
 <plugin>
@@ -965,7 +966,6 @@ git checkout feature/msp-11
 * Set up a Jenkins Server and enable it with `Git`,  `Docker`,  `Docker Compose`,  `AWS CLI v2`, `Python`,  `Ansible` and `Boto3`.  To do so, prepare a [Cloudformation template for Jenkins Server](./msp-11-jenkins-server-cfn-template.yml) with following script and save it as `jenkins-server-cfn-template.yml` under `infrastructure` folder.
 
 ``` bash
-# Ilgili adimda ECR en az AWS CLI 1.9 ile calistigi icin AWS CLI yi silip yeniden kurariz
 #! /bin/bash
 # update os
 yum update -y
@@ -998,6 +998,7 @@ curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compo
 -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 # uninstall aws cli version 1
+# ECR en az AWS CLI 1.9 ile calistigi icin AWS CLI yi silip yeniden kurariz
 rm -rf /bin/aws 
 # install aws cli version 2
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -1057,8 +1058,8 @@ Not:
 1.CI-CD Pipeline: dev, feature, bugfix branchlarina yapilan her commit te bu CI-CD pipeline olusacak. Ismi petclinic-ci-job. Bu pipeline sonucunda herhangi bir infrastructure ayaga kalkmiyor, sadece build islemi basarili mi o kontrol ediliyor.
 2.CI-CD Pipeline: Functional teslerin gece Selenium ile calistirilmasi icin cronjob ile github dan kod cekilecek, bir kubernetes kluster (1 master 2 worker) ayaga kaldirilacak, uygulama kluster a deploy edilip Selenium ile Functional testler yapilacak.
 3.CI-CD Pipeline: Manual test icin daha onceden hazir edilmis infrastructure uzerinde uygulama update edilecek.
-4.CI-CD Pipeline: Bir kluster orkestrasyon toolu olan Rancher kullanilir. Rancher kurulduktan sonra staging icin gerekli olan kluster lar kurulacak. Jenkins ile Rancher entegre edilecek ve Rancher uzerinden uygulamayi klausterlara deploy edecegiz.
-5.CI-CD Pipeline: Bir kluster orkestrasyon toolu olan Rancher kullanilir. Rancher kurulduktan sonra production icin gerekli olan kluster lar kurulacak. Jenkins ile Rancher entegre edilecek ve Rancher uzerinden uygulamayi klausterlara deploy edecegiz.
+4.CI-CD Pipeline: Bir kluster orkestrasyon toolu olan Rancher kullanilir. Rancher kurulduktan sonra staging icin gerekli olan kluster lar kurulacak. Jenkins ile Rancher entegre edilecek ve Rancher uzerinden uygulamayi klusterlara deploy edecegiz.
+5.CI-CD Pipeline: Bir kluster orkestrasyon toolu olan Rancher kullanilir. Rancher kurulduktan sonra production icin gerekli olan kluster lar kurulacak. Jenkins ile Rancher entegre edilecek ve Rancher uzerinden uygulamayi klusterlara deploy edecegiz.
 
 * Create `feature/msp-13` branch from `dev`.
 
@@ -1085,13 +1086,16 @@ mkdir jenkins
   * Click `Add build step` under `Build` and select `Execute Shell`
   * Write below script into the `Command`
     ```bash
-    # Unit test yapmak icin Jenkins server a maven kurmaya ugrasmiyoruz, bunun yerine unit test icin jenkins serverda Maven kurulu bir image i agent olarak kullaniyoruz. Konteynirda uygulama calistirilmiyor sadece unit test yapiyoruz.
-    # docker run --rm ... komutu containeri isi bitince siler.  
-    # Uygulamamiz konteynir icinde degil, Jenkins github adresimizi biliyor, Jenkinste job i ilk calistirinca github daki dosyalarimizi var/lib/jenkins/workspace/petclinic-ci-job klasörüne indirecek. Burasi bizim working Directory miz yani pwd. Sonra bu pwd deki bilgileri konteynirin icinde /app klasorunun icine atacak.
-    # -w ile Konteynirin working directory si olarak /app klasörünü ayarla. Artik /app klasurunde pom.xml dosyasi var. -w ile working directory ayarlanmaz ise maven pom.xml i bulamaz
-    # Dolayisiyla sondaki mvn clean test komutu pom.xml dosyasinin bulundugu yerde calismis olacak
-    # Komut calisinca Konteynirin icinde olusan /root/.m2 klasörünü konteynir kapanacagi icin kapanmadan önce Jenkinsin $HOME/.m2 klasörüne volume olarak esliyoruz.
-    # Böylelikle image in icinde olusan tüm artifact leri jenkins a cekmis olduk
+    # Unit test yapmak icin Jenkins server a maven kurmaya ugrasmiyoruz, bunun yerine unit test icin jenkins serverda Maven kurulu bir image dan olusan konteyniri agent olarak kullaniyoruz. Konteynirda uygulama calistirilmiyor sadece unit test yapiyoruz.
+    # Uygulamamiz konteynir icinde degil, Jenkins github adresimizi biliyor, 
+    # Jenkinste job i ilk calistirinca github daki dosyalarimizi var/lib/jenkins/workspace/petclinic-ci-job klasörüne indirecek. 
+    # Burasi bizim working Directory miz yani pwd. 
+    # Sonra bu pwd deki bilgileri konteynirin icinde /app klasorunun icine atacak.
+    # -w ile Konteynirin working directory si olarak /app klasörü ayarlanir. 
+    # Artik /app klasurunde pom.xml dosyasi var. -w ile working directory ayarlanmaz ise maven pom.xml i bulamaz
+    # Dolayisiyla komutun sonunda yer alan mvn clean test komutu pom.xml dosyasinin bulundugu yerde calismis olacak
+    # docker run --rm ... komutu containeri isi bitince silecegi icin konteynir silinmeden önce konteynirin icinde olusan /root/.m2 klasörünü Jenkinsin $HOME/.m2 klasörüne volume olarak esliyoruz.
+    # Böylelikle image in icinde olusan tüm artifact leri (jar dosyalarini) jenkins a cekmis olduk
 
     echo 'Running Unit Tests on Petclinic Application'
     docker run --rm -v $HOME/.m2:/root/.m2 -v `pwd`:/app -w /app maven:3.8-openjdk-11 mvn clean test
@@ -1145,11 +1149,11 @@ export PS1="\[\e[36m\]\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
 
 ## MSP 14 - Create Docker Registry for Dev Manually
 14.adimda: Image larin atilacagi AWS ECR repo olusturulacak
-15.adimda: Terraform hazirligi (Master, Worker, Security Groups, Policies) yapailacak ve calistirilip denenecek
-16.adimda: Ansible hazirligi (Kubernetes Kluster in olusturulmasi) yapialcak ve calistirilip denenecek
-17.adimda: manifesto yaml lar yazilacak
-18.adimda: Jenkinsfile hazirligi: nightly job calistirilacak
-
+15.adimda: Terraform hazirligi (Master, Worker, Security Groups, Policies) yapilacak ve calistirilip denenecek
+16.adimda: Ansible hazirligi (Kubernetes Kluster in olusturulmasi) yapilacak ve calistirilip denenecek
+17.adimda: Kompose toolu ile docker-compose.yaml dosyasindan Kubernetes manifesto yaml lar elde edilecek
+18.adimda: Jenkinsfile hazirligi: Functional testler icin nightly job calistirilacak
+Genel mantik yapilacak adimlari Jenkins de parca parca Job lar halinde deniyoruz, sonrasinda bunlari ayri ayri scriptler haline getiriyoruz. Jenkinsfile da bu scriptleri kullanacagiz.
 
 - Create `feature/msp-14` branch from `dev`.
 
@@ -1167,9 +1171,9 @@ git checkout feature/msp-14
 # Kubernetes Kluster ayaga kalkarken cekecegi image larin konulacagi ECR repo Jenkins Server da olusturuluyor. Jenkins job u build ederken sadece execute shell kisminda asagidaki kodlari giriyoruz. 
 
 PATH="$PATH:/usr/local/bin" # AWS komutlarinin calistigi path i gosteriyoruz
-APP_REPO_NAME="clarusway-repo/petclinic-app-dev"
+APP_REPO_NAME="clarusway-repo/petclinic-app-dev" # istenirse isim degistirilebilir
 AWS_REGION="us-east-1"
-# asagidaki komutlri aldigimiz web sayfasi
+# asagidaki komutlari aldigimiz web sayfasi
 # https://docs.aws.amazon.com/AmazonECR/latest/userguide/getting-started-cli.html#cli-create-repository
 aws ecr create-repository \
   --repository-name ${APP_REPO_NAME} \
@@ -1205,7 +1209,7 @@ git push origin dev
 ```
 
 ## MSP 15 - Create a QA Automation Environment with Kubernetes - Part-1
-Not: 15.adim Terraform ile 1 master 2 worker node hazirligina basliyoruz. Once main.tf de kullanacagimiz roles.tf dosyasi olusturup policy-Role-Profile ayarlarini giriyoruz. Sonra main.tf de EC2 instance lar Security Group lari olusturacagiz
+Not: 15.adim Terraform ile 1 master 2 worker node hazirligina basliyoruz. Once main.tf de kullanacagimiz roles.tf dosyasi olusturup Policy-Role-Profile ayarlarini giriyoruz. Sonra main.tf de EC2 instance lar Security Group lari olusturacagiz.
 
 - Create `feature/msp-15` branch from `dev`.
 
@@ -1229,9 +1233,9 @@ mkdir -p infrastructure/dev-k8s-terraform/modules/IAM
 
 - Create iam policy file for the master node with the name of `policy_for_master.json`  under the `infrastructure/dev-k8s-terraform/modules/IAM`.
 
-Not: Kubernetes derslerinde policy ayarina gerek duymamistik cünkü AWS de resource olusturacak bir komut girmemistik. Amazon EKS yi kullanirken de Master node a bu tarz yetkiler veriliyordu. Projede Helm Chart lari S3 te depolayacagimiz icin ekstradan S3 e depolama yetkisi vs de lazim. 
+Not: Kubernetes derslerinde Policy ayarina gerek duymamistik cünkü AWS de resource olusturacak bir komut girmemistik. Amazon EKS yi kullanirken de Master node a bu tarz yetkiler veriliyordu. Projede Helm Chart lari S3 te depolayacagimiz icin ekstradan S3 e depolama yetkisi vs de lazim. 
 
-Not: Kubernetes Master Node un policy ayari. 
+Not: Kubernetes Master Node un policy ayari asagidaki gibidir. 
 Kuberneteste Master Node -> Control Play
 Worker Node -> Node
 
@@ -1384,7 +1388,8 @@ IAM service den create policy dersek hangi serviste neye yetki verecegimizi sece
 ```
 
 - Create iam policy file for the worker node with the name of `policy_for_worker.json`  under the `infrastructure/dev-k8s-terraform/modules/IAM`.
-Not: Kubernetes Worker Node un policy ayari. 
+
+Not: Kubernetes Worker Node un policy ayari asagidaki gibidir. 
 Kuberneteste Master Node -> Control Play
 Worker Node -> Node
 
@@ -1532,7 +1537,7 @@ Worker Node -> Node
 // Terraform da EC2 lara direk Role atayamiyorduk. IAM Instance Profile ile yapiyorduk
 // roles.tf in basinda provider vs yok cünkü bu tf dosyasi main.tf in icinde modül olarak kullanilacak 
 // policy kismini jsonencode parantezi icinde uzun sekilde de yazabilirdik, ama file a referans verdik. EC2 userdata da benzer sekilde yapabilmistik. EOF deyif direk main.tf icinde de yapabilmistik ya da file deyip userdata.sh dan aldirmistik.
-// Daha önceki derslerde inline policy ile Role e Policy atayabiliyorduk. Burada farkli yöntemle Policy yi Role bagliyoruz
+// Daha önceki derslerde inline policy ile Role e Policy baglayabiliyorduk. Burada farkli yöntemle Role e Policy bagliyoruz
 
 // Once master ve worker icin IAM Policy olusturalim
 resource "aws_iam_policy" "policy_for_master_role" {
@@ -1623,7 +1628,7 @@ resource "aws_iam_instance_profile" "profile_for_worker" {
   role = aws_iam_role.role_for_worker.name
 }
 
-// Profile lerin ismini yazdiran bir output koyduk
+// Profile lerin ismini yazdiran bir output koyduk. Bu isimleri asagida EC2 instance resource larini olustururken kullanacagiz
 output master_profile_name {
   value       = aws_iam_instance_profile.profile_for_master.name
 }
@@ -1646,17 +1651,18 @@ module "iam" {
 }
 
 // 3 adet Security Group var. 
-// Kubernetes ve rancher dokumanlari incelenerke hangi portlarin acilacagini belirledik
+// Kubernetes ve rancher dokumanlari incelenerek hangi portlarin acilacagini belirledik
 
 // Birincisi Mutual-sg : Bu Terraform u aldatmak icin kullanilan araci security group.
 // Worker-sg ye diyecegiz ki Master-sg den gelenleri kabul et, 
-// Master-sg ye diyecegiz ki Worker-sg den gelenleri kabul et. Terraform da ikisine bu sekilde bagli iki resource ayni anda olusturulamadigi icin Terraformu aldatmak icin Mutual-sg olusturduk. 
+// Master-sg ye diyecegiz ki Worker-sg den gelenleri kabul et. 
+// Terraform da ikisine bu sekilde bagli iki resource ayni anda olusturulamadigi icin Terraformu aldatmak icin Mutual-sg olusturduk. 
 // Depends on ise yaramaz cünkü iki security group da ayni anda olusmali
 resource "aws_security_group" "matt-kube-mutual-sg" {  # 
   name = "kube-mutual-sec-group-for-matt"
 }
 
-// Worker-sg de 10250,8472  portlari icin Mutual-sg ye ihtiyac var.
+// Worker-sg de 10250 ve 8472 portlari icin Mutual-sg ye ihtiyac var.
 resource "aws_security_group" "matt-kube-worker-sg" {
   name = "kube-worker-sec-group-for-matt"
   ingress {
@@ -1698,7 +1704,7 @@ resource "aws_security_group" "matt-kube-worker-sg" {
   }
 }
 
-// Master-sg de 6443, 2380, 2379, 10250, 10251, 10252, 8472 (Rancher) portlari icin Mutual-sg ye ihtiyac var.
+// Master-sg de 2380, 2379, 10250, 10251, 10252, 8472 (Rancher) portlari icin Mutual-sg ye ihtiyac var.
 resource "aws_security_group" "matt-kube-master-sg" {
   name = "kube-master-sec-group-for-matt"
 
@@ -1783,8 +1789,8 @@ resource "aws_security_group" "matt-kube-master-sg" {
 
 // Once Master EC2 Instance
 resource "aws_instance" "kube-master" {
-    ami = "ami-013f17f36f8b1fefb"
-    instance_type = "t3a.medium"
+    ami = "ami-013f17f36f8b1fefb" // güncel bir ubuntu 20.04 ami si sectik
+    instance_type = "t3a.medium" 
     iam_instance_profile = module.iam.master_profile_name // IAM Modul den Master Profile Output unu EC2 ya ekle
     vpc_security_group_ids = [aws_security_group.matt-kube-master-sg.id, aws_security_group.matt-kube-mutual-sg.id] // bütün makinelere iki Security Group eklenir
     key_name = "mattkey" // Job u calistirirken degistirecegiz
@@ -1803,7 +1809,7 @@ resource "aws_instance" "kube-master" {
 
 // Sonra Worker-1 EC2 Instance
 resource "aws_instance" "worker-1" {
-    ami = "ami-013f17f36f8b1fefb"
+    ami = "ami-013f17f36f8b1fefb" // güncel bir ubuntu 20.04 ami si sectik
     instance_type = "t3a.medium"
     iam_instance_profile = module.iam.worker_profile_name // IAM Modul den Worker Profile Output unu EC2 ya ekle
     vpc_security_group_ids = [aws_security_group.matt-kube-worker-sg.id, aws_security_group.matt-kube-mutual-sg.id] // bütün makinelere iki Security Group eklenir
@@ -1823,7 +1829,7 @@ resource "aws_instance" "worker-1" {
 
 // Sonra Worker-2 EC2 Instance
 resource "aws_instance" "worker-2" {
-    ami = "ami-013f17f36f8b1fefb"
+    ami = "ami-013f17f36f8b1fefb" // güncel bir ubuntu 20.04 ami si sectik
     instance_type = "t3a.medium"
     iam_instance_profile = module.iam.worker_profile_name // IAM Modul den Worker Profile Output unu EC2 ya ekle
     vpc_security_group_ids = [aws_security_group.matt-kube-worker-sg.id, aws_security_group.matt-kube-mutual-sg.id] // bütün makinelere iki Security Group eklenir
@@ -1872,7 +1878,7 @@ git push origin dev
 ```
 
 ## MSP 16 - Create a QA Automation Environment with Kubernetes - Part-2
-Not: 16.adim Ansible a basliyoruz
+Not: 16.adim Ansible a basliyoruz. Terraform ile ayaga kalkan infrastructure a Kubernetes kuracagiz
  
 - Create `feature/msp-16` branch from `dev`.
 
