@@ -64,7 +64,7 @@ This project aims to create full CI/CD Pipeline for microservice based applicati
 
 * Prepare development server manually on Amazon Linux 2 (t3a.medium) for developers, enabled with `Docker`,  `Docker-Compose`,  `Java 11`,  `Git`.
 
-NOT: Projeye baslarken bu adimda "/Users/safaksd/Desktop/AWS-DevOps/workspace/_PORTFOLIO/git-sfk-2022/aws-devops-2022/devops/projects/504-microservices-ci-cd-pipeline/infrastructure" altindaki "dev-server-for-petclinic-app-cfn-template.yml" dosyasi ile Cloudformation uzerinden DevServer i kurdum. Bir baska yol aagidaki komutlari userdata olarak ekleyip EC2 yu ayaga kaldirabilirsin. t3a.medium islemci secersen daha iyi olur. Eger komutlari elle gireceksen basina sudo koymayi unutma. Sadece newgrp docker komutunda sudo ya gerek yok. Normalde yml dosyasindaki newgrp docker komutu bash shell i restart yapiyor ama restart etmez ise terminalde bash yazip enterlamak yada yeni bir terminal acmak ayni hesaba geliyor. Suan developerlarin calisacagi standart infrastructure i hazirliyoruz. Bunu developer in kendisinin hazirlamasi da istenebilir.
+NOT: Projeye baslarken bu adimda "/Users/safaksd/Desktop/AWS-DevOps/workspace/_PORTFOLIO/git-sfk-2022/aws-devops-2022/devops/projects/504-microservices-ci-cd-pipeline/infrastructure" altindaki "dev-server-for-petclinic-app-cfn-template.yml" dosyasi ile Cloudformation uzerinden DevServer i kurdum. Bir baska yol asagidaki komutlari userdata olarak ekleyip EC2 yu ayaga kaldirabilirsin. t3a.medium islemci secersen daha iyi olur. Eger komutlari elle gireceksen basina sudo koymayi unutma. Sadece newgrp docker komutunda sudo ya gerek yok. Normalde yml dosyasindaki newgrp docker komutu bash shell i restart yapiyor ama restart etmez ise terminalde bash yazip enterlamak yada yeni bir terminal acmak ayni hesaba geliyor. Suan developerlarin calisacagi standart infrastructure i hazirliyoruz. Bunu developer in kendisinin hazirlamasi da istenebilir.
 
 NOT: Ek bilgi icin Docker ders notlarina bakilabilir
 NOT: Kubernetes lokalden image cekmez
@@ -165,7 +165,7 @@ git checkout dev
 ./mvnw clean test # ./mvnw clean komutu mikroservislere ait klasörlerin icindeki target klasorlerini siler. ./mvnw test komutu pom.xml i calistirir
 # ./mvnw clean + ./mvnw test = ./mvnw clean test esittir, once temizler sonra pom.xml i calistirir
 # Developerlar src/main icinde source kadlari yaziyor, src/test icinde test kodlarini yaziyor. main icindeki tum kodlara test kodu yazilmak zorunda degil, ama bir test kodu yazilmissa main ve test klasor yapisi ayni oluyor
-# ./mvnw test dendiginde src/main icindeki kodlar build oluyor ve calistiriliyor, src/test icindeki kodlar build oluyor ve calistiriliyor, ve her iki kodu  test ediyor.
+# ./mvnw test dendiginde src/main icindeki kodlar build oluyor ve calistiriliyor, src/test icindeki kodlar build oluyor ve calistiriliyor, ve her iki kodu test ediyor.
 
 ```
 > Note: If you get `permission denied` error, try to give execution permission to **mvnw**.  
@@ -176,8 +176,8 @@ git checkout dev
 * Take the compiled code and package it in its distributable `JAR` format.
 
 ``` bash
-# maven default lifecycle daki siraya gore bastan package kadar olan tüm phase lar alttaki komutla gerceklestirilir.
-# package komutu ile compile olan komutun test e ilavaten jar file ini olusturur. jar file lar her mikroservis klarosunun icindeki temizlenmis olan target klasorunun icinde olusur
+# maven default lifecycle daki siraya gore bastan package'a kadar olan tüm phase lar alttaki komutla gerceklestirilir.
+# "./mvnw clean package" komutu ile compile olan komutun "./mvnw clean test" komutuna ilavaten jar file ini olusturur. jar file lar her mikroservis klarosunun icindeki temizlenmis olan target klasorunun icinde olusur
 ./mvnw clean package
 ```
 
@@ -277,7 +277,9 @@ git push origin dev
 
 ## MSP 6 - Prepare Dockerfiles for Microservices
 
-Not: Her bir mikroservis klasörü icinde image i hazirlanacak. Her image icin dockerfile olusturalim. Dockerfile lar benzer sadece portlar farkli.
+Not: Her bir mikroservis klasörü icinde image i hazirlanacak. 
+Her image icin dockerfile olusturalim. 
+Dockerfile lar benzer sadece portlar farkli.
 
 * Create `feature/msp-6` branch from `dev`.
 
@@ -304,7 +306,7 @@ ADD https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/
 # Lokaldeki tar file ADD ile alinirsa otomatik olarak aciyor. 
 # COPY ile lokalden dosya cekilir. 
 # COPY de ek bir katman olusmaz ama ADD kullaninca ek bir katman olusur,
-# Yukaridaki komut ile dockerize isimli uygulamanin ilgili versionunu tar dosyasi seklinde "dockerize.tar.gz" ismiyle indirir. Bu uygulamanin ne ise yaradigini James Hoca docker-compose bölümünde aciklayacak. Bu uygulama konteynir icinde gerekli olan ilave bir tool
+# Yukaridaki komut ile dockerize isimli tool un ilgili versiyonunu tar dosyasi seklinde "dockerize.tar.gz" ismiyle indirir. Bu tool un ne ise yaradigini James Hoca docker-compose bölümünde acikliyor. Bu tool konteynir icinde gerekli olan ilave bir tool. Onun icin Dockerfile e ekliyoruz. Bu tool dan docker-compose.yaml dosyasini yazarken bazı server larin digerlerine göre daha erken ayağa kalkmasi icin istifade ediyoruz. Aynı işi Kubernetes dünyasında initcontainer ile yaptık.
 RUN tar -xzf dockerize.tar.gz 
 # Bu komut ile dockerize.tar.gz zip li file i aciyoruz
 RUN chmod +x dockerize
@@ -435,7 +437,9 @@ git push origin dev
 ```
 
 ## MSP 7 - Prepare Script for Building Docker Images
-Not: 6.adimda olusturulan Dockerfile larin tamamini calistiracak yani build edecek olan bir script olusturalim. 
+Not: Image lari build eden scripti hazirlayalim:
+
+6.adimda olusturulan Dockerfile larin tamamini build edecek olan bir script olusturalim. 
 force-rm dersek calissa da calismasa da ara konteynirlarin silinmesini saglar, pipeline da calismayan bir ara konteynir pipeline in durmasina yol acsin istemiyoruz. 
 
 * Create `feature/msp-7` branch from `dev`.
@@ -491,7 +495,7 @@ git push origin dev
 
 ## MSP 8 - Create Docker Compose File for Local Development
 Not: 7.adimdaki Dockerize uygulamasinin ne ise yaradiginin aciklamasi:
-Projemizde önce config-server ayaga kalkiyor sonra discovery-server ayaga kalkiyor sonrasinda diger servisler ayaga kalkiyor, bu bagimliligi saglamak icin docker-compose.yaml dosyasinda depens-on kullanacagiz ancak bu yeterli degil. calistigini yani aktif hale geldigini de kontrol etmesi de gerekiyor. Bu kontrolü Dockerize tool u ile yapacagiz.
+Projemizde önce config-server ayaga kalkiyor sonra discovery-server ayaga kalkiyor sonrasinda diger servisler ayaga kalkiyor, bu bagimliligi saglamak icin docker-compose.yaml dosyasinda depens-on kullanacagiz ancak bu yeterli degil. Ilgili server larin birbirinden önce calistigini da kontrol etmesi gerekiyor. Bu kontrolü Dockerize tool u ile yapacagiz. Benzer islem Kubernetes dünyasina gecince initcontainer ile yapilacak
 
 * Create `feature/msp-8` branch from `dev`.
 
@@ -630,7 +634,7 @@ Not: Yukaridaki docker-compose.yaml dosyasinin script olarak calismasini saglaya
 
 ``` bash
 # test-local-deployment.sh isimli scriptin icine alttaki komutu yaziyoruz
-docker-compose -f docker-compose-local.yml up # normalde docker compose up dersek mevcut dizindeki docker-compose.yml dosyasi ile calisir, biz burada -f docker-compose-local.yml diyerek kullanacagi yml dosyasini söylüyoruz.
+docker-compose -f docker-compose-local.yml up # normalde docker compose up dersek mevcut dizindeki docker-compose.yml dosyasi ile calisir, biz burada -f docker-compose-local.yml diyerek kullanacagi yml dosyasini söylüyoruz. (-f ile o dosyayi kullanmaya zorluyoruz)
 ```
 
 * Give execution permission to test-local-deployment.sh.
@@ -787,7 +791,7 @@ Not: Code coverage raporu hazirlamak bizim sorumlulugumuz. Raporu inceleyecek ol
 
 ## MSP 10 - Prepare and Implement Selenium Tests
 Not: Selenium joblari olusturacagiz. Örnek amacli 3 tane python dosyasi olusturuyoruz.
-Normalde Selenium testleri icin Google Chrome, Selenium kurulu webserver lazim, ama biz bunu bir devopscu olarak Slenium, Google Chrome kurulu konteynir kullanarak halledecegiz.
+Normalde Selenium testleri icin Google Chrome, Selenium kurulu webserver lazim, ama biz bunu bir devopscu olarak Selenium, Google Chrome kurulu konteynir kullanarak halledecegiz.
 
 * Create `feature/msp-10` branch from `dev`.
 
@@ -1056,7 +1060,7 @@ Not: Jenkins 2375 nolu porttan Docker ile iletisim kuracak. Jenkinste olusturula
 ## MSP 13 - Prepare Continuous Integration (CI) Pipeline
 Not:  
 1.CI-CD Pipeline: dev, feature, bugfix branchlarina yapilan her commit te bu CI-CD pipeline olusacak. Ismi petclinic-ci-job. Bu pipeline sonucunda herhangi bir infrastructure ayaga kalkmiyor, sadece build islemi basarili mi o kontrol ediliyor.
-2.CI-CD Pipeline: Functional teslerin gece Selenium ile calistirilmasi icin cronjob ile github dan kod cekilecek, bir kubernetes kluster (1 master 2 worker) ayaga kaldirilacak, uygulama kluster a deploy edilip Selenium ile Functional testler yapilacak.
+2.CI-CD Pipeline: Functional teslerin gece Selenium ile calistirilmasi icin cronjob ile github dan kod cekilecek, bir kubernetes kluster (1 master 2 worker) ayaga kaldirilacak, uygulama kluster a deploy edilip Selenium ile Functional testler yapilacak. Islem bitince tüm image lar silinecek
 3.CI-CD Pipeline: Manual test icin daha onceden hazir edilmis infrastructure uzerinde uygulama update edilecek.
 4.CI-CD Pipeline: Bir kluster orkestrasyon toolu olan Rancher kullanilir. Rancher kurulduktan sonra staging icin gerekli olan kluster lar kurulacak. Jenkins ile Rancher entegre edilecek ve Rancher uzerinden uygulamayi klusterlara deploy edecegiz.
 5.CI-CD Pipeline: Bir kluster orkestrasyon toolu olan Rancher kullanilir. Rancher kurulduktan sonra production icin gerekli olan kluster lar kurulacak. Jenkins ile Rancher entegre edilecek ve Rancher uzerinden uygulamayi klusterlara deploy edecegiz.
@@ -1087,7 +1091,7 @@ mkdir jenkins
   * Write below script into the `Command`
     ```bash
     # Unit test yapmak icin Jenkins server a maven kurmaya ugrasmiyoruz, bunun yerine unit test icin jenkins serverda Maven kurulu bir image dan olusan konteyniri agent olarak kullaniyoruz. Konteynirda uygulama calistirilmiyor sadece unit test yapiyoruz.
-    # Uygulamamiz konteynir icinde degil, Jenkins github adresimizi biliyor, 
+    # Uygulama konteynir icinde degil, Jenkins github adresimizi biliyor, 
     # Jenkinste job i ilk calistirinca github daki dosyalarimizi var/lib/jenkins/workspace/petclinic-ci-job klasörüne indirecek. 
     # Burasi bizim working Directory miz yani pwd. 
     # Sonra bu pwd deki bilgileri konteynirin icinde /app klasorunun icine atacak.
@@ -2638,7 +2642,7 @@ aws s3api put-object --bucket petclinic-helm-charts-<put-your-name> --key stable
 * Install the helm-s3 plugin for Amazon S3.
 
 ```bash
-# Helm in S3 u kullanabilmeis icin plugin
+# Helm in S3 u kullanabilmesi icin plugin
 # https://artifacthub.io/packages/helm-plugin/s3/s3
 helm plugin install https://github.com/hypnoglow/helm-s3.git
 ```
