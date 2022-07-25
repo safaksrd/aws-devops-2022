@@ -1172,7 +1172,7 @@ git checkout feature/msp-14
 * Click `Add build step` under `Build` and select `Execute Shell`
 ``` bash
 
-# Kubernetes Kluster ayaga kalkarken cekecegi image larin konulacagi ECR repo Jenkins Server da olusturuluyor. Jenkins job u build ederken sadece execute shell kisminda asagidaki kodlari giriyoruz. 
+# Kubernetes Kluster ayaga kalkarken cekecegi image larin konulacagi ECR repo Jenkins Server araciligi ile olusturuluyor. Jenkins job u build ederken sadece execute shell kisminda asagidaki kodlari giriyoruz. 
 
 PATH="$PATH:/usr/local/bin" # AWS komutlarinin calistigi path i gosteriyoruz
 APP_REPO_NAME="clarusway-repo/petclinic-app-dev" # istenirse isim degistirilebilir
@@ -1243,7 +1243,7 @@ Not: Kubernetes Master Node un policy ayari asagidaki gibidir.
 Kuberneteste Master Node -> Control Play
 Worker Node -> Node
 
-IAM service den create policy dersek hangi serviste neye yetki verecegimizi secerek de kendi policy mizi olusturabiliriz
+Not: IAM service den create policy dersek hangi serviste neye yetki verecegimizi secerek de kendi policy mizi olusturabiliriz
 
 ```json
 {
@@ -1541,7 +1541,7 @@ Worker Node -> Node
 // Terraform da EC2 lara direk Role atayamiyorduk. IAM Instance Profile ile yapiyorduk
 // roles.tf in basinda provider vs yok cünkü bu tf dosyasi main.tf in icinde modül olarak kullanilacak 
 // policy kismini jsonencode parantezi icinde uzun sekilde de yazabilirdik, ama file a referans verdik. EC2 userdata da benzer sekilde yapabilmistik. EOF deyif direk main.tf icinde de yapabilmistik ya da file deyip userdata.sh dan aldirmistik.
-// Daha önceki derslerde inline policy ile Role e Policy baglayabiliyorduk. Burada farkli yöntemle Role e Policy bagliyoruz
+// Daha önceki derslerde inline policy ile Role e Policy baglayabiliyorduk. Burada attachment yöntemiyle Policy i Role e bagliyoruz, sonra da Role u Profile e bagliyoruz
 
 // Once master ve worker icin IAM Policy olusturalim
 resource "aws_iam_policy" "policy_for_master_role" {
@@ -1918,7 +1918,7 @@ terraform --version
 - After running the job above, replace the script with the one below in order to test creating key pair for `ansible`.
 
 ```bash
-# Master ve Worker node lar ayaga kalkarken onlara baglayacagimiz bir key olusturacagiz. Bir sonraki adimda keyi global olarak degistirecegiz. 
+# Master ve Worker node lar ayaga kalkarken Jenkins Server dan onlara baglanacagimiz bir key olusturacagiz. Bir sonraki adimda keyi global olarak Terraform ile degistirecegiz. AWS deki eski key imizi kullanabiliriz ancak bu durumda bu keyin private  tarafini Jekins Server da ilgili yere koymaliyiz.
 # Olusan keyi cd /var/lib/Jenkins/workspace/test-creating-qa-automation-infrastructure altinda gorebilirsin.
 # 
 PATH="$PATH:/usr/local/bin"
@@ -1941,7 +1941,7 @@ terraform apply -auto-approve # pipeline larda bunu kullaniriz ki bize yes/no so
 ```
 
 # Not: 23.06.2022 burada kaldik
-Not: Web arayüzünde Jenkins Serverda actigimiz execute shell de girdigimiz joblari istersek Terminalden "sudo su - jenkins" komutuyla jenkins kullanicisina gecip, orada satir satir girebiliriz, ikisi de ayni anlama geliyor. EC2 da jenkins kullanicisina gecmek istersek: (Bu adimlar projede gerekli degil, Terminalden Jenkins Server in icine girip kontrol etmek istersen kullanabilirsin)
+Not: Web arayüzünde Jenkins Serverda actigimiz execute shell de girdigimiz joblari, Terminalden "sudo su - jenkins" komutuyla jenkins kullanicisina gecip, orada satir satir girerek de calistirabiliriz, ikisi de ayni anlama geliyor. EC2 da jenkins kullanicisina gecmek istersek: (Bu adimlar projede gerekli degil, Terminalden Jenkins Server in icine girip kontrol etmek istersen kullanabilirsin)
 
 ```bash
 sudo usermod -s /bin/bash jenkins
@@ -1964,19 +1964,19 @@ Not: tfstate dosyasi jenkins kullanicisinin altinda "/var/lib/jenkins/workspace/
 - After running the job above, replace the script with the one below in order to test SSH connection with one of the instances.
 
 ```bash
-# baglanip baglanamadigimizi herhangi bir makinenin private IP sini girerek deneyelim
+# baglanip baglanamadigimizi klusterdaki herhangi bir makinenin private IP sini girerek deneyelim
 ANS_KEYPAIR="call-ansible-test-dev.key"
 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${WORKSPACE}/${ANS_KEYPAIR} ubuntu@172.31.11.131 hostname
 echo ${WORKSPACE}
 # yes/no diye sormasin diye StrictHostKeyChecking=no dedik
-# makinlerin knownhost dosyalari  zamanla sisebiliyor, sismemesi icin dev/null dedik
+# makinelerin knownhost dosyalari zamanla sisebiliyor, sismemesi icin dev/null dedik
 # echo ${WORKSPACE} komutu ile jenkins icindeki workspace imizi gosterelim
 ```
 
 - Once statik daha sonra ise dinamik envanter olusturup Ansible araciligi ile Kluster kuracagiz.
 
 - Prepare static inventory file with name of `hosts.ini` for Ansible under `ansible/inventory` folder using Docker machines private IP addresses. 
-Not: hosts.ini dsoyasinin uzantisi olmasa da calisir. hosts.txt de olsa calisir.
+Not: hosts.ini dosyasinin uzantisi olmasa da calisir. hosts.txt de olsa calisir.
 
 Not: mkdir -p ansible/inventory girebilirisn ya da elle olustur (proje ana dizinde calistir)
 
@@ -1993,7 +1993,7 @@ git add .
 git commit -m 'added ansible static inventory host.ini for testing'
 git push --set-upstream origin feature/msp-16
 ```
-Not: Projede Jenkisfile olusturmadan önce Jenkinsfile a yazilacaklari ayri ayri job lar seklinde girip denedik. Jenkinsfile in tamamini pipeline seklinde calistirmis olsak ufacik bir hata icin her defasiinda yeni makineler ayaga kalkmis  olacakti.
+Not: Projede Jenkisfile olusturmadan önce Jenkinsfile a yazilacaklari ayri ayri job lar seklinde girip denedik. Jenkinsfile in tamamini pipeline seklinde calistirmis olsak ufacik bir hata icin her defasinda yeni makineler ayaga kalkmis olacakti.
 
 - Configure on Jenkins Server`test-creating-qa-automation-infrastructure` job and replace the existing script with the one below in order to test ansible by pinging static hosts.
 
@@ -2002,7 +2002,7 @@ Not: Projede Jenkisfile olusturmadan önce Jenkinsfile a yazilacaklari ayri ayri
 PATH="$PATH:/usr/local/bin"
 ANS_KEYPAIR="call-ansible-test-dev.key"
 export ANSIBLE_INVENTORY="${WORKSPACE}/ansible/inventory/hosts.ini"
-export ANSIBLE_PRIVATE_KEY_FILE="${WORKSPACE}/${ANS_KEYPAIR}"
+export ANSIBLE_PRIVATE_KEY_FILE="${WORKSPACE}/${ANS_KEYPAIR}" # yeni olusan key ile hosts.ini de yazili olan instance  lara ping atacagiz
 export ANSIBLE_HOST_KEY_CHECKING=False
 ansible all -m ping
 ```
@@ -2094,17 +2094,17 @@ ansible -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml all -m p
 
 ```yml
 # Kluster da default in disinda kullanacagimiz ayarlar icin ClusterConfiguration isimli obje olusturuyoruz. Kubernetesi kubeadm ile kuracagiz. Bunu derste görmüstük. 
-# sudo kubeadm init --apiserver-advertise-address=<ec2-private-ip> --pod-network-cidr=10.244.0.0/16 komutu ile EC2 IP adresini ve pod network CIDR bilgisini manuel girmistik. Burada ise terraform ile bu bilgileri girecegiz.
+# Desrteki kurulumda sudo kubeadm init --apiserver-advertise-address=<ec2-private-ip> --pod-network-cidr=10.244.0.0/16 komutu ile EC2 IP adresini ve pod network CIDR bilgisini manuel girmistik. Burada ise terraform ile bu bilgileri girecegiz.
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
-kind: ClusterConfiguration # kluster capinda konfigurasyona yariyor
+kind: ClusterConfiguration # kluster capinda konfigurasyona yarayan obje
 kubernetesVersion: v1.23.5
 controlPlaneEndpoint: ${CONTROLPLANE_ENDPOINT} # pipeline olusturdugumuz icin manual girmiyoruz, control plane olustugunda IP sini buraya cekecek
 networking:
   podSubnet: 10.244.0.0/16 # Flannel icin required girmemiz gerekiyor
 apiServer:
   extraArgs:
-    cloud-provider: external # Klustera diyoruzki ben  bu hizmeti disaridan alacagim
+    cloud-provider: external # Klustera diyoruzki ben bu hizmeti disaridan alacagim
     enable-aggregator-routing: "true" # birden fazla master olunca gelen trafigi alip route etmek icin gerekli. Bakmak istersen ilgili web sayfalari 
     # https://kubernetes.io/docs/reference/config-api/kubeadm-config.v1beta2/#kubeadm-k8s-io-v1beta2-ClusterConfiguration
     # https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/control-plane-flags/
@@ -2133,7 +2133,7 @@ Not: Projede tek Master Node oldugu icin ve maliyeti uygun olsun diye Terraform 
 - Create a yaml file for Kubernetes `StorageClass` object and name it as `storage.yml` under `ansible/playbooks` folder.
 
 ```yaml
-kind: StorageClass # Kuberneteste storage class objesi olusturalim. Normalde Persistent Volume olusturup bunu Persistent Volume Claim e baglardik, ama bu sekilde statik ayarladigimizda kullanilmayan volume israf oluyordu. Bu israfi önlemek icin StorageClass objesi gelistirilmis. Talebe göre Volume ayarlaniyor.Biz projede volume icin EBS kullanabilmek icin daha sonra playbook da Container Storage Interface Driver i indirecegiz. Veritabanindaki bilgileri kaybolmamasi icin buraya kaydedecegiz. Projenin sonunda bilgileri RDS e gönderecegiz
+kind: StorageClass # Kuberneteste storage class objesi olusturalim. Normalde Persistent Volume olusturup bunu Persistent Volume Claim e baglardik, ama bu sekilde statik ayarladigimizda kullanilmayan volume israf oluyordu. Bu israfi önlemek icin StorageClass objesi gelistirilmis. Talebe göre Volume ayarlaniyor. Biz projede volume icin EBS kullanabilmek icin daha sonra playbook da Container Storage Interface Driver i indirecegiz. Veritabanindaki bilgileri kaybolmamasi icin buraya kaydedecegiz. Projenin sonunda bilgileri RDS e gönderecegiz
 apiVersion: storage.k8s.io/v1
 metadata:
   name: ebs-sc
@@ -2152,6 +2152,7 @@ allowedTopologies:
 ```
 
 - Create an ansible playbook to install kubernetes and save it as `k8s_setup.yaml` under `ansible/playbooks` folder.
+
 Not: Ansible ile Kubernetes i kuracak olan playbook u olusturalim.
 
 ```yaml
@@ -2215,7 +2216,7 @@ Not: Ansible ile Kubernetes i kuracak olan playbook u olusturalim.
   # change the Docker cgroup driver by creating a configuration file `/etc/docker/daemon.json` 
   # and adding the following line then restart deamon, docker and kubelet
 
-  - name: change the Docker cgroup # docker a da cgroup  u degistirdigimizi belirtiyoruz
+  - name: change the Docker cgroup # docker a da cgroup u degistirdigimizi belirtiyoruz
     shell: |
       echo '{"exec-opts": ["native.cgroupdriver=systemd"]}' | sudo tee /etc/docker/daemon.json
       sudo systemctl daemon-reload
@@ -2223,7 +2224,7 @@ Not: Ansible ile Kubernetes i kuracak olan playbook u olusturalim.
       sudo systemctl restart kubelet
 
 
-- hosts: role_master # Dinamik envanter dosyasinda prefix role girilmeseydi _master olacakti. sadece role_master da yapilan islemleri siraliyoruz
+- hosts: role_master # Dinamik envanter dosyasinda prefix role girilmeseydi burada _master yazacakti. sadece role_master da yapilan islemleri siraliyoruz
   tasks:
       
   - name: pull kubernetes images before installation
@@ -2276,7 +2277,7 @@ Not: Ansible ile Kubernetes i kuracak olan playbook u olusturalim.
       worker_join: "{{ join_command_for_workers.stdout.strip() }}"
 
 
-- hosts: role_worker # Dinamik envanter dosyasinda prefix role girilmeseydi worker olacakti. sadece role_worker da yapilan islemleri siraliyoruz
+- hosts: role_worker # Dinamik envanter dosyasinda prefix role girilmeseydi burada _worker yazacakti. sadece role_worker da yapilan islemleri siraliyoruz
   become: true
   tasks:
 
@@ -2339,7 +2340,7 @@ Not: Support for password authentication was removed on August 13, 2021. Please 
 - Configure `test-creating-qa-automation-infrastructure` job and replace the existing script with the one below in order to test the playbooks to create a Kubernetes cluster.
 
 ```bash
-# Ansible ile hazirladigimiz Kubernetes i kuracak olan playbook u Jenkinsde calistiralim.
+# Jenkins Server da dynamic inventory ile elde edilen instance larda Ansible ile hazirladigimiz kluster kuran playbook u calistiralim.
 APP_NAME="Petclinic"
 ANS_KEYPAIR="call-ansible-test-dev.key"
 PATH="$PATH:/usr/local/bin"
@@ -2353,7 +2354,9 @@ Not: Klustera ansible-playbook ile kubernetesin kurulup kurulmadigini ve home/ub
 
 cd /var/lib/jenkins/workspace/test-creating-qa-automation-infrastructure
 ssh -i call-ansible-test-dev.key ubuntu@kube-MasterIP
-ls dersek:
+
+Instance girdikten sonra ls dersek:
+
 clusterconfig-base.yml  clusterconfig.yml  get_helm.sh  storage.yml
 kubectl cluster-info
 kubectl get no
@@ -2364,7 +2367,7 @@ kubectl get no
 # Terraform ile infrastructure i kuruyoruz.
 # Ansible ile infrastructure i konfigure ediyoruz.
 # Ansible playbook ile kubernetes in node larda konfigure oldugunu yani kuruldugunu gordukten sonra Terraform ile ayaga kaldirdigimiz infrastructure i destroy ile kaldiririz. 
-# Sirada kubernetees objelerini kurmak var
+# Sirada kubernetes objelerini kurmak var
 # Asama asama deneme yapiyoruz. 18. adimda tum herseyi birlestirecegiz.
 cd infrastructure/dev-k8s-terraform
 terraform destroy -auto-approve
@@ -2388,7 +2391,7 @@ rm -rf ${ANS_KEYPAIR}
 # Environment variables
 PATH="$PATH:/usr/local/bin"
 APP_NAME="Petclinic"
-ANS_KEYPAIR="Call-$APP_NAME-dev-${BUILD_NUMBER}.key"
+ANS_KEYPAIR="Call-$APP_NAME-dev-${BUILD_NUMBER}.key" # BUILD_NUMBER jenkins den gelen bir environment variable. Her build de degisiyor.--
 AWS_REGION="us-east-1"
 export ANSIBLE_PRIVATE_KEY_FILE="${WORKSPACE}/${ANS_KEYPAIR}"
 export ANSIBLE_HOST_KEY_CHECKING=False
