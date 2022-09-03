@@ -2431,8 +2431,6 @@ docker-compose.yaml dosyasini Kubernetes manifesto yaml file lara (objelere) cev
 HELM Chart ile paketleyip S3 e atacagiz
 Klusteri olustur deyince S3 den Helm Charti release edecegiz
 
-# EC2 da burada kaldim
-
 * Create `feature/msp-17` branch from `dev`.
 
 ``` bash
@@ -2448,7 +2446,7 @@ git checkout feature/msp-17
 ```yaml
 # Elimizdeki docker-compose yaml dosyasinin kubernetes manifesto yaml files a donusturen Kompose isimli toolu kullanacagiz https://kompose.io/
 
-# Bu tool ile docker-compose daki her parametrenin manifesto yaml dosyasi olusturulamiyor. Conversion Matrix den kontrol edilebilir (https://kompose.io/conversion/). docker-compose da olmayan ancak eklememiz gereken bir paramatereyi olusabilmesi icin manuel labels kismina ekliyoruz. Uygulamanin ara yüzüne Api Server dan ulasiyorduk. Örnegin Api serverinde Selenium u calistirmak icin (functional tests) Api Server da nodeport servisi ile bir portu dis dünyaya acmaliyz. 
+# Bu tool ile docker-compose daki her parametrenin manifesto yaml dosyasi olusturulamiyor. Conversion Matrix den kontrol edilebilir (https://kompose.io/conversion/). docker-compose da olmayan ancak eklememiz gereken bir parametreyi olusabilmesi icin ilgili service in labels kismina manuel olarak ekliyoruz. Örnek uygulama olarak uygulamanin ara yüzüne ulastigimiz api-gateway server da Selenium u calistirmak icin (functional tests) nodeport servisi ile bir portu dis dünyaya acmaliyiz. Bu nodeport servisini labels kismina kompose.service.type: "nodeport" ve kompose.service.nodeport.port: "30001" seklinde ekleriz.
 
 # Kompose toolun yetenegi disinda kalan birseyi ise manifesto yaml files olustuktan sonra elle ekleyecegiz
 
@@ -2456,49 +2454,49 @@ git checkout feature/msp-17
 version: '3'
 services:
   config-server:
-    image: "{{ .Values.IMAGE_TAG_CONFIG_SERVER }}" # bu Helm den cekiyor. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
+    image: "{{ .Values.IMAGE_TAG_CONFIG_SERVER }}" # Helm Chart yardimiyla image dinamik olarak cekilecek. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
      - 8888:8888
     labels:
       kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
   discovery-server:
-    image: "{{ .Values.IMAGE_TAG_DISCOVERY_SERVER }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
+    image: "{{ .Values.IMAGE_TAG_DISCOVERY_SERVER }}" # Helm Chart yardimiyla image dinamik olarak cekilecek. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
      - 8761:8761
     labels:
-      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
   customers-service:
-    image: "{{ .Values.IMAGE_TAG_CUSTOMERS_SERVICE }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
+    image: "{{ .Values.IMAGE_TAG_CUSTOMERS_SERVICE }}" # Helm Chart yardimiyla image dinamik olarak cekilecek. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     deploy:
       replicas: 2
     ports:
     - 8081:8081
     labels:
-      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
   visits-service:
-    image: "{{ .Values.IMAGE_TAG_VISITS_SERVICE }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
+    image: "{{ .Values.IMAGE_TAG_VISITS_SERVICE }}" # Helm Chart yardimiyla image dinamik olarak cekilecek. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     deploy:
       replicas: 2
     ports:
      - 8082:8082
     labels:
-      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
   vets-service:
-    image: "{{ .Values.IMAGE_TAG_VETS_SERVICE }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
+    image: "{{ .Values.IMAGE_TAG_VETS_SERVICE }}" # Helm Chart yardimiyla image dinamik olarak cekilecek. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     deploy:
       replicas: 2
     ports:
      - 8083:8083
     labels:
-      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
   api-gateway:
-    image: "{{ .Values.IMAGE_TAG_API_GATEWAY }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
+    image: "{{ .Values.IMAGE_TAG_API_GATEWAY }}" # Helm Chart yardimiyla image dinamik olarak cekilecek. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     deploy:
       replicas: 1
     ports:
      - 8080:8080
     labels:
-      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
       kompose.service.expose: "{{ .Values.DNS_NAME }}" # Ingress de kendi DNS Name imize gidebilsin diye path belirtebiliyorduk
       kompose.service.type: "nodeport" # Selenium tesler icin nodeport aciyoruz
       kompose.service.nodeport.port: "30001" # Selenium tesler icin nodeport aciyoruz
@@ -2509,29 +2507,29 @@ services:
     ports:
      - 9411:9411
   admin-server:
-    image: "{{ .Values.IMAGE_TAG_ADMIN_SERVER }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
+    image: "{{ .Values.IMAGE_TAG_ADMIN_SERVER }}" # Helm Chart yardimiyla image dinamik olarak cekilecek. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
      - 9090:9090
     labels:
-      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
   hystrix-dashboard:
-    image: "{{ .Values.IMAGE_TAG_HYSTRIX_DASHBOARD }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
+    image: "{{ .Values.IMAGE_TAG_HYSTRIX_DASHBOARD }}" # Helm Chart yardimiyla image dinamik olarak cekilecek. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
      - 7979:7979
     labels:
-      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
   grafana-server:
-    image: "{{ .Values.IMAGE_TAG_GRAFANA_SERVICE }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
+    image: "{{ .Values.IMAGE_TAG_GRAFANA_SERVICE }}" # Helm Chart yardimiyla image dinamik olarak cekilecek. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
     - 3000:3000
     labels:
-      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
   prometheus-server:
-    image: "{{ .Values.IMAGE_TAG_PROMETHEUS_SERVICE }}" # bu Helm den cekiyor. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
+    image: "{{ .Values.IMAGE_TAG_PROMETHEUS_SERVICE }}" # Helm Chart yardimiyla image dinamik olarak cekilecek. Helm Chartta values.yaml icindeki value yi cekecek. Jenkinsfile olustururken bu bilgiler Helm Charttan dinamik cekilecek
     ports:
     - 9091:9090
     labels:
-      kompose.image-pull-secret: "regcred"
+      kompose.image-pull-secret: "regcred" # register credentials. Kuberneteste image i cekerken credentials i tanitmaliyiz (dockerhub dan cekersek buna gerek yok) biz ECR dan cekecegimiz icin bu credentials i veriyoruz. regcred scrptini "kubectl create secret" komutuyla daha sonraki adimlarda biz olusturacagiz. Ansible ile Master node un icine gönderecegiz, lazim oldugunda oradan al diyecegiz
 
   mysql-server:
     image: mysql:5.7.8
@@ -2551,11 +2549,15 @@ chmod +x kompose
 sudo mv ./kompose /usr/local/bin/kompose
 kompose version
 ```
+# EC2 da buraya kadar geldim
 
 * Install Helm [version 3+](https://github.com/helm/helm/releases) on Jenkins Server. [Introduction to Helm](https://helm.sh/docs/intro/). [Helm Installation](https://helm.sh/docs/intro/install/).
 
 ```bash
 # helm i indirelim
+# Helm kubernetes deki objelerimizi paketlemeye yariyor. Paketi calistir dedigimizde manifesto file larda yer alan objeöerin hepsi olusur.
+# Helm ile Manifesto file lari paketleyip S3 e koyacagiz (Helm dersinde paketleri lokale ve github a koymustuk)
+# Jenkinsfile i yazarken S3 de paketlenmis haldeki bu manifesto file lari Master Node a cekecegiz.
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 helm version
 ```
@@ -2580,9 +2582,9 @@ rm -r petclinic_chart/templates/* # rekursiv olarak yani ic ice templates altind
 
 ```bash
 kompose convert -f docker-compose.yml -o petclinic_chart/templates 
-# kompose tool u ile docker-compose.yml dönüstürülerek petclinic_chart/templates dizini altina kubernetes manifesto file lar olusturulur. 
+# kompose tool u ile docker-compose.yml dosyasi kubernetes manifesto file lara dönüstürülür. Manifesto yaml file lar "helm create" ile olusan petclinic_chart/templates dizini altinda olusturulur. 
 # Olusan manifesto yaml files dan birisi "api-gateway-ingress.yaml". 
-# Bu yaml dosyasinda values.dns_name kismina kendi DNS adresimizi yazarak yönlendirecegiz, böylelikle ayaga kalkan petclinic uygulamasini DNS adresimizden görebilecegiz
+# Bu yaml dosyasinda values.dns_name kismina !!! kendi DNS adresimizi !!! yazarak yönlendirecegiz, böylelikle ayaga kalkan petclinic uygulamasini DNS adresimizden görebilecegiz
 ```
 
 * Update deployment files with `init-containers` to launch microservices in sequence. See [Init Containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
@@ -2611,7 +2613,7 @@ Not: Kompose tarafindan olusturulan yaml file larda eksiklikler var, hersey tam 
 spec:
   ingressClassName: nginx
   rules:
-    - host: '{{ .Values.DNS_NAME }}'
+    - host: '{{ .Values.DNS_NAME }}' # kompose tool undan kaynaklanan bir hata var. dns_name kucuk harfli geliyor, bunu büyük harfe ceviririz.
       ...
 ```
 
@@ -2628,7 +2630,7 @@ IMAGE_TAG_ADMIN_SERVER: "${IMAGE_TAG_ADMIN_SERVER}"
 IMAGE_TAG_HYSTRIX_DASHBOARD: "${IMAGE_TAG_HYSTRIX_DASHBOARD}"
 IMAGE_TAG_GRAFANA_SERVICE: "${IMAGE_TAG_GRAFANA_SERVICE}"
 IMAGE_TAG_PROMETHEUS_SERVICE: "${IMAGE_TAG_PROMETHEUS_SERVICE}"
-DNS_NAME: "DNS Name of your application"
+DNS_NAME: "DNS Name of your application" # buraya petclinic.safaks.net yazilacak
 ```
 
 ### Set up a Helm v3 chart repository in Amazon S3
@@ -2638,22 +2640,26 @@ DNS_NAME: "DNS Name of your application"
 * Create an S3 bucket for Helm charts. In the bucket, create a folder called stable/myapp. The example in this pattern uses s3://petclinic-helm-charts-<put-your-name>/stable/myapp as the target chart repository.
 
 ```bash
+# AWS CLI kullanarak once helm chart lari gonderecegimiz S3 bucket olusturulur
 aws s3api create-bucket --bucket petclinic-helm-charts-<put-your-name> --region us-east-1
+# sonra bu bucket altinda stable/myapp klasorleri olusturulur
 aws s3api put-object --bucket petclinic-helm-charts-<put-your-name> --key stable/myapp/
 ```
 
 * Install the helm-s3 plugin for Amazon S3.
 
 ```bash
-# Helm in S3 u kullanabilmesi icin plugin
-# https://artifacthub.io/packages/helm-plugin/s3/s3
+# Helm in S3 u kullanabilmesi icin alttaki plugin kurulur
+# https://artifacthub.io/packages/helm-plugin/s3/s3 sayfasindan kullanimina bakilabilir
 helm plugin install https://github.com/hypnoglow/helm-s3.git
 ```
 
 * On some systems we need to install Helm S3 plugin as Jenkins user to be able to use S3 with pipeline script.
 
 ``` bash
-# S3 te Helm Chart olacak. ec2-user S3 e ulasabiliyor ama jenkins kullanicisi ulasamiyor, onun da S3 e ulasabilmesi icin alttaki komutlari girerirz
+# ec2-user S3 e ulasabiliyor ama jenkins kullanicisi ulasamiyor, 
+# jenkins kullanicisinin da S3 e ulasabilmesi ve Helm Chart i cekmeye yetki alabilmesi icin alttaki komutlari gireriz
+# jenkins user a gecer ve S3 e ulasmayi saglayan plugin i indiririz
 sudo su -s /bin/bash jenkins
 export PATH=$PATH:/usr/local/bin
 helm version
@@ -2664,7 +2670,8 @@ helm plugin install https://github.com/hypnoglow/helm-s3.git
 
 ```bash
 # S3 repoyu Helm Repo olarak initialize ettik
-# Helm chartin olmazsa olmazlari zip li dosyalar ve index.yaml dosyasiydi
+# Helm chartin olmazsa olmazlari zip li dosyalar ve index.yaml dosyasiydi. 
+# Alttaki komut girilince simdilik chart olmadigi icin zip li dosya yok ama index.yaml dosyasi geldi.
 AWS_REGION=us-east-1 helm s3 init s3://petclinic-helm-charts-<put-your-name>/stable/myapp 
 ```
 
@@ -2673,7 +2680,7 @@ AWS_REGION=us-east-1 helm s3 init s3://petclinic-helm-charts-<put-your-name>/sta
 * Verify that the index.yaml file was created.
 
 ```bash
-# s3 bbucket a ls cekiyoruz
+# CLI yardimi ile s3 bucket a ls cekiyoruz
 aws s3 ls s3://petclinic-helm-charts-<put-your-name>/stable/myapp/
 ```
 
@@ -2682,22 +2689,23 @@ aws s3 ls s3://petclinic-helm-charts-<put-your-name>/stable/myapp/
 ```bash
 # helm repo ls cekelim
 helm repo ls
-# S3 de Helm repoya ekleme yapiyoruz
+# S3 de Helm repoya ekleme yapiyoruz. Reponun ismini "stable-petclinicapp" verdik. S3 bucket ismi yukarida verilmisti
 AWS_REGION=us-east-1 helm repo add stable-petclinicapp s3://petclinic-helm-charts-<put-your-name>/stable/myapp/
 ```
 
 * Update `version` and `appVersion` field of `k8s/petclinic_chart/Chart.yaml` file as below for testing.
 
 ```yaml
-version: 1.1.1
-appVersion: 0.1.0
+version: 1.1.1      # Chart.yaml dosyasinda chart in versiyonunu degistiriyoruz
+appVersion: 0.1.0   # Chart.yaml dosyasinda application un versiyonunu degistiriyoruz
 ```
 
 * Package the local Helm chart.
 
 ```bash
 cd k8s
-# petclinic_chart klasörünü Helm chart olarak paketliyoruz
+# petclinic_chart klasörünü (icindeki Templates (25 adet manifesto files) ve diger klasorlerle birlikte) Helm chart olarak paketliyoruz. tgz uzantili dosya olusur
+# Helm in kolayligi. Helm de repo olarak tutuyoruz. Chart i install dedigimizde tüm manifesto file lari olusturur
 helm package petclinic_chart/ 
 ```
 
@@ -2705,7 +2713,9 @@ helm package petclinic_chart/
 
 ```bash
 # MODE=3 anlami force ederek gonderiyor
-# Helm charti S3 deki Helm repoya paketlenmis gonderiyoruz
+# yukarida olusan tgz uzantili "petclinic_chart-1.1.1.tgz" isimli dosyayi S3 deki Helm repoya paketlenmis gonderiyoruz
+# Jenkinsfile yazarken git S3 deki Helm Charti kullan ve kluster i olustur diyecegiz
+# Dinlerken buraya kadar geldim!
 HELM_S3_MODE=3 AWS_REGION=us-east-1 helm s3 push ./petclinic_chart-1.1.1.tgz stable-petclinicapp
 ```
 
